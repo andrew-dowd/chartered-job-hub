@@ -24,10 +24,10 @@ export const FilterBar = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-6 p-6 bg-white shadow-sm rounded-lg">
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Salary Range (€)</label>
-        <div className="space-y-4">
+    <div className="flex flex-wrap gap-4 p-4 bg-white shadow-sm rounded-lg items-center">
+      <div className="flex-1 min-w-[200px] max-w-[300px]">
+        <div className="space-y-1">
+          <label className="text-sm font-medium">Salary (€{salaryRange}k+)</label>
           <Slider
             defaultValue={[40]}
             max={200}
@@ -35,17 +35,13 @@ export const FilterBar = () => {
             step={5}
             value={salaryRange}
             onValueChange={setSalaryRange}
-            className="w-full"
           />
-          <div className="text-sm text-gray-500">
-            €{salaryRange}k+
-          </div>
         </div>
       </div>
 
       <Select>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Experience Level" />
+        <SelectTrigger className="w-[140px]">
+          <SelectValue placeholder="Experience" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="0-2">0-2 years</SelectItem>
@@ -55,7 +51,7 @@ export const FilterBar = () => {
       </Select>
 
       <Select>
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-[140px]">
           <SelectValue placeholder="Location" />
         </SelectTrigger>
         <SelectContent>
@@ -67,7 +63,7 @@ export const FilterBar = () => {
         </SelectContent>
       </Select>
 
-      <Button variant="outline" className="w-full">Clear Filters</Button>
+      <Button variant="outline" className="whitespace-nowrap">Clear Filters</Button>
     </div>
   );
 };

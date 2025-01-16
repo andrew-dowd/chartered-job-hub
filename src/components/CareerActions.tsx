@@ -30,42 +30,41 @@ export const CareerActions = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Stay Updated</h3>
-        <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
+    <div className="bg-white rounded-lg shadow-sm p-4">
+      <div className="flex flex-wrap gap-4 items-center justify-between">
+        <form onSubmit={handleNewsletterSubmit} className="flex gap-2 flex-1 min-w-[280px]">
           <Input
             type="email"
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="flex-1"
+            className="max-w-[300px]"
           />
-          <Button type="submit">
+          <Button type="submit" size="sm">
             <Mail className="mr-2 h-4 w-4" />
             Subscribe
           </Button>
         </form>
-      </div>
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Button
-          variant="outline"
-          className="flex-1"
-          onClick={handleJoinCommunity}
-        >
-          <Users className="mr-2 h-4 w-4" />
-          Join Community
-        </Button>
-        <Button
-          variant="outline"
-          className="flex-1"
-          onClick={handleTalentNetwork}
-        >
-          <Upload className="mr-2 h-4 w-4" />
-          Join Talent Network
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleJoinCommunity}
+          >
+            <Users className="mr-2 h-4 w-4" />
+            Join Community
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleTalentNetwork}
+          >
+            <Upload className="mr-2 h-4 w-4" />
+            Join Talent Network
+          </Button>
+        </div>
       </div>
     </div>
   );
