@@ -10,7 +10,7 @@ import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
 
 export const FilterBar = () => {
-  const [salaryRange, setSalaryRange] = useState([40, 100]);
+  const [salaryRange, setSalaryRange] = useState([30, 200]);
   
   const IRISH_LOCATIONS = [
     "All Ireland",
@@ -29,12 +29,13 @@ export const FilterBar = () => {
         <div className="space-y-1">
           <label className="text-sm font-medium">Salary (€{salaryRange[0]}k - €{salaryRange[1]}k)</label>
           <Slider
-            defaultValue={[40, 100]}
+            defaultValue={[30, 200]}
             max={200}
             min={30}
             step={5}
             value={salaryRange}
             onValueChange={setSalaryRange}
+            className="w-full"
           />
         </div>
       </div>
