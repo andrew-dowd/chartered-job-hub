@@ -38,7 +38,7 @@ export const JobCard = ({
           .eq("user_id", session.user.id)
           .eq("title", title)
           .eq("company", company)
-          .single();
+          .maybeSingle();
 
         if (data && !error) {
           setSaved(true);
