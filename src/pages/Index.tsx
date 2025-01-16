@@ -1,6 +1,7 @@
 import { JobCard } from "@/components/JobCard";
 import { FilterBar } from "@/components/FilterBar";
 import { CareerActions } from "@/components/CareerActions";
+import { useState, useMemo } from "react";
 
 const MOCK_JOBS = [
   {
@@ -78,6 +79,40 @@ const MOCK_JOBS = [
 ];
 
 const Index = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [salaryRange, setSalaryRange] = useState([30, 200]);
+  const [experience, setExperience] = useState("");
+  const [location, setLocation] = useState("");
+
+  const filteredJobs = useMemo(() => {
+    return MOCK_JOBS.filter((job) => {
+      // Search filter
+      const matchesSearch = job.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+      // Salary filter
+      const salaryMatch = (() => {
+        const [min, max] = job.salary.match(/\d+/g)?.map(Number) || [0, 0];
+        return min >= salaryRange[0] && max <= salaryRange[1];
+      })();
+
+      // Location filter
+      const locationMatch = !location || job.location.toLowerCase() === location;
+
+      // For now, we'll skip experience filter since it's not in our mock data
+      // but the infrastructure is there to support it
+      const experienceMatch = !experience || true;
+
+      return matchesSearch && salaryMatch && locationMatch && experienceMatch;
+    });
+  }, [searchQuery, salaryRange, experience, location]);
+
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setSalaryRange([30, 200]);
+    setExperience("");
+    setLocation("");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b">
@@ -91,12 +126,25 @@ const Index = () => {
         <CareerActions />
         
         <div className="space-y-8">
-          <FilterBar />
+          <FilterBar
+            onSearchChange={setSearchQuery}
+            onSalaryChange={setSalaryRange}
+            onExperienceChange={setExperience}
+            onLocationChange={setLocation}
+            onClearFilters={handleClearFilters}
+          />
+          
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {MOCK_JOBS.map((job, index) => (
+            {filteredJobs.map((job, index) => (
               <JobCard key={index} {...job} />
             ))}
           </div>
+          
+          {filteredJobs.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-gray-600">No jobs found matching your criteria.</p>
+            </div>
+          )}
         </div>
       </main>
     </div>
