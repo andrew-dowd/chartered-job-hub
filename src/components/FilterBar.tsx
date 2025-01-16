@@ -71,23 +71,27 @@ export const FilterBar = ({
         </div>
 
         <Select onValueChange={onExperienceChange}>
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-[140px] bg-white">
             <SelectValue placeholder="Experience" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="0-2">0-2 years</SelectItem>
-            <SelectItem value="3-5">3-5 years</SelectItem>
-            <SelectItem value="5+">5+ years</SelectItem>
+          <SelectContent className="bg-white">
+            <SelectItem value="0-2" className="hover:bg-gray-100">0-2 years</SelectItem>
+            <SelectItem value="3-5" className="hover:bg-gray-100">3-5 years</SelectItem>
+            <SelectItem value="5+" className="hover:bg-gray-100">5+ years</SelectItem>
           </SelectContent>
         </Select>
 
         <Select onValueChange={onLocationChange}>
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-[140px] bg-white">
             <SelectValue placeholder="Location" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white">
             {IRISH_LOCATIONS.map((location) => (
-              <SelectItem key={location} value={location.toLowerCase()}>
+              <SelectItem 
+                key={location} 
+                value={location.toLowerCase()}
+                className="hover:bg-gray-100"
+              >
                 {location}
               </SelectItem>
             ))}
