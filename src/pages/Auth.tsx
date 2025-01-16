@@ -38,7 +38,8 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-sm p-8">
-        <h2 className="text-2xl font-bold text-center mb-6">Welcome Back</h2>
+        <h2 className="text-3xl font-bold text-gray-900 text-center mb-6">Join CA Job Board</h2>
+        <p className="text-gray-600 text-center mb-8">Create an account to save jobs and track your applications</p>
         {errorMessage && (
           <Alert variant="destructive" className="mb-4">
             <AlertDescription>{errorMessage}</AlertDescription>
@@ -57,6 +58,7 @@ const Auth = () => {
               }
             }
           }}
+          view="sign_up"
           providers={[]}
         />
       </div>
