@@ -39,18 +39,15 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="container mx-auto py-8">
-        <div className="grid gap-8 grid-cols-1 lg:grid-cols-4">
-          <div className="lg:col-span-3">
-            <FilterBar />
-            <div className="mt-8 grid gap-6 md:grid-cols-2">
-              {MOCK_JOBS.map((job, index) => (
-                <JobCard key={index} {...job} />
-              ))}
-            </div>
-          </div>
-          <div className="lg:col-span-1">
-            <CareerActions />
+      <main className="container mx-auto py-8 space-y-8">
+        <CareerActions />
+        
+        <div className="space-y-8">
+          <FilterBar />
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {MOCK_JOBS.map((job, index) => (
+              <JobCard key={index} {...job} />
+            ))}
           </div>
         </div>
       </main>
