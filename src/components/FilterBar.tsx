@@ -45,82 +45,82 @@ export const FilterBar = ({
   };
 
   return (
-    <div className="border-b border-gray-200 bg-white">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center gap-4 overflow-x-auto">
-          {/* Search Input */}
-          <div className="flex-1 min-w-[200px] relative">
+    <div className="bg-white rounded-xl shadow-sm border p-4">
+      <div className="flex items-center gap-4">
+        {/* Search Input */}
+        <div className="flex-1 min-w-[200px]">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               type="text"
               placeholder="Search job titles..."
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-10 pr-4 h-12 rounded-full border-gray-300"
+              className="pl-10 pr-4 h-12 w-full rounded-lg border-gray-200"
             />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
           </div>
-
-          {/* Salary Range */}
-          <div className="min-w-[200px] px-4 border-x border-gray-200">
-            <div className="space-y-1">
-              <p className="text-sm font-medium text-gray-600">Salary Range</p>
-              <p className="text-sm">€{salaryRange[0]}k - €{salaryRange[1]}k</p>
-              <Slider
-                defaultValue={[30, 200]}
-                max={200}
-                min={30}
-                step={5}
-                value={salaryRange}
-                onValueChange={handleSalaryChange}
-                className="w-full"
-              />
-            </div>
-          </div>
-
-          {/* Experience Level */}
-          <div className="min-w-[140px] px-4 border-r border-gray-200">
-            <p className="text-sm font-medium text-gray-600 mb-1">Experience</p>
-            <Select onValueChange={onExperienceChange}>
-              <SelectTrigger className="w-full bg-white border-gray-300">
-                <SelectValue placeholder="Select years" />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                <SelectItem value="0-2" className="hover:bg-gray-100">0-2 years</SelectItem>
-                <SelectItem value="3-5" className="hover:bg-gray-100">3-5 years</SelectItem>
-                <SelectItem value="5+" className="hover:bg-gray-100">5+ years</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Location */}
-          <div className="min-w-[140px] px-4 border-r border-gray-200">
-            <p className="text-sm font-medium text-gray-600 mb-1">Location</p>
-            <Select onValueChange={onLocationChange}>
-              <SelectTrigger className="w-full bg-white border-gray-300">
-                <SelectValue placeholder="Select location" />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                {IRISH_LOCATIONS.map((location) => (
-                  <SelectItem 
-                    key={location} 
-                    value={location.toLowerCase()}
-                    className="hover:bg-gray-100"
-                  >
-                    {location}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Search Button */}
-          <Button 
-            onClick={onClearFilters}
-            className="min-w-[100px] h-12 rounded-full bg-primary hover:bg-primary/90"
-          >
-            <Search className="mr-2 h-4 w-4" />
-            Search
-          </Button>
         </div>
+
+        {/* Salary Range */}
+        <div className="min-w-[240px] border-l border-gray-200 pl-4">
+          <p className="text-sm font-medium text-gray-600 mb-1">Salary Range</p>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600">€{salaryRange[0]}k</span>
+            <Slider
+              defaultValue={[30, 200]}
+              max={200}
+              min={30}
+              step={5}
+              value={salaryRange}
+              onValueChange={handleSalaryChange}
+              className="w-32"
+            />
+            <span className="text-sm text-gray-600">€{salaryRange[1]}k</span>
+          </div>
+        </div>
+
+        {/* Experience Level */}
+        <div className="min-w-[160px] border-l border-gray-200 pl-4">
+          <p className="text-sm font-medium text-gray-600 mb-1">Experience</p>
+          <Select onValueChange={onExperienceChange}>
+            <SelectTrigger className="w-full bg-white border-gray-200">
+              <SelectValue placeholder="Select years" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0-2">0-2 years</SelectItem>
+              <SelectItem value="3-5">3-5 years</SelectItem>
+              <SelectItem value="5+">5+ years</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Location */}
+        <div className="min-w-[160px] border-l border-gray-200 pl-4">
+          <p className="text-sm font-medium text-gray-600 mb-1">Location</p>
+          <Select onValueChange={onLocationChange}>
+            <SelectTrigger className="w-full bg-white border-gray-200">
+              <SelectValue placeholder="Select location" />
+            </SelectTrigger>
+            <SelectContent>
+              {IRISH_LOCATIONS.map((location) => (
+                <SelectItem 
+                  key={location} 
+                  value={location.toLowerCase()}
+                >
+                  {location}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Search Button */}
+        <Button 
+          onClick={onClearFilters}
+          className="h-12 px-8 bg-primary hover:bg-primary/90 ml-4"
+        >
+          <Search className="mr-2 h-4 w-4" />
+          Search
+        </Button>
       </div>
     </div>
   );

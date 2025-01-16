@@ -2,6 +2,9 @@ import { JobCard } from "@/components/JobCard";
 import { FilterBar } from "@/components/FilterBar";
 import { CareerActions } from "@/components/CareerActions";
 import { useState, useMemo } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { UserCircle2, Upload } from "lucide-react";
 
 const MOCK_JOBS = [
   {
@@ -116,36 +119,56 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b">
-        <div className="container mx-auto py-6">
-          <h1 className="text-3xl font-bold text-gray-900">CA Job Board</h1>
-          <p className="text-gray-600 mt-2">Find your next role as a Chartered Accountant in Ireland</p>
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">CA Job Board</h1>
+            <p className="text-sm text-gray-600">Find your next role as a Chartered Accountant in Ireland</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex gap-2">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                className="w-64"
+              />
+              <Button className="bg-primary hover:bg-primary/90">
+                Subscribe
+              </Button>
+            </div>
+            <div className="flex items-center gap-3 ml-6">
+              <Button variant="outline" className="flex items-center gap-2">
+                <UserCircle2 className="h-4 w-4" />
+                Join Community
+              </Button>
+              <Button variant="outline" className="flex items-center gap-2">
+                <Upload className="h-4 w-4" />
+                Join Talent Network
+              </Button>
+            </div>
+          </div>
         </div>
       </header>
 
-      <main className="container mx-auto py-8 space-y-8">
-        <CareerActions />
+      <main className="container mx-auto px-4 py-8 space-y-8">
+        <FilterBar
+          onSearchChange={setSearchQuery}
+          onSalaryChange={setSalaryRange}
+          onExperienceChange={setExperience}
+          onLocationChange={setLocation}
+          onClearFilters={handleClearFilters}
+        />
         
-        <div className="space-y-8">
-          <FilterBar
-            onSearchChange={setSearchQuery}
-            onSalaryChange={setSalaryRange}
-            onExperienceChange={setExperience}
-            onLocationChange={setLocation}
-            onClearFilters={handleClearFilters}
-          />
-          
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredJobs.map((job, index) => (
-              <JobCard key={index} {...job} />
-            ))}
-          </div>
-          
-          {filteredJobs.length === 0 && (
-            <div className="text-center py-8">
-              <p className="text-gray-600">No jobs found matching your criteria.</p>
-            </div>
-          )}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {filteredJobs.map((job, index) => (
+            <JobCard key={index} {...job} />
+          ))}
         </div>
+        
+        {filteredJobs.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-gray-600">No jobs found matching your criteria.</p>
+          </div>
+        )}
       </main>
     </div>
   );
