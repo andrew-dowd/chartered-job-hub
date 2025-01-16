@@ -1,7 +1,7 @@
 import { JobCard } from "@/components/JobCard";
 import { FilterBar } from "@/components/FilterBar";
+import { CareerActions } from "@/components/CareerActions";
 
-// Mock data for initial display
 const MOCK_JOBS = [
   {
     title: "Senior Chartered Accountant",
@@ -40,12 +40,18 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto py-8">
-        <FilterBar />
-        
-        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {MOCK_JOBS.map((job, index) => (
-            <JobCard key={index} {...job} />
-          ))}
+        <div className="grid gap-8 grid-cols-1 lg:grid-cols-4">
+          <div className="lg:col-span-3">
+            <FilterBar />
+            <div className="mt-8 grid gap-6 md:grid-cols-2">
+              {MOCK_JOBS.map((job, index) => (
+                <JobCard key={index} {...job} />
+              ))}
+            </div>
+          </div>
+          <div className="lg:col-span-1">
+            <CareerActions />
+          </div>
         </div>
       </main>
     </div>
