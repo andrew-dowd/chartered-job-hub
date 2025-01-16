@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { BookmarkPlus, MapPin, Building2, Banknote } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { useSession } from "@supabase/auth-helpers-react";
 
 interface JobCardProps {
   title: string;
@@ -23,13 +26,84 @@ export const JobCard = ({
 }: JobCardProps) => {
   const [saved, setSaved] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const session = useSession();
 
-  const handleSave = () => {
-    setSaved(!saved);
-    toast({
-      title: saved ? "Job removed from saved jobs" : "Job saved successfully",
-      description: saved ? "You can always save it again later" : "Check your saved jobs to apply later",
-    });
+  useEffect(() => {
+    const checkIfSaved = async () => {
+      if (session?.user) {
+        const { data, error } = await supabase
+          .from("saved_jobs")
+          .select("id")
+          .eq("user_id", session.user.id)
+          .eq("title", title)
+          .eq("company", company)
+          .single();
+
+        if (data && !error) {
+          setSaved(true);
+        }
+      }
+    };
+
+    checkIfSaved();
+  }, [session, title, company]);
+
+  const handleSave = async () => {
+    if (!session) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to save jobs",
+      });
+      navigate("/auth");
+      return;
+    }
+
+    try {
+      if (saved) {
+        const { error } = await supabase
+          .from("saved_jobs")
+          .delete()
+          .eq("user_id", session.user.id)
+          .eq("title", title)
+          .eq("company", company);
+
+        if (error) throw error;
+
+        setSaved(false);
+        toast({
+          title: "Job removed from saved jobs",
+          description: "You can always save it again later",
+        });
+      } else {
+        const { error } = await supabase.from("saved_jobs").insert([
+          {
+            user_id: session.user.id,
+            title,
+            company,
+            location,
+            salary,
+            description,
+            apply_url: applyUrl,
+          },
+        ]);
+
+        if (error) throw error;
+
+        setSaved(true);
+        toast({
+          title: "Job saved successfully",
+          description: "Check your saved jobs to apply later",
+        });
+      }
+    } catch (error) {
+      console.error("Error saving job:", error);
+      toast({
+        title: "Error",
+        description: "There was an error saving the job. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -56,7 +130,7 @@ export const JobCard = ({
           variant="ghost"
           size="icon"
           onClick={handleSave}
-          className={saved ? "text-accent" : "text-gray-400"}
+          className={saved ? "text-primary" : "text-gray-400"}
         >
           <BookmarkPlus className="w-5 h-5" />
         </Button>
