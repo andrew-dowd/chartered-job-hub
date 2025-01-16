@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookmarkPlus, MapPin, Building2, Banknote } from "lucide-react";
+import { BookmarkPlus, BookmarkCheck, MapPin, Building2, Banknote } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -132,7 +132,7 @@ export const JobCard = ({
           onClick={handleSave}
           className={saved ? "text-primary" : "text-gray-400"}
         >
-          <BookmarkPlus className="w-5 h-5" />
+          {saved ? <BookmarkCheck className="w-5 h-5" /> : <BookmarkPlus className="w-5 h-5" />}
         </Button>
       </div>
       <p className="mt-4 text-gray-600 line-clamp-2">{description}</p>
