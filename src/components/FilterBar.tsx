@@ -116,10 +116,10 @@ export const FilterBar = ({
         {/* Search Button */}
         <Button 
           onClick={onClearFilters}
-          className="h-12 px-8 bg-primary hover:bg-primary/90 ml-4"
+          className="h-12 w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0"
+          size="icon"
         >
-          <Search className="mr-2 h-4 w-4" />
-          Search
+          <Search className="h-5 w-5" />
         </Button>
       </div>
     </div>
