@@ -109,10 +109,16 @@ const Index = () => {
 
       // Salary filter
       const salaryMatch = (() => {
-        const [minStr, maxStr] = job.salary.match(/\d+/g) || [];
-        const jobMinSalary = parseInt(minStr, 10);
-        const jobMaxSalary = parseInt(maxStr, 10);
-        return jobMinSalary >= salaryRange[0] && jobMaxSalary <= salaryRange[1];
+        // Extract numbers from salary string (e.g., "€45,000 - €60,000")
+        const numbers = job.salary.match(/\d+,?\d*/g)?.map(num => parseInt(num.replace(',', ''), 10)) || [];
+        if (numbers.length >= 2) {
+          const [jobMinSalary, jobMaxSalary] = numbers;
+          // Convert to thousands (k) to match the slider values
+          const jobMinK = Math.floor(jobMinSalary / 1000);
+          const jobMaxK = Math.floor(jobMaxSalary / 1000);
+          return jobMinK >= salaryRange[0] && jobMaxK <= salaryRange[1];
+        }
+        return false;
       })();
 
       // Location filter
