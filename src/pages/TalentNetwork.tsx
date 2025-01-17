@@ -83,10 +83,10 @@ const TalentNetwork = () => {
           full_name: values.fullName,
           email: values.email,
           current_location: values.currentLocation,
-          linkedin_url: values.linkedinUrl,
-          portfolio_url: values.portfolioUrl,
-          salary_expectation: values.salaryExpectation,
-          resume_url: resumeUrl,
+          linkedin_url: values.linkedinUrl || null,
+          portfolio_url: values.portfolioUrl || null,
+          salary_expectation: values.salaryExpectation || null,
+          resume_url: resumeUrl || null,
         });
 
       if (error) throw error;

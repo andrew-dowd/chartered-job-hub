@@ -69,6 +69,45 @@ export type Database = {
         }
         Relationships: []
       }
+      talent_profiles: {
+        Row: {
+          created_at: string
+          current_location: string
+          email: string
+          full_name: string
+          id: string
+          linkedin_url: string | null
+          portfolio_url: string | null
+          resume_url: string | null
+          salary_expectation: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_location: string
+          email: string
+          full_name: string
+          id?: string
+          linkedin_url?: string | null
+          portfolio_url?: string | null
+          resume_url?: string | null
+          salary_expectation?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_location?: string
+          email?: string
+          full_name?: string
+          id?: string
+          linkedin_url?: string | null
+          portfolio_url?: string | null
+          resume_url?: string | null
+          salary_expectation?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
