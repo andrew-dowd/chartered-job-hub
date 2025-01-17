@@ -17,6 +17,7 @@ const MOCK_JOBS = [
     description: "Join our team of experienced chartered accountants working with leading Irish and multinational clients. Strong background in financial reporting and analysis required.",
     applyUrl: "#",
     createdAt: subHours(new Date(), 2).toISOString(),
+    experience_level: "5+"
   },
   {
     title: "Tax Manager",
@@ -26,6 +27,7 @@ const MOCK_JOBS = [
     description: "Exciting opportunity for a chartered accountant specializing in corporate tax planning and compliance for Irish businesses.",
     applyUrl: "#",
     createdAt: subHours(new Date(), 5).toISOString(),
+    experience_level: "3-5"
   },
   {
     title: "Audit Senior",
@@ -35,6 +37,7 @@ const MOCK_JOBS = [
     description: "Join our audit team working with diverse clients across Ireland. Excellent opportunity for career progression.",
     applyUrl: "#",
     createdAt: subDays(new Date(), 1).toISOString(),
+    experience_level: "3-5"
   },
   {
     title: "Financial Controller",
@@ -43,6 +46,7 @@ const MOCK_JOBS = [
     salary: "€70,000 - €90,000",
     description: "Leading the financial operations for our growing Irish client base. Strong commercial acumen required.",
     applyUrl: "#",
+    experience_level: "5+"
   },
   {
     title: "Management Accountant",
@@ -51,6 +55,7 @@ const MOCK_JOBS = [
     salary: "€45,000 - €60,000",
     description: "Supporting Irish businesses with management reporting and financial analysis.",
     applyUrl: "#",
+    experience_level: "0-2"
   },
   {
     title: "Corporate Finance Associate",
@@ -59,6 +64,7 @@ const MOCK_JOBS = [
     salary: "€50,000 - €65,000",
     description: "Working on M&A transactions and corporate advisory projects across Ireland.",
     applyUrl: "#",
+    experience_level: "3-5"
   },
   {
     title: "Risk Advisory Manager",
@@ -67,6 +73,7 @@ const MOCK_JOBS = [
     salary: "€55,000 - €75,000",
     description: "Leading risk advisory projects for major Irish and international clients.",
     applyUrl: "#",
+    experience_level: "5+"
   },
   {
     title: "Internal Auditor",
@@ -75,6 +82,7 @@ const MOCK_JOBS = [
     salary: "€45,000 - €60,000",
     description: "Supporting internal audit function for one of Ireland's leading banks.",
     applyUrl: "#",
+    experience_level: "0-2"
   },
   {
     title: "Group Accountant",
@@ -83,6 +91,7 @@ const MOCK_JOBS = [
     salary: "€55,000 - €70,000",
     description: "Managing group consolidation and reporting for Irish operations.",
     applyUrl: "#",
+    experience_level: "3-5"
   }
 ];
 
