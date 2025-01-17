@@ -71,6 +71,7 @@ export type Database = {
       }
       talent_profiles: {
         Row: {
+          additional_locations: string | null
           created_at: string
           current_location: string
           email: string
@@ -83,6 +84,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          additional_locations?: string | null
           created_at?: string
           current_location: string
           email: string
@@ -95,6 +97,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          additional_locations?: string | null
           created_at?: string
           current_location?: string
           email?: string
