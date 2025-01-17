@@ -147,8 +147,8 @@ const Index = () => {
                 Join Community
               </Button>
               <Button 
-                variant="outline" 
-                className="flex items-center gap-2 bg-[#F87171] hover:bg-[#EF4444] text-white"
+                variant="secondary"
+                className="flex items-center gap-2 bg-[#FDE1D3] hover:bg-[#FFDEE2] text-gray-800 font-medium shadow-sm transition-all duration-200 hover:shadow-md"
                 onClick={handleTalentNetwork}
               >
                 <Upload className="h-4 w-4" />
