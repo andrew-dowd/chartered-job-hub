@@ -135,7 +135,7 @@ const Index = () => {
       <header className="bg-white border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">CA Job Board</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Chartered Jobs</h1>
             <p className="text-sm text-gray-600">Find your next role as a Chartered Accountant in Ireland</p>
           </div>
           <div className="flex items-center gap-4">
@@ -152,15 +152,14 @@ const Index = () => {
             <div className="flex items-center gap-3 ml-6">
               <Button 
                 variant="outline" 
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 hover:bg-gray-50"
                 onClick={handleJoinCommunity}
               >
                 <UserCircle2 className="h-4 w-4" />
                 Join Community
               </Button>
               <Button 
-                variant="secondary"
-                className="flex items-center gap-2 bg-[#FDE1D3] hover:bg-[#FFDEE2] text-gray-800 font-medium shadow-sm transition-all duration-200 hover:shadow-md"
+                className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white"
                 onClick={handleTalentNetwork}
               >
                 <Upload className="h-4 w-4" />
@@ -174,9 +173,9 @@ const Index = () => {
       <main className="container mx-auto px-4 py-8 space-y-8">
         <FilterBar
           onSearchChange={setSearchQuery}
-          onSalaryChange={setSalaryRange}
-          onExperienceChange={setExperience}
-          onLocationChange={setLocation}
+          onSalaryRange={setSalaryRange}
+          onExperience={setExperience}
+          onLocation={setLocation}
           onClearFilters={handleClearFilters}
         />
         
