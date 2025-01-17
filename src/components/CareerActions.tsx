@@ -56,7 +56,7 @@ export const CareerActions = () => {
             Join Community
           </Button>
           <Button
-            variant="outline"
+            className="bg-[#F87171] hover:bg-[#EF4444] text-white"
             size="sm"
             onClick={handleTalentNetwork}
           >
