@@ -3,7 +3,8 @@ import { JobCard } from "@/components/JobCard";
 import { useSession } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface SavedJob {
   id: string;
@@ -44,7 +45,34 @@ const SavedJobs = () => {
     };
 
     fetchSavedJobs();
+
+    // Subscribe to changes in saved_jobs table
+    const channel = supabase
+      .channel('saved_jobs_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'saved_jobs',
+        },
+        (payload) => {
+          console.log('Job removed:', payload);
+          setSavedJobs((current) => 
+            current.filter((job) => job.id !== payload.old.id)
+          );
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [session, navigate]);
+
+  const handleBackToJobs = () => {
+    navigate('/');
+  };
 
   if (loading) {
     return (
@@ -57,7 +85,18 @@ const SavedJobs = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Saved Jobs</h1>
+        <div className="flex items-center gap-4 mb-6">
+          <Button
+            variant="ghost"
+            onClick={handleBackToJobs}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Jobs
+          </Button>
+          <h1 className="text-2xl font-bold text-gray-900">Saved Jobs</h1>
+        </div>
+        
         {savedJobs.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-600">You haven't saved any jobs yet.</p>
