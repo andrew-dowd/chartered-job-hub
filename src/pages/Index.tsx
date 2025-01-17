@@ -173,9 +173,9 @@ const Index = () => {
       <main className="container mx-auto px-4 py-8 space-y-8">
         <FilterBar
           onSearchChange={setSearchQuery}
-          onSalaryRange={setSalaryRange}
-          onExperience={setExperience}
-          onLocation={setLocation}
+          onSalaryChange={setSalaryRange}
+          onExperienceChange={setExperience}
+          onLocationChange={setLocation}
           onClearFilters={handleClearFilters}
         />
         
