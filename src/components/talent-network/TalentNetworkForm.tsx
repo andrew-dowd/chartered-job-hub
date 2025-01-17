@@ -16,7 +16,11 @@ const formSchema = z.object({
   currentLocation: z.string().min(2, "Location is required"),
   additionalLocations: z.string().optional(),
   linkedinUrl: z.string().url("Invalid LinkedIn URL").optional().or(z.literal("")),
-  portfolioUrl: z.string().url("Invalid portfolio URL").optional().or(z.literal("")),
+  portfolioUrl: z.string().optional()
+    .refine(val => !val || val.startsWith('http://') || val.startsWith('https://'), {
+      message: "Portfolio URL must start with http:// or https://"
+    })
+    .or(z.literal("")),
   salaryExpectation: z.string().optional(),
 });
 
@@ -109,44 +113,44 @@ export const TalentNetworkForm = ({ onSuccess }: TalentNetworkFormProps) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8">
-      <div className="text-center space-y-4">
-        <h1 className="text-3xl font-bold text-gray-900">Complete Your Profile</h1>
-        <p className="text-lg text-gray-600">
-          Help companies discover you
-        </p>
+    <div className="max-w-2xl mx-auto space-y-6">
+      <div className="text-center space-y-2">
+        <h1 className="text-2xl font-bold text-gray-900">Complete Your Profile</h1>
+        <p className="text-gray-600">Help companies discover you</p>
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="fullName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Full Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <div>
               <FormLabel>Resume</FormLabel>
@@ -158,19 +162,35 @@ export const TalentNetworkForm = ({ onSuccess }: TalentNetworkFormProps) => {
               />
             </div>
 
-            <FormField
-              control={form.control}
-              name="currentLocation"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Current Location</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="currentLocation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Current Location</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="salaryExpectation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Salary Expectation (Optional)</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="e.g. €50,000 - €70,000" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
@@ -182,6 +202,7 @@ export const TalentNetworkForm = ({ onSuccess }: TalentNetworkFormProps) => {
                     <Textarea 
                       {...field} 
                       placeholder="e.g. New York, London, Remote"
+                      className="h-20"
                     />
                   </FormControl>
                   <FormMessage />
@@ -189,47 +210,35 @@ export const TalentNetworkForm = ({ onSuccess }: TalentNetworkFormProps) => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="linkedinUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>LinkedIn Profile (Optional)</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="https://linkedin.com/in/..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="linkedinUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>LinkedIn Profile (Optional)</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="https://linkedin.com/in/..." />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="portfolioUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Portfolio/Website (Optional)</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="https://..." />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="salaryExpectation"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Salary Expectation (Optional)</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="e.g. €50,000 - €70,000" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="portfolioUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Portfolio/Website (Optional)</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="https://..." />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <Button 
               type="submit" 
