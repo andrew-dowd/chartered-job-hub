@@ -1,12 +1,12 @@
 import { JobCard } from "@/components/JobCard";
 import { FilterBar } from "@/components/FilterBar";
-import { CareerActions } from "@/components/CareerActions";
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { UserCircle2, Upload } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { subHours, subDays } from "date-fns";
+import { ProfileDropdown } from "@/components/ProfileDropdown";
 
 const MOCK_JOBS = [
   {
@@ -142,10 +142,6 @@ const Index = () => {
     navigate('/talent-network');
   };
 
-  const handleJoinCommunity = () => {
-    window.open("https://www.reddit.com/r/AccountantsEire", "_blank");
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b">
@@ -167,20 +163,13 @@ const Index = () => {
             </div>
             <div className="flex items-center gap-3 ml-6">
               <Button 
-                variant="outline" 
-                className="flex items-center gap-2 hover:bg-gray-50"
-                onClick={handleJoinCommunity}
-              >
-                <UserCircle2 className="h-4 w-4" />
-                Join Community
-              </Button>
-              <Button 
                 className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white"
                 onClick={handleTalentNetwork}
               >
                 <Upload className="h-4 w-4" />
                 Join Talent Network
               </Button>
+              <ProfileDropdown />
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import TalentNetwork from "./pages/TalentNetwork";
+import SavedJobs from "./pages/SavedJobs";
 import { supabase } from "./integrations/supabase/client";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/talent-network" element={<TalentNetwork />} />
+            <Route path="/saved-jobs" element={<SavedJobs />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
