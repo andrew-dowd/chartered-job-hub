@@ -15,7 +15,7 @@ interface JobCardProps {
   salary: string;
   description: string;
   applyUrl: string;
-  createdAt?: string; // Optional as it might not be available in mock data
+  createdAt?: string;
 }
 
 export const JobCard = ({

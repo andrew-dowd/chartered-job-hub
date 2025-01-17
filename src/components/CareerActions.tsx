@@ -40,7 +40,7 @@ export const CareerActions = () => {
             required
             className="max-w-[300px]"
           />
-          <Button type="submit" size="sm">
+          <Button type="submit" size="sm" className="bg-primary hover:bg-primary/90">
             <Mail className="mr-2 h-4 w-4" />
             Subscribe
           </Button>
@@ -51,12 +51,13 @@ export const CareerActions = () => {
             variant="outline"
             size="sm"
             onClick={handleJoinCommunity}
+            className="hover:bg-gray-50"
           >
             <Users className="mr-2 h-4 w-4" />
             Join Community
           </Button>
           <Button
-            className="bg-[#F87171] hover:bg-[#EF4444] text-white"
+            className="bg-accent hover:bg-accent/90 text-white"
             size="sm"
             onClick={handleTalentNetwork}
           >

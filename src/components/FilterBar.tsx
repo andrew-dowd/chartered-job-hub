@@ -47,7 +47,6 @@ export const FilterBar = ({
   return (
     <div className="bg-white rounded-xl shadow-sm border p-4">
       <div className="flex items-center gap-4">
-        {/* Search Input */}
         <div className="flex-1 min-w-[200px]">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -60,7 +59,6 @@ export const FilterBar = ({
           </div>
         </div>
 
-        {/* Salary Range */}
         <div className="min-w-[240px] border-l border-gray-200 pl-4">
           <p className="text-sm font-medium text-gray-600 mb-1">Salary Range</p>
           <div className="flex items-center gap-2">
@@ -78,7 +76,6 @@ export const FilterBar = ({
           </div>
         </div>
 
-        {/* Experience Level */}
         <div className="min-w-[160px] border-l border-gray-200 pl-4">
           <p className="text-sm font-medium text-gray-600 mb-1">Experience</p>
           <Select onValueChange={onExperienceChange}>
@@ -93,7 +90,6 @@ export const FilterBar = ({
           </Select>
         </div>
 
-        {/* Location */}
         <div className="min-w-[160px] border-l border-gray-200 pl-4">
           <p className="text-sm font-medium text-gray-600 mb-1">Location</p>
           <Select onValueChange={onLocationChange}>
@@ -114,7 +110,6 @@ export const FilterBar = ({
           </Select>
         </div>
 
-        {/* Search Button */}
         <Button 
           onClick={onClearFilters}
           className="h-12 w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0"
