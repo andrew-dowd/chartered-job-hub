@@ -35,7 +35,7 @@ export const ProfileDropdown = () => {
           <UserCircle2 className="h-6 w-6" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent align="end" className="w-48 bg-white dark:bg-gray-800 border shadow-lg">
         <DropdownMenuItem onClick={() => navigate("/saved-jobs")} className="cursor-pointer">
           <BookmarkIcon className="mr-2 h-4 w-4" />
           Saved Jobs
