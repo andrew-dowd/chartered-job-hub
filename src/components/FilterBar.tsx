@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useState } from "react";
 
 interface FilterBarProps {
@@ -27,6 +27,9 @@ export const FilterBar = ({
   onClearFilters,
 }: FilterBarProps) => {
   const [salaryRange, setSalaryRange] = useState([30, 200]);
+  const [searchValue, setSearchValue] = useState("");
+  const [experienceValue, setExperienceValue] = useState("");
+  const [locationValue, setLocationValue] = useState("");
   
   const IRISH_LOCATIONS = [
     "All Ireland",
@@ -44,6 +47,32 @@ export const FilterBar = ({
     onSalaryChange(newRange);
   };
 
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value);
+    onSearchChange(value);
+  };
+
+  const handleExperienceChange = (value: string) => {
+    setExperienceValue(value);
+    onExperienceChange(value);
+  };
+
+  const handleLocationChange = (value: string) => {
+    setLocationValue(value);
+    onLocationChange(value === "all ireland" ? "" : value);
+  };
+
+  const handleClearFilters = () => {
+    setSearchValue("");
+    setSalaryRange([30, 200]);
+    setExperienceValue("");
+    setLocationValue("");
+    onClearFilters();
+  };
+
+  const hasActiveFilters = searchValue || experienceValue || locationValue || 
+    salaryRange[0] !== 30 || salaryRange[1] !== 200;
+
   return (
     <div className="bg-white rounded-xl shadow-sm border p-4">
       <div className="flex items-center gap-4">
@@ -53,7 +82,8 @@ export const FilterBar = ({
             <Input
               type="text"
               placeholder="Search job titles..."
-              onChange={(e) => onSearchChange(e.target.value)}
+              value={searchValue}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="pl-10 pr-4 h-12 w-full rounded-lg border-gray-200"
             />
           </div>
@@ -78,7 +108,7 @@ export const FilterBar = ({
 
         <div className="min-w-[160px] border-l border-gray-200 pl-4">
           <p className="text-sm font-medium text-gray-600 mb-1">Experience</p>
-          <Select onValueChange={onExperienceChange}>
+          <Select value={experienceValue} onValueChange={handleExperienceChange}>
             <SelectTrigger className="w-full bg-white border-gray-200">
               <SelectValue placeholder="Select years" />
             </SelectTrigger>
@@ -92,7 +122,7 @@ export const FilterBar = ({
 
         <div className="min-w-[160px] border-l border-gray-200 pl-4">
           <p className="text-sm font-medium text-gray-600 mb-1">Location</p>
-          <Select onValueChange={onLocationChange}>
+          <Select value={locationValue} onValueChange={handleLocationChange}>
             <SelectTrigger className="w-full bg-white border-gray-200">
               <SelectValue placeholder="Select location" />
             </SelectTrigger>
@@ -111,11 +141,15 @@ export const FilterBar = ({
         </div>
 
         <Button 
-          onClick={onClearFilters}
+          onClick={handleClearFilters}
           className="h-12 w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0"
           size="icon"
         >
-          <Search className="h-5 w-5" />
+          {hasActiveFilters ? (
+            <X className="h-5 w-5" />
+          ) : (
+            <Search className="h-5 w-5" />
+          )}
         </Button>
       </div>
     </div>

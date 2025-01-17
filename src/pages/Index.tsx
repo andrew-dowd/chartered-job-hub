@@ -107,9 +107,8 @@ const Index = () => {
       // Location filter
       const locationMatch = !location || job.location.toLowerCase() === location;
 
-      // For now, we'll skip experience filter since it's not in our mock data
-      // but the infrastructure is there to support it
-      const experienceMatch = !experience || true;
+      // Experience filter - assuming experience is stored in the format "0-2", "3-5", "5+"
+      const experienceMatch = !experience || job.experience_level === experience;
 
       return matchesSearch && salaryMatch && locationMatch && experienceMatch;
     });
