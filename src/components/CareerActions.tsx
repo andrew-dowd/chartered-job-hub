@@ -21,7 +21,7 @@ export const CareerActions = () => {
   };
 
   const handleJoinCommunity = () => {
-    window.open("https://reddit.com/r/charteredaccountants", "_blank");
+    window.open("https://www.reddit.com/r/AccountantsEire", "_blank");
   };
 
   const handleTalentNetwork = () => {
