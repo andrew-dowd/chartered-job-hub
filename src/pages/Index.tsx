@@ -122,6 +122,10 @@ const Index = () => {
     navigate('/talent-network');
   };
 
+  const handleJoinCommunity = () => {
+    window.open("https://www.reddit.com/r/AccountantsEire", "_blank");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b">
@@ -142,7 +146,11 @@ const Index = () => {
               </Button>
             </div>
             <div className="flex items-center gap-3 ml-6">
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2"
+                onClick={handleJoinCommunity}
+              >
                 <UserCircle2 className="h-4 w-4" />
                 Join Community
               </Button>
