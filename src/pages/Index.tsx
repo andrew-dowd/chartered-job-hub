@@ -109,14 +109,16 @@ const Index = () => {
 
       // Salary filter
       const salaryMatch = (() => {
-        const [min, max] = job.salary.match(/\d+/g)?.map(Number) || [0, 0];
-        return min >= salaryRange[0] && max <= salaryRange[1];
+        const [minStr, maxStr] = job.salary.match(/\d+/g) || [];
+        const jobMinSalary = parseInt(minStr, 10);
+        const jobMaxSalary = parseInt(maxStr, 10);
+        return jobMinSalary >= salaryRange[0] && jobMaxSalary <= salaryRange[1];
       })();
 
       // Location filter
       const locationMatch = !location || job.location.toLowerCase() === location;
 
-      // Experience filter - assuming experience is stored in the format "0-2", "3-5", "5+"
+      // Experience filter
       const experienceMatch = !experience || job.experience_level === experience;
 
       return matchesSearch && salaryMatch && locationMatch && experienceMatch;
