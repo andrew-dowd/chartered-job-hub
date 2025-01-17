@@ -45,33 +45,17 @@ const SavedJobs = () => {
     };
 
     fetchSavedJobs();
-
-    // Subscribe to changes in saved_jobs table
-    const channel = supabase
-      .channel('saved_jobs_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: 'DELETE',
-          schema: 'public',
-          table: 'saved_jobs',
-        },
-        (payload) => {
-          console.log('Job removed:', payload);
-          setSavedJobs((current) => 
-            current.filter((job) => job.id !== payload.old.id)
-          );
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
   }, [session, navigate]);
 
   const handleBackToJobs = () => {
     navigate('/');
+  };
+
+  // This function will be passed to JobCard to handle state updates
+  const onJobUnsaved = (title: string, company: string) => {
+    setSavedJobs((current) => 
+      current.filter((job) => !(job.title === title && job.company === company))
+    );
   };
 
   if (loading) {
@@ -113,6 +97,7 @@ const SavedJobs = () => {
                 description={job.description}
                 applyUrl={job.apply_url}
                 createdAt={job.created_at}
+                onUnsave={onJobUnsaved}
               />
             ))}
           </div>

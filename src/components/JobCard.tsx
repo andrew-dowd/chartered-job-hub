@@ -16,6 +16,7 @@ interface JobCardProps {
   description: string;
   applyUrl: string;
   createdAt?: string;
+  onUnsave?: (title: string, company: string) => void;
 }
 
 export const JobCard = ({
@@ -26,6 +27,7 @@ export const JobCard = ({
   description,
   applyUrl,
   createdAt,
+  onUnsave,
 }: JobCardProps) => {
   const [saved, setSaved] = useState(false);
   const { toast } = useToast();
@@ -78,6 +80,11 @@ export const JobCard = ({
           title: "Job removed from saved jobs",
           description: "You can always save it again later",
         });
+        
+        // Call onUnsave callback if provided
+        if (onUnsave) {
+          onUnsave(title, company);
+        }
       } else {
         const { error } = await supabase.from("saved_jobs").insert([
           {
