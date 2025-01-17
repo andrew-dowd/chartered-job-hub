@@ -5,6 +5,7 @@ import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { UserCircle2, Upload } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const MOCK_JOBS = [
   {
@@ -86,6 +87,7 @@ const Index = () => {
   const [salaryRange, setSalaryRange] = useState([30, 200]);
   const [experience, setExperience] = useState("");
   const [location, setLocation] = useState("");
+  const navigate = useNavigate();
 
   const filteredJobs = useMemo(() => {
     return MOCK_JOBS.filter((job) => {
@@ -116,6 +118,10 @@ const Index = () => {
     setLocation("");
   };
 
+  const handleTalentNetwork = () => {
+    navigate('/talent-network');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b">
@@ -140,7 +146,11 @@ const Index = () => {
                 <UserCircle2 className="h-4 w-4" />
                 Join Community
               </Button>
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2 bg-[#F87171] hover:bg-[#EF4444] text-white"
+                onClick={handleTalentNetwork}
+              >
                 <Upload className="h-4 w-4" />
                 Join Talent Network
               </Button>
