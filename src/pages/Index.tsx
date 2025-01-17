@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { UserCircle2, Upload } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { subHours, subDays } from "date-fns";
 
 const MOCK_JOBS = [
   {
@@ -15,6 +16,7 @@ const MOCK_JOBS = [
     salary: "€65,000 - €85,000",
     description: "Join our team of experienced chartered accountants working with leading Irish and multinational clients. Strong background in financial reporting and analysis required.",
     applyUrl: "#",
+    createdAt: subHours(new Date(), 2).toISOString(),
   },
   {
     title: "Tax Manager",
@@ -23,6 +25,7 @@ const MOCK_JOBS = [
     salary: "€60,000 - €75,000",
     description: "Exciting opportunity for a chartered accountant specializing in corporate tax planning and compliance for Irish businesses.",
     applyUrl: "#",
+    createdAt: subHours(new Date(), 5).toISOString(),
   },
   {
     title: "Audit Senior",
@@ -31,6 +34,7 @@ const MOCK_JOBS = [
     salary: "€45,000 - €60,000",
     description: "Join our audit team working with diverse clients across Ireland. Excellent opportunity for career progression.",
     applyUrl: "#",
+    createdAt: subDays(new Date(), 1).toISOString(),
   },
   {
     title: "Financial Controller",
