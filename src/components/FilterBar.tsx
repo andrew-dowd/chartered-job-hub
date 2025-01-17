@@ -85,10 +85,10 @@ export const FilterBar = ({
             <SelectTrigger className="w-full bg-white border-gray-200">
               <SelectValue placeholder="Select years" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="0-2">0-2 years</SelectItem>
-              <SelectItem value="3-5">3-5 years</SelectItem>
-              <SelectItem value="5+">5+ years</SelectItem>
+            <SelectContent className="bg-white border shadow-lg">
+              <SelectItem value="0-2" className="hover:bg-gray-50">0-2 years</SelectItem>
+              <SelectItem value="3-5" className="hover:bg-gray-50">3-5 years</SelectItem>
+              <SelectItem value="5+" className="hover:bg-gray-50">5+ years</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -100,11 +100,12 @@ export const FilterBar = ({
             <SelectTrigger className="w-full bg-white border-gray-200">
               <SelectValue placeholder="Select location" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white border shadow-lg">
               {IRISH_LOCATIONS.map((location) => (
                 <SelectItem 
                   key={location} 
                   value={location.toLowerCase()}
+                  className="hover:bg-gray-50"
                 >
                   {location}
                 </SelectItem>
