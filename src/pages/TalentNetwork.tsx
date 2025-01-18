@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSession } from "@supabase/auth-helpers-react";
+import { supabase } from "@/integrations/supabase/client";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TalentNetworkIntro } from "@/components/talent-network/TalentNetworkIntro";
@@ -12,22 +12,32 @@ type Step = "intro" | "auth" | "form" | "success";
 
 const TalentNetwork = () => {
   const navigate = useNavigate();
-  const session = useSession();
   const [currentStep, setCurrentStep] = useState<Step>("intro");
+  const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // If user is already authenticated, skip the auth step
-    if (session && currentStep === "auth") {
-      setCurrentStep("form");
-    }
-  }, [session, currentStep]);
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      setSession(currentSession);
+      if (currentSession) {
+        setCurrentStep("form");
+      }
+      setLoading(false);
+    });
 
-  // Redirect authenticated users directly to form when they first land
-  useEffect(() => {
-    if (session && currentStep === "intro") {
-      setCurrentStep("form");
-    }
-  }, [session]);
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+      if (newSession) {
+        setCurrentStep("form");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleContinue = () => {
     if (!session) {
@@ -36,6 +46,14 @@ const TalentNetwork = () => {
       setCurrentStep("form");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   const renderStep = () => {
     switch (currentStep) {
