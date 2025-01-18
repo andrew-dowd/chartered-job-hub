@@ -1,80 +1,19 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { SignInForm } from "@/components/auth/SignInForm";
+import { SignUpForm } from "@/components/auth/SignUpForm";
 
 const Auth = () => {
-  const [searchParams] = useSearchParams();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isSignUp, setIsSignUp] = useState(searchParams.get("mode") !== "signin");
-  const { toast } = useToast();
-  const navigate = useNavigate();
 
-  // Update isSignUp when search params change
   useEffect(() => {
     setIsSignUp(searchParams.get("mode") !== "signin");
   }, [searchParams]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      console.log("Attempting authentication with:", { email });
-      
-      if (!email || !password) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Please enter both email and password",
-        });
-        return;
-      }
-
-      const { error } = isSignUp 
-        ? await supabase.auth.signUp({
-            email,
-            password,
-          })
-        : await supabase.auth.signInWithPassword({
-            email,
-            password,
-          });
-
-      if (error) {
-        console.error("Auth error:", error);
-        toast({
-          variant: "destructive",
-          title: "Authentication Error",
-          description: error.message,
-        });
-      } else {
-        toast({
-          title: isSignUp ? "Account created" : "Welcome back!",
-          description: isSignUp 
-            ? "Please check your email to confirm your account" 
-            : "You have been successfully logged in",
-        });
-        if (!isSignUp) {
-          navigate("/");
-        }
-      }
-    } catch (error) {
-      console.error("Unexpected error:", error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "An unexpected error occurred",
-      });
-    } finally {
-      setLoading(false);
-    }
+  const toggleMode = () => {
+    setSearchParams({ mode: isSignUp ? "signin" : "signup" });
   };
 
   return (
@@ -91,58 +30,11 @@ const Auth = () => {
           </p>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email address</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={loading}
-                className="w-full"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={loading}
-                className="w-full"
-              />
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full bg-primary hover:bg-primary/90"
-              disabled={loading}
-            >
-              {loading 
-                ? (isSignUp ? "Creating account..." : "Signing in...") 
-                : (isSignUp ? "Create account" : "Sign in")}
-            </Button>
-
-            <div className="text-center pt-2">
-              <button
-                type="button"
-                onClick={() => setIsSignUp(!isSignUp)}
-                className="text-sm text-primary hover:underline"
-                disabled={loading}
-              >
-                {isSignUp 
-                  ? "Already have an account? Sign in" 
-                  : "Need an account? Sign up"}
-              </button>
-            </div>
-          </form>
+          {isSignUp ? (
+            <SignUpForm onToggle={toggleMode} />
+          ) : (
+            <SignInForm onToggle={toggleMode} />
+          )}
         </CardContent>
       </Card>
     </div>
