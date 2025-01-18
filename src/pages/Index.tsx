@@ -1,9 +1,8 @@
 import { JobCard } from "@/components/JobCard";
 import { FilterBar } from "@/components/FilterBar";
 import { useState, useMemo } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { UserCircle2, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { subHours, subDays } from "date-fns";
 import { ProfileDropdown } from "@/components/ProfileDropdown";
@@ -150,27 +149,15 @@ const Index = () => {
             <h1 className="text-2xl font-bold text-gray-900">Chartered Jobs</h1>
             <p className="text-sm text-gray-600">Find your next role as a Chartered Accountant in Ireland</p>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex gap-2">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="w-64"
-              />
-              <Button className="bg-primary hover:bg-primary/90">
-                Subscribe
-              </Button>
-            </div>
-            <div className="flex items-center gap-3 ml-6">
-              <Button 
-                className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white"
-                onClick={handleTalentNetwork}
-              >
-                <Upload className="h-4 w-4" />
-                Join Talent Network
-              </Button>
-              <ProfileDropdown />
-            </div>
+          <div className="flex items-center gap-3">
+            <Button 
+              className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white"
+              onClick={() => navigate('/talent-network')}
+            >
+              <Upload className="h-4 w-4" />
+              Join Talent Network
+            </Button>
+            <ProfileDropdown />
           </div>
         </div>
       </header>
