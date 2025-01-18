@@ -29,26 +29,41 @@ export const ProfileDropdown = () => {
     } = supabase.auth.onAuthStateChange((_event, newSession) => {
       console.log("Auth state changed:", _event, newSession?.user?.email);
       setSession(newSession);
+      
+      // If user signs out, redirect to auth page
+      if (_event === 'SIGNED_OUT') {
+        navigate('/auth');
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const handleSignOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("Error signing out:", error);
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error("Error signing out:", error);
+        toast({
+          title: "Error signing out",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out of your account",
+      });
+    } catch (error) {
+      console.error("Unexpected error during sign out:", error);
       toast({
         title: "Error signing out",
-        description: error.message,
+        description: "An unexpected error occurred",
         variant: "destructive",
       });
-      return;
     }
-    toast({
-      title: "Signed out successfully",
-      description: "You have been signed out of your account",
-    });
   };
 
   const handleSubscribe = () => {
