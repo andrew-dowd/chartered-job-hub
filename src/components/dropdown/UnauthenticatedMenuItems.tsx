@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { LogIn, UserPlus, Mail, Users, HelpCircle } from "lucide-react";
+import { LogIn, UserPlus, Mail, Users, HelpCircle, FileEdit } from "lucide-react";
 
 export const UnauthenticatedMenuItems = () => {
   const navigate = useNavigate();
@@ -24,6 +24,10 @@ export const UnauthenticatedMenuItems = () => {
         Sign Up
       </DropdownMenuItem>
       <DropdownMenuSeparator />
+      <DropdownMenuItem onClick={() => navigate("/post-job")} className="cursor-pointer">
+        <FileEdit className="mr-2 h-4 w-4" />
+        Post a Job
+      </DropdownMenuItem>
       <DropdownMenuItem onClick={handleSubscribe} className="cursor-pointer">
         <Mail className="mr-2 h-4 w-4" />
         Subscribe
