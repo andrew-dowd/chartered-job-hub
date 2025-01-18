@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const FAQ = () => {
   return (
-    <div className="max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Frequently Asked Questions</h1>
-      <Accordion type="single" collapsible className="space-y-2">
+    <div className="max-w-3xl mx-auto pt-12 px-4">
+      <h1 className="text-2xl font-bold mb-8">Frequently Asked Questions</h1>
+      <Accordion type="single" collapsible className="space-y-1">
         <AccordionItem value="item-1">
           <AccordionTrigger>When are jobs added/updated?</AccordionTrigger>
           <AccordionContent>
