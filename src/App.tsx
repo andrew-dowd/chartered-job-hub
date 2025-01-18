@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import TalentNetwork from "./pages/TalentNetwork";
 import SavedJobs from "./pages/SavedJobs";
+import PostJob from "./pages/PostJob";
 import { supabase } from "./integrations/supabase/client";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/talent-network" element={<TalentNetwork />} />
             <Route path="/saved-jobs" element={<SavedJobs />} />
+            <Route path="/post-job" element={<PostJob />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

@@ -9,7 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { UserCircle2, BookmarkIcon, LogOut } from "lucide-react";
+import { UserCircle2, BookmarkIcon, LogOut, BriefcaseIcon } from "lucide-react";
 
 export const ProfileDropdown = () => {
   const navigate = useNavigate();
@@ -39,6 +39,10 @@ export const ProfileDropdown = () => {
         <DropdownMenuItem onClick={() => navigate("/saved-jobs")} className="cursor-pointer">
           <BookmarkIcon className="mr-2 h-4 w-4" />
           Saved Jobs
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate("/post-job")} className="cursor-pointer">
+          <BriefcaseIcon className="mr-2 h-4 w-4" />
+          Post a Job
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
