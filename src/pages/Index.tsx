@@ -1,11 +1,7 @@
 import { JobCard } from "@/components/JobCard";
 import { FilterBar } from "@/components/FilterBar";
 import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { Upload } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { subHours, subDays } from "date-fns";
-import { ProfileDropdown } from "@/components/ProfileDropdown";
 
 const MOCK_JOBS = [
   {
@@ -99,7 +95,6 @@ const Index = () => {
   const [salaryRange, setSalaryRange] = useState([30, 200]);
   const [experience, setExperience] = useState("");
   const [location, setLocation] = useState("");
-  const navigate = useNavigate();
 
   const filteredJobs = useMemo(() => {
     return MOCK_JOBS.filter((job) => {
@@ -108,11 +103,9 @@ const Index = () => {
 
       // Salary filter
       const salaryMatch = (() => {
-        // Extract numbers from salary string (e.g., "€45,000 - €60,000")
         const numbers = job.salary.match(/\d+,?\d*/g)?.map(num => parseInt(num.replace(',', ''), 10)) || [];
         if (numbers.length >= 2) {
           const [jobMinSalary, jobMaxSalary] = numbers;
-          // Convert to thousands (k) to match the slider values
           const jobMinK = Math.floor(jobMinSalary / 1000);
           const jobMaxK = Math.floor(jobMaxSalary / 1000);
           return jobMinK >= salaryRange[0] && jobMaxK <= salaryRange[1];
@@ -137,52 +130,27 @@ const Index = () => {
     setLocation("");
   };
 
-  const handleTalentNetwork = () => {
-    navigate('/talent-network');
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Chartered Jobs</h1>
-            <p className="text-sm text-gray-600">Find your next role as a Chartered Accountant in Ireland</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button 
-              className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white"
-              onClick={() => navigate('/talent-network')}
-            >
-              <Upload className="h-4 w-4" />
-              Join Talent Network
-            </Button>
-            <ProfileDropdown />
-          </div>
+    <div className="space-y-8">
+      <FilterBar
+        onSearchChange={setSearchQuery}
+        onSalaryChange={setSalaryRange}
+        onExperienceChange={setExperience}
+        onLocationChange={setLocation}
+        onClearFilters={handleClearFilters}
+      />
+      
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {filteredJobs.map((job, index) => (
+          <JobCard key={index} {...job} />
+        ))}
+      </div>
+      
+      {filteredJobs.length === 0 && (
+        <div className="text-center py-8">
+          <p className="text-gray-600">No jobs found matching your criteria.</p>
         </div>
-      </header>
-
-      <main className="container mx-auto px-4 py-8 space-y-8">
-        <FilterBar
-          onSearchChange={setSearchQuery}
-          onSalaryChange={setSalaryRange}
-          onExperienceChange={setExperience}
-          onLocationChange={setLocation}
-          onClearFilters={handleClearFilters}
-        />
-        
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredJobs.map((job, index) => (
-            <JobCard key={index} {...job} />
-          ))}
-        </div>
-        
-        {filteredJobs.length === 0 && (
-          <div className="text-center py-8">
-            <p className="text-gray-600">No jobs found matching your criteria.</p>
-          </div>
-        )}
-      </main>
+      )}
     </div>
   );
 };
