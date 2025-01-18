@@ -5,67 +5,87 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(true);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
-      });
-    } else {
-      toast({
-        title: "Success!",
-        description: "Check your email to confirm your account.",
-      });
-    }
-    setLoading(false);
-  };
-
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      console.log("Attempting authentication with:", { email, password });
+      
+      if (!email || !password) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Please enter both email and password",
+        });
+        return;
+      }
 
-    if (error) {
+      const { error } = isSignUp 
+        ? await supabase.auth.signUp({
+            email,
+            password,
+          })
+        : await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+
+      if (error) {
+        console.error("Auth error:", error);
+        toast({
+          variant: "destructive",
+          title: "Authentication Error",
+          description: error.message,
+        });
+      } else {
+        toast({
+          title: isSignUp ? "Account created" : "Welcome back!",
+          description: isSignUp 
+            ? "Please check your email to confirm your account" 
+            : "You have been successfully logged in",
+        });
+        if (!isSignUp) {
+          navigate("/");
+        }
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message,
+        description: "An unexpected error occurred",
       });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <h1 className="text-2xl font-bold text-center">Join Our Talent Network</h1>
+          <h1 className="text-2xl font-bold text-center">
+            {isSignUp ? "Create an Account" : "Welcome Back"}
+          </h1>
           <p className="text-muted-foreground text-center mt-2">
-            Create an account to showcase your profile and get matched with exciting opportunities
+            {isSignUp 
+              ? "Join our talent network to discover exciting opportunities" 
+              : "Sign in to access your account"}
           </p>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSignUp} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email address</Label>
               <Input
@@ -75,6 +95,7 @@ const Auth = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
             
@@ -87,6 +108,7 @@ const Auth = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
 
@@ -95,17 +117,21 @@ const Auth = () => {
               className="w-full"
               disabled={loading}
             >
-              {loading ? "Creating account..." : "Create account"}
+              {loading 
+                ? (isSignUp ? "Creating account..." : "Signing in...") 
+                : (isSignUp ? "Create account" : "Sign in")}
             </Button>
 
             <div className="text-center">
               <button
                 type="button"
-                onClick={handleSignIn}
+                onClick={() => setIsSignUp(!isSignUp)}
                 className="text-sm text-primary hover:underline"
                 disabled={loading}
               >
-                Already have an account? Sign in
+                {isSignUp 
+                  ? "Already have an account? Sign in" 
+                  : "Need an account? Sign up"}
               </button>
             </div>
           </form>
