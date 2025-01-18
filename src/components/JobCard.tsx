@@ -137,28 +137,28 @@ export const JobCard = ({
     : "Recently posted";
 
   return (
-    <Card className="p-4 md:p-6 hover:shadow-lg transition-shadow duration-200 bg-white">
-      <div className="flex justify-between items-start gap-4">
-        <div className="space-y-3 md:space-y-4 flex-1 min-w-0">
+    <Card className="p-6 hover:shadow-lg transition-shadow duration-200 bg-white">
+      <div className="flex justify-between items-start">
+        <div className="space-y-4 flex-1">
           <div>
-            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-1 line-clamp-2">{title}</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-1">{title}</h3>
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              <Clock className="w-4 h-4 flex-shrink-0" />
+              <Clock className="w-4 h-4" />
               <span>{timeAgo}</span>
             </div>
           </div>
           <div className="space-y-2">
             <div className="flex items-center text-gray-600">
               <Building2 className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span className="text-sm truncate">{company}</span>
+              <span className="text-sm">{company}</span>
             </div>
             <div className="flex items-center text-gray-600">
               <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span className="text-sm truncate">{location}</span>
+              <span className="text-sm">{location}</span>
             </div>
             <div className="flex items-center text-gray-600">
               <Banknote className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span className="text-sm truncate">{salary}</span>
+              <span className="text-sm">{salary}</span>
             </div>
           </div>
         </div>
@@ -166,16 +166,16 @@ export const JobCard = ({
           variant="ghost"
           size="icon"
           onClick={handleSave}
-          className={`${saved ? "text-primary" : "text-gray-400"} flex-shrink-0`}
+          className={`${saved ? "text-primary" : "text-gray-400"} ml-2`}
         >
           {saved ? <BookmarkCheck className="w-5 h-5" /> : <BookmarkPlus className="w-5 h-5" />}
         </Button>
       </div>
       <p className="mt-4 text-sm text-gray-600 line-clamp-2">{description}</p>
-      <div className="mt-4 md:mt-6 flex justify-end">
+      <div className="mt-6 flex justify-end">
         <Button 
           asChild
-          className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white font-medium px-6"
+          className="bg-primary hover:bg-primary/90 text-white font-medium px-6"
         >
           <a href={applyUrl} target="_blank" rel="noopener noreferrer">
             Apply Now
