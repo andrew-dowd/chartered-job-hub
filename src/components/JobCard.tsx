@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import { useSession } from "@supabase/auth-helpers-react";
 import { formatDistanceToNow } from "date-fns";
 
 interface JobCardProps {
@@ -32,33 +31,51 @@ export const JobCard = ({
   const [saved, setSaved] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const session = useSession();
+  const [session, setSession] = useState(null);
 
   useEffect(() => {
-    const checkIfSaved = async () => {
-      if (session?.user) {
-        const { data, error } = await supabase
-          .from("saved_jobs")
-          .select("id")
-          .eq("user_id", session.user.id)
-          .eq("title", title)
-          .eq("company", company)
-          .maybeSingle();
-
-        if (data && !error) {
-          setSaved(true);
-        }
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      setSession(currentSession);
+      if (currentSession?.user) {
+        checkIfSaved(currentSession.user.id);
       }
-    };
+    });
 
-    checkIfSaved();
-  }, [session, title, company]);
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+      if (newSession?.user) {
+        checkIfSaved(newSession.user.id);
+      } else {
+        setSaved(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const checkIfSaved = async (userId: string) => {
+    const { data, error } = await supabase
+      .from("saved_jobs")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("title", title)
+      .eq("company", company)
+      .maybeSingle();
+
+    if (data && !error) {
+      setSaved(true);
+    }
+  };
 
   const handleSave = async () => {
     if (!session) {
       toast({
-        title: "Authentication required",
-        description: "Please sign in to save jobs",
+        title: "Sign in required",
+        description: "Please sign in or create an account to save jobs",
       });
       navigate("/auth");
       return;
@@ -81,7 +98,6 @@ export const JobCard = ({
           description: "You can always save it again later",
         });
         
-        // Call onUnsave callback if provided
         if (onUnsave) {
           onUnsave(title, company);
         }
