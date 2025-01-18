@@ -17,12 +17,17 @@ const Auth = () => {
   };
 
   return (
-    <div>
-      {isSignUp ? (
-        <SignUpForm onToggle={toggleMode} />
-      ) : (
-        <SignInForm onToggle={toggleMode} />
-      )}
+    <div className="w-full max-w-md mx-auto">
+      <div className="space-y-4">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {isSignUp ? "Create Account" : "Sign In"}
+        </h1>
+        {isSignUp ? (
+          <SignUpForm onToggle={toggleMode} />
+        ) : (
+          <SignInForm onToggle={toggleMode} />
+        )}
+      </div>
     </div>
   );
 };

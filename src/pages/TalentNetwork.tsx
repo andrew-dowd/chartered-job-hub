@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { TalentNetworkIntro } from "@/components/talent-network/TalentNetworkIntro";
 import { TalentNetworkForm } from "@/components/talent-network/TalentNetworkForm";
 import { TalentNetworkSuccess } from "@/components/talent-network/TalentNetworkSuccess";
-import { Card, CardContent } from "@/components/ui/card";
 import Auth from "./Auth";
 
 type Step = "intro" | "auth" | "form" | "success";
@@ -62,21 +61,15 @@ const TalentNetwork = () => {
         return <TalentNetworkIntro onContinue={handleContinue} />;
       case "auth":
         return (
-          <Card className="w-full max-w-md mx-auto bg-white shadow-md">
-            <CardContent className="pt-6 px-6">
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <h2 className="text-2xl font-bold text-center">Create an Account</h2>
-                  <p className="text-gray-600 text-center text-sm">
-                    Join our Talent Network to create your profile, control your privacy, 
-                    and discover matching opportunities. We'll keep your information secure 
-                    and notify you about relevant positions.
-                  </p>
-                </div>
-                <Auth />
-              </div>
-            </CardContent>
-          </Card>
+          <div className="max-w-md mx-auto">
+            <div className="space-y-4">
+              <h2 className="text-2xl font-semibold tracking-tight">Join our Talent Network</h2>
+              <p className="text-gray-600 text-sm">
+                Create an account to build your profile, control your privacy settings, and get notified about matching opportunities.
+              </p>
+              <Auth />
+            </div>
+          </div>
         );
       case "form":
         return <TalentNetworkForm onSuccess={() => setCurrentStep("success")} />;

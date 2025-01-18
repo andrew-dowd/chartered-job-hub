@@ -92,17 +92,17 @@ export const SignInForm = ({ onToggle }: { onToggle: () => void }) => {
 
       <Button
         type="submit"
-        className="w-full bg-primary hover:bg-primary/90"
+        className="w-full bg-primary hover:bg-primary/90 h-11 text-base font-medium"
         disabled={loading}
       >
         {loading ? "Signing in..." : "Sign in"}
       </Button>
 
-      <div className="text-center pt-2">
+      <div className="text-center">
         <button
           type="button"
           onClick={onToggle}
-          className="text-sm text-primary hover:underline"
+          className="text-sm text-primary hover:underline font-medium"
           disabled={loading}
         >
           Need an account? Sign up
