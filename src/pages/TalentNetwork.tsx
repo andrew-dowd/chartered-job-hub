@@ -16,11 +16,18 @@ const TalentNetwork = () => {
   const [currentStep, setCurrentStep] = useState<Step>("intro");
 
   useEffect(() => {
-    // If user becomes authenticated, move to form step
+    // If user is already authenticated, skip the auth step
     if (session && currentStep === "auth") {
       setCurrentStep("form");
     }
   }, [session, currentStep]);
+
+  // Redirect authenticated users directly to form when they first land
+  useEffect(() => {
+    if (session && currentStep === "intro") {
+      setCurrentStep("form");
+    }
+  }, [session]);
 
   const handleContinue = () => {
     if (!session) {
@@ -35,7 +42,19 @@ const TalentNetwork = () => {
       case "intro":
         return <TalentNetworkIntro onContinue={handleContinue} />;
       case "auth":
-        return <Auth />;
+        return (
+          <div className="max-w-md mx-auto">
+            <h2 className="text-2xl font-bold mb-4">Create an Account</h2>
+            <p className="text-gray-600 mb-6">
+              To join our Talent Network, you'll need an account. This allows us to:
+              - Save your profile securely
+              - Let you control who sees your information
+              - Keep you updated on matching opportunities
+              - Manage your privacy settings
+            </p>
+            <Auth />
+          </div>
+        );
       case "form":
         return <TalentNetworkForm onSuccess={() => setCurrentStep("success")} />;
       case "success":
