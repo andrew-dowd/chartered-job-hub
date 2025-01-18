@@ -29,7 +29,7 @@ export const ProfileDropdown = () => {
   };
 
   const handleSubscribe = () => {
-    window.location.href = "https://www.charteredjobs.ie/";
+    window.open("https://www.charteredjobs.ie/", "_blank");
   };
 
   const handleJoinCommunity = () => {
