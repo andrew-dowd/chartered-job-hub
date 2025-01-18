@@ -131,7 +131,7 @@ const Index = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8 px-4 md:px-0">
       <FilterBar
         onSearchChange={setSearchQuery}
         onSalaryChange={setSalaryRange}
@@ -140,7 +140,7 @@ const Index = () => {
         onClearFilters={handleClearFilters}
       />
       
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {filteredJobs.map((job, index) => (
           <JobCard key={index} {...job} />
         ))}
