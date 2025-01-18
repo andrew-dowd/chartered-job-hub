@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const FAQ = () => {
   return (
-    <div className="container mx-auto px-4 py-8 max-w-3xl">
+    <div className="max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Frequently Asked Questions</h1>
       <Accordion type="single" collapsible className="space-y-2">
         <AccordionItem value="item-1">

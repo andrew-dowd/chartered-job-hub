@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Layout } from "@/components/Layout";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import SavedJobs from "./pages/SavedJobs";
@@ -11,12 +12,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/saved-jobs" element={<SavedJobs />} />
-        <Route path="/post-job" element={<PostJob />} />
-        <Route path="/talent-network" element={<TalentNetwork />} />
-        <Route path="/faq" element={<FAQ />} />
+        <Route element={<Layout />}>
+          <Route path="/" element={<Index />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/saved-jobs" element={<SavedJobs />} />
+          <Route path="/post-job" element={<PostJob />} />
+          <Route path="/talent-network" element={<TalentNetwork />} />
+          <Route path="/faq" element={<FAQ />} />
+        </Route>
       </Routes>
     </Router>
   );
