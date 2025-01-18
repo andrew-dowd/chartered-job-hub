@@ -20,7 +20,7 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      console.log("Attempting authentication with:", { email, password });
+      console.log("Attempting authentication with:", { email });
       
       if (!email || !password) {
         toast({
@@ -72,13 +72,13 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <h1 className="text-2xl font-bold text-center">
+    <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 bg-gray-50">
+      <Card className="w-full max-w-md mx-auto shadow-lg">
+        <CardHeader className="space-y-1 text-center pb-4">
+          <h1 className="text-2xl font-bold tracking-tight">
             {isSignUp ? "Create an Account" : "Welcome Back"}
           </h1>
-          <p className="text-muted-foreground text-center mt-2">
+          <p className="text-sm text-muted-foreground">
             {isSignUp 
               ? "Join our talent network to discover exciting opportunities" 
               : "Sign in to access your account"}
@@ -96,6 +96,7 @@ const Auth = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
+                className="w-full"
               />
             </div>
             
@@ -109,12 +110,13 @@ const Auth = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={loading}
+                className="w-full"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-primary hover:bg-primary/90"
               disabled={loading}
             >
               {loading 
@@ -122,7 +124,7 @@ const Auth = () => {
                 : (isSignUp ? "Create account" : "Sign in")}
             </Button>
 
-            <div className="text-center">
+            <div className="text-center pt-2">
               <button
                 type="button"
                 onClick={() => setIsSignUp(!isSignUp)}
