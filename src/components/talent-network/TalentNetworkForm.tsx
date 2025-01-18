@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "@supabase/auth-helpers-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -25,11 +25,10 @@ const formSchema = z.object({
 });
 
 interface TalentNetworkFormProps {
-  existingProfile?: any;
   onSuccess: () => void;
 }
 
-export const TalentNetworkForm = ({ existingProfile, onSuccess }: TalentNetworkFormProps) => {
+export const TalentNetworkForm = ({ onSuccess }: TalentNetworkFormProps) => {
   const session = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
@@ -37,13 +36,13 @@ export const TalentNetworkForm = ({ existingProfile, onSuccess }: TalentNetworkF
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: existingProfile?.full_name || "",
-      email: existingProfile?.email || "",
-      currentLocation: existingProfile?.current_location || "",
-      additionalLocations: existingProfile?.additional_locations || "",
-      linkedinUrl: existingProfile?.linkedin_url || "",
-      portfolioUrl: existingProfile?.portfolio_url || "",
-      salaryExpectation: existingProfile?.salary_expectation || "",
+      fullName: "",
+      email: "",
+      currentLocation: "",
+      additionalLocations: "",
+      linkedinUrl: "",
+      portfolioUrl: "",
+      salaryExpectation: "",
     },
   });
 
@@ -65,7 +64,7 @@ export const TalentNetworkForm = ({ existingProfile, onSuccess }: TalentNetworkF
 
     setIsSubmitting(true);
     try {
-      let resumeUrl = existingProfile?.resume_url || "";
+      let resumeUrl = "";
       
       if (resumeFile) {
         const fileExt = resumeFile.name.split('.').pop();
@@ -84,35 +83,21 @@ export const TalentNetworkForm = ({ existingProfile, onSuccess }: TalentNetworkF
         resumeUrl = publicUrl;
       }
 
-      const profileData = {
-        user_id: session.user.id,
-        full_name: values.fullName,
-        email: values.email,
-        current_location: values.currentLocation,
-        additional_locations: values.additionalLocations || null,
-        linkedin_url: values.linkedinUrl || null,
-        portfolio_url: values.portfolioUrl || null,
-        salary_expectation: values.salaryExpectation || null,
-        resume_url: resumeUrl || null,
-      };
-
-      const { error } = existingProfile
-        ? await supabase
-            .from('talent_profiles')
-            .update(profileData)
-            .eq('user_id', session.user.id)
-        : await supabase
-            .from('talent_profiles')
-            .insert(profileData);
+      const { error } = await supabase
+        .from('talent_profiles')
+        .insert({
+          user_id: session.user.id,
+          full_name: values.fullName,
+          email: values.email,
+          current_location: values.currentLocation,
+          additional_locations: values.additionalLocations || null,
+          linkedin_url: values.linkedinUrl || null,
+          portfolio_url: values.portfolioUrl || null,
+          salary_expectation: values.salaryExpectation || null,
+          resume_url: resumeUrl || null,
+        });
 
       if (error) throw error;
-
-      toast({
-        title: existingProfile ? "Profile Updated" : "Profile Created",
-        description: existingProfile 
-          ? "Your profile has been successfully updated" 
-          : "Your profile has been successfully created",
-      });
 
       onSuccess();
     } catch (error) {
@@ -130,14 +115,8 @@ export const TalentNetworkForm = ({ existingProfile, onSuccess }: TalentNetworkF
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold text-gray-900">
-          {existingProfile ? "Update Your Profile" : "Complete Your Profile"}
-        </h1>
-        <p className="text-gray-600">
-          {existingProfile 
-            ? "Keep your profile up to date to receive the best matches" 
-            : "Help companies discover you"}
-        </p>
+        <h1 className="text-2xl font-bold text-gray-900">Complete Your Profile</h1>
+        <p className="text-gray-600">Help companies discover you</p>
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -266,12 +245,7 @@ export const TalentNetworkForm = ({ existingProfile, onSuccess }: TalentNetworkF
               className="w-full"
               disabled={isSubmitting}
             >
-              {isSubmitting 
-                ? "Submitting..." 
-                : existingProfile 
-                  ? "Update Profile"
-                  : "Submit Profile"
-              }
+              {isSubmitting ? "Submitting..." : "Submit Profile"}
             </Button>
           </form>
         </Form>
