@@ -74,7 +74,7 @@ export const FilterBar = ({
     salaryRange[0] !== 30 || salaryRange[1] !== 200;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-4">
+    <div className="bg-white rounded-xl shadow-sm border p-6 mt-8">
       <div className="flex items-center gap-4">
         <div className="flex-1 min-w-[200px]">
           <div className="relative">
