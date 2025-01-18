@@ -118,11 +118,11 @@ export const ProfileDropdown = () => {
         ) : (
           // Logged out state
           <>
-            <DropdownMenuItem onClick={() => navigate("/auth")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => navigate("/auth?mode=signin")} className="cursor-pointer">
               <LogIn className="mr-2 h-4 w-4" />
               Log In
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate("/auth")} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => navigate("/auth?mode=signup")} className="cursor-pointer">
               <UserPlus className="mr-2 h-4 w-4" />
               Sign Up
             </DropdownMenuItem>
