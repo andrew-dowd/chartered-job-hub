@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSession } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,32 +13,44 @@ type Step = "intro" | "auth" | "form" | "success";
 
 const TalentNetwork = () => {
   const navigate = useNavigate();
+  const session = useSession();
   const [currentStep, setCurrentStep] = useState<Step>("intro");
-  const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [existingProfile, setExistingProfile] = useState<any>(null);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
-      setSession(currentSession);
-      if (currentSession) {
-        setCurrentStep("form");
+    const checkExistingProfile = async () => {
+      if (!session?.user) {
+        setLoading(false);
+        return;
       }
-      setLoading(false);
-    });
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession);
-      if (newSession) {
-        setCurrentStep("form");
+      try {
+        console.log("Checking for existing profile for user:", session.user.id);
+        const { data: profile, error } = await supabase
+          .from('talent_profiles')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        console.log("Existing profile found:", profile);
+        setExistingProfile(profile);
+        
+        // If user has a profile, skip intro and go straight to form
+        if (profile) {
+          setCurrentStep("form");
+        }
+      } catch (error) {
+        console.error("Error checking profile:", error);
+      } finally {
+        setLoading(false);
       }
-    });
+    };
 
-    return () => subscription.unsubscribe();
-  }, []);
+    checkExistingProfile();
+  }, [session]);
 
   const handleContinue = () => {
     if (!session) {
@@ -58,6 +71,7 @@ const TalentNetwork = () => {
   const renderStep = () => {
     switch (currentStep) {
       case "intro":
+        // Only show intro if user doesn't have a profile
         return <TalentNetworkIntro onContinue={handleContinue} />;
       case "auth":
         return (
@@ -74,7 +88,12 @@ const TalentNetwork = () => {
           </div>
         );
       case "form":
-        return <TalentNetworkForm onSuccess={() => setCurrentStep("success")} />;
+        return (
+          <TalentNetworkForm 
+            existingProfile={existingProfile} 
+            onSuccess={() => setCurrentStep("success")} 
+          />
+        );
       case "success":
         return <TalentNetworkSuccess />;
     }
