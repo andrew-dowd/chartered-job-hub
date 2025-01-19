@@ -142,9 +142,13 @@ export const JobCard = ({
       ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
       : "Recently posted";
 
-  const displaySalary = salary && salary !== "null" && salary !== "undefined" && salary.trim() !== "" 
-    ? salary 
-    : "Not disclosed";
+  const displaySalary = salary && 
+    salary !== "null" && 
+    salary !== "undefined" && 
+    salary.trim() !== "" && 
+    salary !== "€0k - €0k"
+      ? salary 
+      : "Not disclosed";
 
   return (
     <Card className="p-6 hover:shadow-lg transition-shadow duration-200 bg-white">
