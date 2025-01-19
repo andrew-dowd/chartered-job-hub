@@ -136,12 +136,15 @@ export const JobCard = ({
     }
   };
 
-  // Use postedDate if available (from jobs table), otherwise fall back to createdAt (from saved_jobs table)
   const timeAgo = postedDate 
     ? formatDistanceToNow(new Date(postedDate), { addSuffix: true })
     : createdAt 
       ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
       : "Recently posted";
+
+  const displaySalary = salary && salary !== "null" && salary !== "undefined" && salary.trim() !== "" 
+    ? salary 
+    : "Not disclosed";
 
   return (
     <Card className="p-6 hover:shadow-lg transition-shadow duration-200 bg-white">
@@ -165,7 +168,7 @@ export const JobCard = ({
             </div>
             <div className="flex items-center text-gray-600">
               <Banknote className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span className="text-sm">{salary}</span>
+              <span className="text-sm">{displaySalary}</span>
             </div>
           </div>
         </div>
