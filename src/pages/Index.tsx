@@ -2,7 +2,7 @@ import { JobCard } from "@/components/JobCard";
 import { FilterBar } from "@/components/FilterBar";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [jobs, setJobs] = useState([]);
@@ -21,12 +21,12 @@ const Index = () => {
 
   const fetchJobs = async () => {
     try {
+      console.log("Fetching jobs with filters:", filters);
       let query = supabase
         .from("jobs")
         .select("*")
         .order("posted_date", { ascending: false });
 
-      // Apply filters
       if (filters.searchQuery) {
         query = query.ilike("title", `%${filters.searchQuery}%`);
       }
@@ -35,8 +35,19 @@ const Index = () => {
         query = query.gte("min_salary", filters.minSalary * 1000);
       }
 
+      // Map the experience filter values to the experience_level field
       if (filters.experience) {
-        query = query.eq("experience_level", filters.experience);
+        switch (filters.experience) {
+          case "0-2":
+            query = query.eq("experience_level", "Junior");
+            break;
+          case "3-5":
+            query = query.eq("experience_level", "Mid-Level");
+            break;
+          case "5+":
+            query = query.eq("experience_level", "Senior");
+            break;
+        }
       }
 
       if (filters.location) {
@@ -49,6 +60,7 @@ const Index = () => {
         throw error;
       }
 
+      console.log("Fetched jobs:", data);
       setJobs(data || []);
     } catch (error) {
       console.error("Error fetching jobs:", error);
@@ -71,6 +83,7 @@ const Index = () => {
   };
 
   const handleExperienceChange = (experience: string) => {
+    console.log("Experience filter changed:", experience);
     setFilters(prev => ({ ...prev, experience }));
   };
 
