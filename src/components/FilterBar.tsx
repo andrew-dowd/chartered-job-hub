@@ -118,9 +118,9 @@ export const FilterBar = ({
               step={5}
               value={[minSalary]}
               onValueChange={handleMinSalaryChange}
-              className="w-32 md:w-32"
+              className="flex-1"
             />
-            <span className="text-sm text-gray-600">€200k</span>
+            <span className="text-sm text-gray-600 text-right">€200k</span>
           </div>
         </div>
 
