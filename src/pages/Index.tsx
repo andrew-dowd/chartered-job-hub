@@ -1,150 +1,122 @@
 import { JobCard } from "@/components/JobCard";
 import { FilterBar } from "@/components/FilterBar";
-import { useState, useMemo } from "react";
-import { subHours, subDays } from "date-fns";
-
-const MOCK_JOBS = [
-  {
-    title: "Senior Financial Accountant",
-    company: "KPMG",
-    location: "Dublin",
-    salary: "€65,000 - €85,000",
-    description: "Join our team of experienced chartered accountants working with leading Irish and multinational clients. Strong background in financial reporting and analysis required.",
-    applyUrl: "#",
-    createdAt: subHours(new Date(), 2).toISOString(),
-    experience_level: "5+"
-  },
-  {
-    title: "Tax Manager",
-    company: "PwC",
-    location: "Cork",
-    salary: "€60,000 - €75,000",
-    description: "Exciting opportunity for a chartered accountant specializing in corporate tax planning and compliance for Irish businesses.",
-    applyUrl: "#",
-    createdAt: subHours(new Date(), 5).toISOString(),
-    experience_level: "3-5"
-  },
-  {
-    title: "Audit Senior",
-    company: "Deloitte",
-    location: "Galway",
-    salary: "€45,000 - €60,000",
-    description: "Join our audit team working with diverse clients across Ireland. Excellent opportunity for career progression.",
-    applyUrl: "#",
-    createdAt: subDays(new Date(), 1).toISOString(),
-    experience_level: "3-5"
-  },
-  {
-    title: "Financial Controller",
-    company: "EY",
-    location: "Limerick",
-    salary: "€70,000 - €90,000",
-    description: "Leading the financial operations for our growing Irish client base. Strong commercial acumen required.",
-    applyUrl: "#",
-    experience_level: "5+"
-  },
-  {
-    title: "Management Accountant",
-    company: "Grant Thornton",
-    location: "Waterford",
-    salary: "€45,000 - €60,000",
-    description: "Supporting Irish businesses with management reporting and financial analysis.",
-    applyUrl: "#",
-    experience_level: "0-2"
-  },
-  {
-    title: "Corporate Finance Associate",
-    company: "BDO",
-    location: "Dublin",
-    salary: "€50,000 - €65,000",
-    description: "Working on M&A transactions and corporate advisory projects across Ireland.",
-    applyUrl: "#",
-    experience_level: "3-5"
-  },
-  {
-    title: "Risk Advisory Manager",
-    company: "KPMG",
-    location: "Belfast",
-    salary: "€55,000 - €75,000",
-    description: "Leading risk advisory projects for major Irish and international clients.",
-    applyUrl: "#",
-    experience_level: "5+"
-  },
-  {
-    title: "Internal Auditor",
-    company: "AIB",
-    location: "Dublin",
-    salary: "€45,000 - €60,000",
-    description: "Supporting internal audit function for one of Ireland's leading banks.",
-    applyUrl: "#",
-    experience_level: "0-2"
-  },
-  {
-    title: "Group Accountant",
-    company: "CRH",
-    location: "Dublin",
-    salary: "€55,000 - €70,000",
-    description: "Managing group consolidation and reporting for Irish operations.",
-    applyUrl: "#",
-    experience_level: "3-5"
-  }
-];
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [minSalary, setMinSalary] = useState(30);
-  const [experience, setExperience] = useState("");
-  const [location, setLocation] = useState("");
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+  const [filters, setFilters] = useState({
+    searchQuery: "",
+    minSalary: 30,
+    experience: "",
+    location: "",
+  });
 
-  const filteredJobs = useMemo(() => {
-    return MOCK_JOBS.filter((job) => {
-      // Search filter
-      const matchesSearch = job.title.toLowerCase().includes(searchQuery.toLowerCase());
+  useEffect(() => {
+    fetchJobs();
+  }, [filters]);
 
-      // Salary filter
-      const salaryMatch = (() => {
-        const numbers = job.salary.match(/\d+,?\d*/g)?.map(num => parseInt(num.replace(',', ''), 10)) || [];
-        if (numbers.length >= 2) {
-          const jobMinSalary = Math.floor(numbers[0] / 1000);
-          return jobMinSalary >= minSalary;
-        }
-        return false;
-      })();
+  const fetchJobs = async () => {
+    try {
+      let query = supabase
+        .from("jobs")
+        .select("*")
+        .order("posted_date", { ascending: false });
 
-      // Location filter
-      const locationMatch = !location || job.location.toLowerCase() === location;
+      // Apply filters
+      if (filters.searchQuery) {
+        query = query.ilike("title", `%${filters.searchQuery}%`);
+      }
 
-      // Experience filter
-      const experienceMatch = !experience || job.experience_level === experience;
+      if (filters.minSalary > 30) {
+        query = query.gte("min_salary", filters.minSalary * 1000);
+      }
 
-      return matchesSearch && salaryMatch && locationMatch && experienceMatch;
-    });
-  }, [searchQuery, minSalary, experience, location]);
+      if (filters.experience) {
+        query = query.eq("experience_level", filters.experience);
+      }
+
+      if (filters.location) {
+        query = query.ilike("location_category", filters.location);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        throw error;
+      }
+
+      setJobs(data || []);
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch jobs. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearchChange = (search: string) => {
+    setFilters(prev => ({ ...prev, searchQuery: search }));
+  };
+
+  const handleMinSalaryChange = (minSalary: number) => {
+    setFilters(prev => ({ ...prev, minSalary }));
+  };
+
+  const handleExperienceChange = (experience: string) => {
+    setFilters(prev => ({ ...prev, experience }));
+  };
+
+  const handleLocationChange = (location: string) => {
+    setFilters(prev => ({ ...prev, location }));
+  };
 
   const handleClearFilters = () => {
-    setSearchQuery("");
-    setMinSalary(30);
-    setExperience("");
-    setLocation("");
+    setFilters({
+      searchQuery: "",
+      minSalary: 30,
+      experience: "",
+      location: "",
+    });
   };
 
   return (
     <div className="space-y-8">
       <FilterBar
-        onSearchChange={setSearchQuery}
-        onMinSalaryChange={setMinSalary}
-        onExperienceChange={setExperience}
-        onLocationChange={setLocation}
+        onSearchChange={handleSearchChange}
+        onMinSalaryChange={handleMinSalaryChange}
+        onExperienceChange={handleExperienceChange}
+        onLocationChange={handleLocationChange}
         onClearFilters={handleClearFilters}
       />
       
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredJobs.map((job, index) => (
-          <JobCard key={index} {...job} />
-        ))}
-      </div>
-      
-      {filteredJobs.length === 0 && (
+      {loading ? (
+        <div className="text-center py-8">
+          <p className="text-gray-600">Loading jobs...</p>
+        </div>
+      ) : jobs.length > 0 ? (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {jobs.map((job) => (
+            <JobCard
+              key={job.id}
+              title={job.title}
+              company={job.company}
+              location={job.location}
+              salary={job.salary_range || `€${job.salary_min / 1000}k - €${job.salary_max / 1000}k`}
+              description={job.description}
+              applyUrl={job.job_url}
+              createdAt={job.posted_date}
+            />
+          ))}
+        </div>
+      ) : (
         <div className="text-center py-8">
           <p className="text-gray-600">No jobs found matching your criteria.</p>
         </div>

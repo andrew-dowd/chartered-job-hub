@@ -9,6 +9,69 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      jobs: {
+        Row: {
+          closing_date: string | null
+          company: string
+          created_at: string
+          description: string
+          experience_level: string | null
+          id: string
+          job_url: string
+          location: string
+          location_category: string | null
+          min_experience: number | null
+          min_salary: number | null
+          posted_date: string
+          pqe: string | null
+          reasoning: string | null
+          salary_max: number | null
+          salary_min: number | null
+          salary_range: string | null
+          title: string
+        }
+        Insert: {
+          closing_date?: string | null
+          company: string
+          created_at?: string
+          description: string
+          experience_level?: string | null
+          id?: string
+          job_url: string
+          location: string
+          location_category?: string | null
+          min_experience?: number | null
+          min_salary?: number | null
+          posted_date?: string
+          pqe?: string | null
+          reasoning?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          salary_range?: string | null
+          title: string
+        }
+        Update: {
+          closing_date?: string | null
+          company?: string
+          created_at?: string
+          description?: string
+          experience_level?: string | null
+          id?: string
+          job_url?: string
+          location?: string
+          location_category?: string | null
+          min_experience?: number | null
+          min_salary?: number | null
+          posted_date?: string
+          pqe?: string | null
+          reasoning?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          salary_range?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       saved_jobs: {
         Row: {
           apply_url: string
