@@ -10,9 +10,9 @@ interface SavedJob {
   title: string;
   company: string;
   location: string;
-  salary: string;
+  salary_range: string | null;
   description: string;
-  apply_url: string;
+  job_url: string;
   created_at: string;
   min_experience: number | null;
   location_category: string | null;
@@ -55,19 +55,38 @@ const SavedJobs = () => {
 
   const fetchSavedJobs = async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from("saved_jobs")
-        .select("*")
-        .eq("user_id", userId)
-        .order("created_at", { ascending: false });
+      const { data: savedJobsData, error } = await supabase
+        .from('saved_jobs')
+        .select(`
+          job_id,
+          jobs (
+            id,
+            title,
+            company,
+            location,
+            salary_range,
+            description,
+            job_url,
+            created_at,
+            min_experience,
+            location_category,
+            reasoning
+          )
+        `)
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error("Error fetching saved jobs:", error);
         return;
       }
 
-      console.log("Fetched saved jobs:", data?.length);
-      setSavedJobs(data || []);
+      const formattedJobs = savedJobsData
+        .map(record => record.jobs)
+        .filter(job => job !== null);
+
+      console.log("Fetched saved jobs:", formattedJobs?.length);
+      setSavedJobs(formattedJobs || []);
       setLoading(false);
     } catch (error) {
       console.error("Error in fetchSavedJobs:", error);
@@ -79,10 +98,9 @@ const SavedJobs = () => {
     navigate("/");
   };
 
-  // This function will be passed to JobCard to handle state updates
-  const onJobUnsaved = (title: string, company: string) => {
+  const onJobUnsaved = (jobId: string) => {
     setSavedJobs((current) =>
-      current.filter((job) => !(job.title === title && job.company === company))
+      current.filter((job) => job.id !== jobId)
     );
   };
 
@@ -118,12 +136,13 @@ const SavedJobs = () => {
             {savedJobs.map((job) => (
               <JobCard
                 key={job.id}
+                id={job.id}
                 title={job.title}
                 company={job.company}
                 location={job.location}
-                salary={job.salary}
+                salary={job.salary_range || ""}
                 description={job.description}
-                applyUrl={job.apply_url}
+                applyUrl={job.job_url}
                 createdAt={job.created_at}
                 onUnsave={onJobUnsaved}
                 minExperience={job.min_experience}
