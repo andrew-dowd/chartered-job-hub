@@ -72,8 +72,8 @@ export const FilterBar = ({
   const hasActiveFilters = searchValue || experienceValue || locationValue || minSalary !== 30;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-6 mt-8">
-      <div className="flex items-center gap-4">
+    <div className="bg-white rounded-xl shadow-sm border p-4">
+      <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1 min-w-[200px]">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -87,7 +87,7 @@ export const FilterBar = ({
           </div>
         </div>
 
-        <div className="min-w-[240px] border-l border-gray-200 pl-4">
+        <div className="md:w-[240px] md:border-l border-gray-200 md:pl-4">
           <p className="text-sm font-medium text-gray-600 mb-1">Minimum Salary</p>
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">€{minSalary}k</span>
@@ -104,7 +104,7 @@ export const FilterBar = ({
           </div>
         </div>
 
-        <div className="min-w-[160px] border-l border-gray-200 pl-4">
+        <div className="md:w-[160px] md:border-l border-gray-200 md:pl-4">
           <p className="text-sm font-medium text-gray-600 mb-1">Experience</p>
           <Select value={experienceValue} onValueChange={handleExperienceChange}>
             <SelectTrigger className="w-full bg-white border-gray-200">
@@ -118,7 +118,7 @@ export const FilterBar = ({
           </Select>
         </div>
 
-        <div className="min-w-[160px] border-l border-gray-200 pl-4">
+        <div className="md:w-[160px] md:border-l border-gray-200 md:pl-4">
           <p className="text-sm font-medium text-gray-600 mb-1">Location</p>
           <Select value={locationValue} onValueChange={handleLocationChange}>
             <SelectTrigger className="w-full bg-white border-gray-200">
@@ -140,7 +140,7 @@ export const FilterBar = ({
 
         <Button 
           onClick={handleClearFilters}
-          className="h-12 w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0"
+          className="h-12 w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0 md:self-end"
           size="icon"
         >
           {hasActiveFilters ? (

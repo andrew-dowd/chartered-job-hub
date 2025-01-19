@@ -150,28 +150,53 @@ const Index = () => {
   };
 
   return (
-    <div className="max-w-[1600px] mx-auto space-y-6">
-      <FilterBar
-        onSearchChange={handleSearchChange}
-        onMinSalaryChange={handleMinSalaryChange}
-        onExperienceChange={handleExperienceChange}
-        onLocationChange={handleLocationChange}
-        onClearFilters={handleClearFilters}
-      />
-      
-      <div className="bg-white rounded-lg p-4 shadow-sm border">
-        <p className="text-lg">
-          Found <span className="text-primary font-semibold">{totalJobs}</span> matching jobs
-        </p>
+    <div className="w-full space-y-4">
+      <div className="bg-white border-b">
+        <div className="max-w-[1600px] mx-auto px-4 py-8 md:px-6 lg:px-8">
+          <h1 className="text-4xl font-bold text-gray-900">Find Your Next Role</h1>
+          <p className="mt-2 text-lg text-gray-600">Discover opportunities that match your experience and aspirations</p>
+        </div>
       </div>
-      
-      {jobs.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {jobs.map((job, index) => {
-            if (jobs.length === index + 1) {
-              return (
-                <div ref={lastJobElementRef} key={job.id}>
+
+      <div className="max-w-[1600px] mx-auto px-4 md:px-6 lg:px-8">
+        <FilterBar
+          onSearchChange={handleSearchChange}
+          onMinSalaryChange={handleMinSalaryChange}
+          onExperienceChange={handleExperienceChange}
+          onLocationChange={handleLocationChange}
+          onClearFilters={handleClearFilters}
+        />
+        
+        <div className="bg-white rounded-lg p-4 shadow-sm border mt-4">
+          <p className="text-lg">
+            Found <span className="text-primary font-semibold">{totalJobs}</span> matching jobs
+          </p>
+        </div>
+        
+        {jobs.length > 0 ? (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 mt-4">
+            {jobs.map((job, index) => {
+              if (jobs.length === index + 1) {
+                return (
+                  <div ref={lastJobElementRef} key={job.id}>
+                    <JobCard
+                      title={job.title}
+                      company={job.company}
+                      location={job.location}
+                      salary={job.salary_range || `€${job.salary_min / 1000}k - €${job.salary_max / 1000}k`}
+                      description=""
+                      reasoning={job.reasoning}
+                      applyUrl={job.job_url}
+                      postedDate={job.posted_date}
+                      minExperience={job.min_experience}
+                      locationCategory={job.location_category}
+                    />
+                  </div>
+                );
+              } else {
+                return (
                   <JobCard
+                    key={job.id}
                     title={job.title}
                     company={job.company}
                     location={job.location}
@@ -183,40 +208,24 @@ const Index = () => {
                     minExperience={job.min_experience}
                     locationCategory={job.location_category}
                   />
-                </div>
-              );
-            } else {
-              return (
-                <JobCard
-                  key={job.id}
-                  title={job.title}
-                  company={job.company}
-                  location={job.location}
-                  salary={job.salary_range || `€${job.salary_min / 1000}k - €${job.salary_max / 1000}k`}
-                  description=""
-                  reasoning={job.reasoning}
-                  applyUrl={job.job_url}
-                  postedDate={job.posted_date}
-                  minExperience={job.min_experience}
-                  locationCategory={job.location_category}
-                />
-              );
-            }
-          })}
-        </div>
-      ) : (
-        <div className="text-center py-8">
-          <p className="text-gray-600">
-            {loading ? "Loading jobs..." : "No jobs found matching your criteria."}
-          </p>
-        </div>
-      )}
-      
-      {loading && jobs.length > 0 && (
-        <div className="text-center py-4">
-          <p className="text-gray-600">Loading more jobs...</p>
-        </div>
-      )}
+                );
+              }
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-gray-600">
+              {loading ? "Loading jobs..." : "No jobs found matching your criteria."}
+            </p>
+          </div>
+        )}
+        
+        {loading && jobs.length > 0 && (
+          <div className="text-center py-4">
+            <p className="text-gray-600">Loading more jobs...</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
