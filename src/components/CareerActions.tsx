@@ -12,7 +12,6 @@ export const CareerActions = () => {
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here we would integrate with Beehiiv
     toast({
       title: "Subscribed!",
       description: "You've been added to our newsletter list.",
@@ -29,7 +28,7 @@ export const CareerActions = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-4">
+    <div className="bg-white rounded-lg shadow-sm p-6">
       <div className="flex flex-wrap gap-4 items-center justify-between">
         <form onSubmit={handleNewsletterSubmit} className="flex gap-2 flex-1 min-w-[280px]">
           <Input
