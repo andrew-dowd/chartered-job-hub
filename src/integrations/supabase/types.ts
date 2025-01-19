@@ -22,7 +22,7 @@ export type Database = {
           location_category: string | null
           min_experience: number | null
           min_salary: number | null
-          posted_date: string
+          posted_date: string | null
           pqe: string | null
           reasoning: string | null
           salary_max: number | null
@@ -42,7 +42,7 @@ export type Database = {
           location_category?: string | null
           min_experience?: number | null
           min_salary?: number | null
-          posted_date?: string
+          posted_date?: string | null
           pqe?: string | null
           reasoning?: string | null
           salary_max?: number | null
@@ -62,7 +62,7 @@ export type Database = {
           location_category?: string | null
           min_experience?: number | null
           min_salary?: number | null
-          posted_date?: string
+          posted_date?: string | null
           pqe?: string | null
           reasoning?: string | null
           salary_max?: number | null

@@ -31,15 +31,14 @@ export const FilterBar = ({
   const [experienceValue, setExperienceValue] = useState("");
   const [locationValue, setLocationValue] = useState("");
   
-  const IRISH_LOCATIONS = [
-    "All Ireland",
+  const LOCATIONS = [
     "Dublin",
-    "Cork",
-    "Galway",
-    "Limerick",
-    "Waterford",
-    "Belfast",
-    "Remote"
+    "Leinster",
+    "Munster",
+    "Connacht",
+    "Ulster",
+    "Remote",
+    "International"
   ];
 
   const handleMinSalaryChange = (value: number[]) => {
@@ -59,7 +58,7 @@ export const FilterBar = ({
 
   const handleLocationChange = (value: string) => {
     setLocationValue(value);
-    onLocationChange(value === "all ireland" ? "" : value);
+    onLocationChange(value.toLowerCase());
   };
 
   const handleClearFilters = () => {
@@ -126,10 +125,10 @@ export const FilterBar = ({
               <SelectValue placeholder="Select location" />
             </SelectTrigger>
             <SelectContent className="bg-white border shadow-lg">
-              {IRISH_LOCATIONS.map((location) => (
+              {LOCATIONS.map((location) => (
                 <SelectItem 
                   key={location} 
-                  value={location.toLowerCase()}
+                  value={location}
                   className="hover:bg-gray-50"
                 >
                   {location}
