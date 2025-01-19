@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { ProfileDropdown } from "./ProfileDropdown";
 import { Button } from "@/components/ui/button";
-import { Upload } from "lucide-react";
+import { Users } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export const NavBar = () => {
@@ -21,7 +21,7 @@ export const NavBar = () => {
               className="hidden md:flex items-center gap-2 bg-primary hover:bg-primary/90 text-white text-sm md:text-base w-full md:w-auto justify-center"
               onClick={() => navigate('/talent-network')}
             >
-              <Upload className="h-4 w-4" />
+              <Users className="h-4 w-4" />
               {isMobile ? "Join Network" : "Join Talent Network"}
             </Button>
             <ProfileDropdown />
