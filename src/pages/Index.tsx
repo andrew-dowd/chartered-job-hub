@@ -150,6 +150,7 @@ const Index = () => {
                     applyUrl={job.job_url}
                     postedDate={job.posted_date}
                     minExperience={job.min_experience}
+                    locationCategory={job.location_category}
                   />
                 </div>
               );
@@ -166,6 +167,7 @@ const Index = () => {
                   applyUrl={job.job_url}
                   postedDate={job.posted_date}
                   minExperience={job.min_experience}
+                  locationCategory={job.location_category}
                 />
               );
             }

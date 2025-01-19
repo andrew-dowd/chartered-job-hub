@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookmarkPlus, BookmarkCheck, MapPin, Building2, Banknote, Clock, File } from "lucide-react";
+import { BookmarkPlus, BookmarkCheck, MapPin, Building2, Banknote, Clock, File, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,6 +20,7 @@ interface JobCardProps {
   postedDate?: string;
   onUnsave?: (title: string, company: string) => void;
   minExperience?: number | null;
+  locationCategory?: string;
 }
 
 export const JobCard = ({
@@ -34,6 +35,7 @@ export const JobCard = ({
   postedDate,
   onUnsave,
   minExperience,
+  locationCategory,
 }: JobCardProps) => {
   const [saved, setSaved] = useState(false);
   const { toast } = useToast();
@@ -193,12 +195,20 @@ export const JobCard = ({
         </Button>
       </div>
       <div className="mt-4 flex-grow">
-        {minExperience !== null && minExperience !== undefined && (
-          <Badge variant="secondary" className="mb-2">
-            <File className="w-3.5 h-3.5 mr-1 inline-block" />
-            {minExperience}+ YOE
-          </Badge>
-        )}
+        <div className="flex gap-2 mb-2">
+          {minExperience !== null && minExperience !== undefined && (
+            <Badge variant="secondary">
+              <File className="w-3.5 h-3.5 mr-1 inline-block" />
+              {minExperience}+ YOE
+            </Badge>
+          )}
+          {locationCategory && (
+            <Badge variant="secondary">
+              <Globe className="w-3.5 h-3.5 mr-1 inline-block" />
+              {locationCategory}
+            </Badge>
+          )}
+        </div>
         <p className="text-sm text-gray-600">
           {reasoning || description}
         </p>
