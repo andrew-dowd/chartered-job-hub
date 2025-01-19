@@ -14,6 +14,7 @@ export const NewsletterSubscription = () => {
     setIsLoading(true);
 
     try {
+      console.log("Attempting to subscribe email:", email);
       const { data, error } = await supabase.functions.invoke('subscribe-newsletter', {
         body: { email }
       });
@@ -26,8 +27,9 @@ export const NewsletterSubscription = () => {
       console.log('Subscription response:', data);
 
       toast({
-        title: "Successfully subscribed!",
-        description: "Welcome to our newsletter. You'll hear from us soon!",
+        title: "Successfully subscribed! 🎉",
+        description: "You'll receive our weekly job updates every Thursday.",
+        duration: 5000,
       });
       
       setEmail("");
@@ -35,8 +37,9 @@ export const NewsletterSubscription = () => {
       console.error('Newsletter subscription error:', error);
       toast({
         title: "Subscription failed",
-        description: error.message || "Please try again later.",
+        description: "Please try again later or contact support if the issue persists.",
         variant: "destructive",
+        duration: 5000,
       });
     } finally {
       setIsLoading(false);
@@ -63,6 +66,7 @@ export const NewsletterSubscription = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="flex-1 text-base"
+              disabled={isLoading}
             />
             <Button 
               type="submit" 
