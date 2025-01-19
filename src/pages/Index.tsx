@@ -54,8 +54,8 @@ const Index = () => {
       let query = supabase
         .from("jobs")
         .select("*")
-        .order('salary_range', { nullsFirst: false }) // Order by salary_range not null first
-        .order('min_experience', { ascending: true }) // Then order by min_experience
+        .order('salary_range', { nullsFirst: false })
+        .order('min_experience', { ascending: true })
         .range(page * JOBS_PER_PAGE, (page + 1) * JOBS_PER_PAGE - 1);
 
       if (filters.searchQuery) {
@@ -133,6 +133,13 @@ const Index = () => {
         onLocationChange={handleLocationChange}
         onClearFilters={handleClearFilters}
       />
+      
+      {/* Job count display */}
+      <div className="bg-white rounded-lg p-4 shadow-sm border">
+        <p className="text-lg font-medium text-gray-900">
+          Found <span className="text-primary font-semibold">{jobs.length}</span> matching jobs
+        </p>
+      </div>
       
       {jobs.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
