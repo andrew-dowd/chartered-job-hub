@@ -210,7 +210,7 @@ export const JobCard = ({
           )}
         </div>
 
-        <p className="text-sm text-gray-600 line-clamp-3 mb-4 flex-grow">
+        <p className="text-sm text-gray-600 mb-4 flex-grow">
           {reasoning || description}
         </p>
 
