@@ -25,7 +25,7 @@ export const JobsGrid = forwardRef<HTMLDivElement, JobsGridProps>(
         
         <AnimatePresence mode="wait">
           <motion.div 
-            key={jobs.length} // This forces a re-render when the jobs array changes
+            key={jobs.length}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -43,6 +43,7 @@ export const JobsGrid = forwardRef<HTMLDivElement, JobsGridProps>(
                     transition={{ duration: 0.2, delay: index * 0.05 }}
                   >
                     <JobCard
+                      id={job.id}
                       title={job.title}
                       company={job.company}
                       location={job.location}
@@ -65,6 +66,7 @@ export const JobsGrid = forwardRef<HTMLDivElement, JobsGridProps>(
                   transition={{ duration: 0.2, delay: index * 0.05 }}
                 >
                   <JobCard
+                    id={job.id}
                     title={job.title}
                     company={job.company}
                     location={job.location}

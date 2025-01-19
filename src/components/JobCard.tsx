@@ -9,6 +9,7 @@ import { formatDistanceToNow } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 
 interface JobCardProps {
+  id: string; // Add this line
   title: string;
   company: string;
   location: string;
@@ -18,12 +19,13 @@ interface JobCardProps {
   applyUrl: string;
   createdAt?: string;
   postedDate?: string;
-  onUnsave?: (title: string, company: string) => void;
+  onUnsave?: (jobId: string) => void;
   minExperience?: number | null;
   locationCategory?: string;
 }
 
 export const JobCard = ({
+  id,
   title,
   company,
   location,
@@ -71,8 +73,7 @@ export const JobCard = ({
       .from("saved_jobs")
       .select("id")
       .eq("user_id", userId)
-      .eq("title", title)
-      .eq("company", company)
+      .eq("job_id", id)
       .maybeSingle();
 
     if (data && !error) {
@@ -96,8 +97,7 @@ export const JobCard = ({
           .from("saved_jobs")
           .delete()
           .eq("user_id", session.user.id)
-          .eq("title", title)
-          .eq("company", company);
+          .eq("job_id", id);
 
         if (error) throw error;
 
@@ -108,20 +108,15 @@ export const JobCard = ({
         });
         
         if (onUnsave) {
-          onUnsave(title, company);
+          onUnsave(id);
         }
       } else {
-        const { error } = await supabase.from("saved_jobs").insert([
-          {
+        const { error } = await supabase
+          .from("saved_jobs")
+          .insert([{
             user_id: session.user.id,
-            title,
-            company,
-            location,
-            salary,
-            description,
-            apply_url: applyUrl,
-          },
-        ]);
+            job_id: id,
+          }]);
 
         if (error) throw error;
 
@@ -141,11 +136,20 @@ export const JobCard = ({
     }
   };
 
-  const timeAgo = postedDate 
-    ? formatDistanceToNow(new Date(postedDate), { addSuffix: true })
-    : createdAt 
-      ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
-      : "Recently posted";
+  const timeAgo = (() => {
+    try {
+      if (postedDate) {
+        return formatDistanceToNow(new Date(postedDate), { addSuffix: true });
+      }
+      if (createdAt) {
+        return formatDistanceToNow(new Date(createdAt), { addSuffix: true });
+      }
+      return "Recently posted";
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return "Recently posted";
+    }
+  })();
 
   const displaySalary = salary && 
     salary !== "null" && 
