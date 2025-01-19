@@ -221,7 +221,8 @@ export const JobCard = ({
         <div className="mt-auto">
           <Button 
             asChild
-            className="w-full bg-primary hover:bg-primary/90 text-white font-medium"
+            variant="outline"
+            className="w-full border-gray-200 hover:bg-gray-50 text-gray-700 font-medium"
           >
             <a href={applyUrl} target="_blank" rel="noopener noreferrer">
               Apply Now
