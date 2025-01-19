@@ -79,7 +79,7 @@ export const FilterBar = ({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               type="text"
-              placeholder="Search job titles..."
+              placeholder="Search jobs by title or company..."
               value={searchValue}
               onChange={(e) => handleSearchChange(e.target.value)}
               className="pl-10 pr-4 h-12 w-full rounded-lg border-gray-200"

@@ -42,7 +42,7 @@ const Index = () => {
         .select("*", { count: "exact", head: true });
 
       if (filters.searchQuery) {
-        countQuery = countQuery.ilike("title", `%${filters.searchQuery}%`);
+        countQuery = countQuery.or(`title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%`);
       }
       if (filters.minSalary > 30) {
         countQuery = countQuery.gte("min_salary", filters.minSalary * 1000);
@@ -67,7 +67,7 @@ const Index = () => {
         .range((currentPage - 1) * JOBS_PER_PAGE, currentPage * JOBS_PER_PAGE - 1);
 
       if (filters.searchQuery) {
-        query = query.ilike("title", `%${filters.searchQuery}%`);
+        query = query.or(`title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%`);
       }
       if (filters.minSalary > 30) {
         query = query.gte("min_salary", filters.minSalary * 1000);
