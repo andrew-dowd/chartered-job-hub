@@ -20,7 +20,6 @@ const Index = () => {
     location: "",
   });
 
-  // Intersection Observer setup
   const observer = useRef(null);
   const lastJobElementRef = useCallback(node => {
     if (loading) return;
@@ -51,7 +50,7 @@ const Index = () => {
   const buildQuery = (countOnly = false) => {
     let query = supabase
       .from("jobs")
-      .select(countOnly ? 'count' : '*');
+      .select(countOnly ? 'count' : '*', { count: 'exact' });
 
     if (filters.searchQuery) {
       query = query.or(`title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%`);
@@ -71,15 +70,12 @@ const Index = () => {
 
   const fetchTotalCount = async () => {
     try {
-      const query = buildQuery(true);
-      const { data, error } = await query;
+      const { count, error } = await buildQuery(true);
       
       if (error) throw error;
       
-      // The count comes back as an array with a single object containing the count
-      const count = data?.[0]?.count ?? 0;
       console.log("Total matching jobs:", count);
-      setTotalJobs(Number(count));
+      setTotalJobs(count || 0);
     } catch (error) {
       console.error("Error fetching total count:", error);
       toast({
