@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { NavBar } from "./NavBar";
 import { NewsletterSubscription } from "./NewsletterSubscription";
+import { Toaster } from "@/components/ui/toaster";
 
 export const Layout = () => {
   const location = useLocation();
@@ -13,6 +14,7 @@ export const Layout = () => {
         <Outlet />
       </main>
       {!isAuthPage && <NewsletterSubscription />}
+      <Toaster />
     </div>
   );
 };
