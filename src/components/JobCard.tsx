@@ -154,7 +154,7 @@ export const JobCard = ({
       : "Not disclosed";
 
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow duration-200 bg-white">
+    <Card className="p-6 hover:shadow-lg transition-shadow duration-200 bg-white flex flex-col h-full">
       <div className="flex justify-between items-start">
         <div className="space-y-4 flex-1">
           <div>
@@ -192,7 +192,7 @@ export const JobCard = ({
           {saved ? <BookmarkCheck className="w-5 h-5" /> : <BookmarkPlus className="w-5 h-5" />}
         </Button>
       </div>
-      <div className="mt-4">
+      <div className="mt-4 flex-grow">
         {minExperience !== null && minExperience !== undefined && (
           <Badge variant="secondary" className="mb-2">
             <File className="w-3.5 h-3.5 mr-1 inline-block" />
