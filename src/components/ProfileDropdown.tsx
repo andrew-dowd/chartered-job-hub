@@ -43,7 +43,7 @@ export const ProfileDropdown = () => {
         <Button 
           variant="ghost" 
           size="icon" 
-          className="rounded-full bg-primary hover:bg-primary/90 text-white"
+          className="rounded-full bg-[#E5DEFF] hover:bg-[#D3D6FD] text-gray-700"
         >
           <UserCircle2 className="h-6 w-6" />
         </Button>
