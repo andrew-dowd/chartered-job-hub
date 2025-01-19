@@ -11,6 +11,7 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
+  const [totalJobs, setTotalJobs] = useState(0);
   const { toast } = useToast();
   const [filters, setFilters] = useState({
     searchQuery: "",
@@ -40,36 +41,62 @@ const Index = () => {
     setJobs([]);
     setPage(0);
     setHasMore(true);
+    fetchTotalCount();
   }, [filters]);
 
   useEffect(() => {
     fetchJobs();
   }, [filters, page]);
 
+  const buildQuery = () => {
+    let query = supabase
+      .from("jobs")
+      .select();
+
+    if (filters.searchQuery) {
+      query = query.or(`title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%`);
+    }
+    if (filters.minSalary > 30) {
+      query = query.gte("min_salary", filters.minSalary * 1000);
+    }
+    if (filters.experience) {
+      query = query.eq("experience_level", filters.experience);
+    }
+    if (filters.location) {
+      query = query.ilike("location_category", filters.location);
+    }
+
+    return query;
+  };
+
+  const fetchTotalCount = async () => {
+    try {
+      const query = buildQuery();
+      const { count, error } = await query.count();
+      
+      if (error) throw error;
+      
+      console.log("Total matching jobs:", count);
+      setTotalJobs(count);
+    } catch (error) {
+      console.error("Error fetching total count:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch total job count. Please try again later.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const fetchJobs = async () => {
     try {
       console.log("Fetching jobs with filters:", filters, "page:", page);
       setLoading(true);
 
-      let query = supabase
-        .from("jobs")
-        .select("*")
+      const query = buildQuery()
         .order('salary_range', { nullsFirst: false })
         .order('min_experience', { ascending: true })
         .range(page * JOBS_PER_PAGE, (page + 1) * JOBS_PER_PAGE - 1);
-
-      if (filters.searchQuery) {
-        query = query.or(`title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%`);
-      }
-      if (filters.minSalary > 30) {
-        query = query.gte("min_salary", filters.minSalary * 1000);
-      }
-      if (filters.experience) {
-        query = query.eq("experience_level", filters.experience);
-      }
-      if (filters.location) {
-        query = query.ilike("location_category", filters.location);
-      }
 
       const { data, error } = await query;
 
@@ -137,7 +164,7 @@ const Index = () => {
       {/* Job count display */}
       <div className="bg-white rounded-lg p-4 shadow-sm border">
         <p className="text-lg font-medium text-gray-900">
-          Found <span className="text-primary font-semibold">{jobs.length}</span> matching jobs
+          Found <span className="text-primary font-semibold">{totalJobs}</span> matching jobs
         </p>
       </div>
       
