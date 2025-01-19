@@ -2,7 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const BEEHIIV_API_KEY = Deno.env.get('BEEHIIV_API_KEY');
-const BEEHIIV_PUBLICATION_ID = "pub_"; // Add your publication ID here
+const BEEHIIV_PUBLICATION_ID = "pub_2a9c7c0f-d194-4107-8932-e3e6c9f00bec"; // Updated with actual publication ID
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
