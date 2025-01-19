@@ -222,7 +222,7 @@ export const JobCard = ({
           <Button 
             asChild
             variant="outline"
-            className="w-full border-gray-200 hover:bg-gray-100 hover:border-gray-300 text-gray-700 font-medium transition-all duration-200"
+            className="w-full border-gray-200 hover:bg-gray-100 hover:border-gray-300 hover:text-gray-900 text-gray-700 font-medium transition-all duration-200"
           >
             <a href={applyUrl} target="_blank" rel="noopener noreferrer">
               Apply Now
