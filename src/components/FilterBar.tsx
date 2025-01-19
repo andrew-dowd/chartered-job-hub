@@ -10,6 +10,7 @@ import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
 import { useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface FilterBarProps {
   onSearchChange: (search: string) => void;
@@ -30,6 +31,7 @@ export const FilterBar = ({
   const [searchValue, setSearchValue] = useState("");
   const [experienceValue, setExperienceValue] = useState("");
   const [locationValue, setLocationValue] = useState("");
+  const isMobile = useIsMobile();
   
   const LOCATIONS = [
     "Dublin",
@@ -90,14 +92,14 @@ export const FilterBar = ({
   const hasActiveFilters = searchValue || experienceValue || locationValue || minSalary !== 30;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-6 mt-8">
-      <div className="flex items-center gap-4">
-        <div className="flex-1 min-w-[200px]">
+    <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6 mt-8">
+      <div className="flex flex-col md:flex-row gap-4 md:items-center">
+        <div className="flex-1 min-w-0 md:min-w-[200px]">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               type="text"
-              placeholder="Search jobs by title or company..."
+              placeholder={isMobile ? "Search jobs..." : "Search jobs by title or company..."}
               value={searchValue}
               onChange={(e) => handleSearchChange(e.target.value)}
               className="pl-10 pr-4 h-12 w-full rounded-lg border-gray-200"
@@ -105,10 +107,10 @@ export const FilterBar = ({
           </div>
         </div>
 
-        <div className="min-w-[240px] border-l border-gray-200 pl-4">
+        <div className="w-full md:w-auto md:min-w-[240px] md:border-l md:border-gray-200 md:pl-4">
           <p className="text-sm font-medium text-gray-600 mb-1">Minimum Salary</p>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600">€{minSalary}k</span>
+            <span className="text-sm text-gray-600 min-w-[48px]">€{minSalary}k</span>
             <Slider
               defaultValue={[30]}
               max={200}
@@ -116,13 +118,13 @@ export const FilterBar = ({
               step={5}
               value={[minSalary]}
               onValueChange={handleMinSalaryChange}
-              className="w-32"
+              className="w-32 md:w-32"
             />
             <span className="text-sm text-gray-600">€200k</span>
           </div>
         </div>
 
-        <div className="min-w-[160px] border-l border-gray-200 pl-4">
+        <div className="w-full md:w-auto md:min-w-[160px] md:border-l md:border-gray-200 md:pl-4">
           <p className="text-sm font-medium text-gray-600 mb-1">Experience</p>
           <Select value={experienceValue} onValueChange={handleExperienceChange}>
             <SelectTrigger className="w-full bg-white border-gray-200">
@@ -136,7 +138,7 @@ export const FilterBar = ({
           </Select>
         </div>
 
-        <div className="min-w-[160px] border-l border-gray-200 pl-4">
+        <div className="w-full md:w-auto md:min-w-[160px] md:border-l md:border-gray-200 md:pl-4">
           <p className="text-sm font-medium text-gray-600 mb-1">Location</p>
           <Select value={locationValue} onValueChange={handleLocationChange}>
             <SelectTrigger className="w-full bg-white border-gray-200">
@@ -158,7 +160,7 @@ export const FilterBar = ({
 
         <Button 
           onClick={handleClearFilters}
-          className="h-12 w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0"
+          className="h-12 w-full md:w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0"
           size="icon"
         >
           {hasActiveFilters ? (
