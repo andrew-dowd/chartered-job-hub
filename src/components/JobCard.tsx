@@ -199,7 +199,7 @@ export const JobCard = ({
             {minExperience}+ YOE required
           </Badge>
         )}
-        <p className="text-sm text-gray-600 line-clamp-2">
+        <p className="text-sm text-gray-600">
           {reasoning || description}
         </p>
       </div>
