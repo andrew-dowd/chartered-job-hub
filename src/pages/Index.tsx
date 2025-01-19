@@ -48,10 +48,10 @@ const Index = () => {
     fetchJobs();
   }, [filters, page]);
 
-  const buildQuery = () => {
+  const buildQuery = (countOnly = false) => {
     let query = supabase
       .from("jobs")
-      .select();
+      .select(countOnly ? 'count' : '*');
 
     if (filters.searchQuery) {
       query = query.or(`title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%`);
@@ -71,13 +71,15 @@ const Index = () => {
 
   const fetchTotalCount = async () => {
     try {
-      const query = buildQuery();
-      const { count, error } = await query.count();
+      const query = buildQuery(true);
+      const { data, error } = await query;
       
       if (error) throw error;
       
+      // The count comes back as an array with a single object containing the count
+      const count = data?.[0]?.count ?? 0;
       console.log("Total matching jobs:", count);
-      setTotalJobs(count);
+      setTotalJobs(Number(count));
     } catch (error) {
       console.error("Error fetching total count:", error);
       toast({
