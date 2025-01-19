@@ -13,6 +13,7 @@ interface JobCardProps {
   location: string;
   salary: string;
   description: string;
+  reasoning?: string;
   applyUrl: string;
   createdAt?: string;
   onUnsave?: (title: string, company: string) => void;
@@ -24,6 +25,7 @@ export const JobCard = ({
   location,
   salary,
   description,
+  reasoning,
   applyUrl,
   createdAt,
   onUnsave,
@@ -171,7 +173,9 @@ export const JobCard = ({
           {saved ? <BookmarkCheck className="w-5 h-5" /> : <BookmarkPlus className="w-5 h-5" />}
         </Button>
       </div>
-      <p className="mt-4 text-sm text-gray-600 line-clamp-2">{description}</p>
+      <p className="mt-4 text-sm text-gray-600 line-clamp-2">
+        {reasoning || description}
+      </p>
       <div className="mt-6 flex justify-end">
         <Button 
           asChild
