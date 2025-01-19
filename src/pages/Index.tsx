@@ -92,7 +92,7 @@ const MOCK_JOBS = [
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [salaryRange, setSalaryRange] = useState([30, 200]);
+  const [minSalary, setMinSalary] = useState(30);
   const [experience, setExperience] = useState("");
   const [location, setLocation] = useState("");
 
@@ -105,10 +105,8 @@ const Index = () => {
       const salaryMatch = (() => {
         const numbers = job.salary.match(/\d+,?\d*/g)?.map(num => parseInt(num.replace(',', ''), 10)) || [];
         if (numbers.length >= 2) {
-          const [jobMinSalary, jobMaxSalary] = numbers;
-          const jobMinK = Math.floor(jobMinSalary / 1000);
-          const jobMaxK = Math.floor(jobMaxSalary / 1000);
-          return jobMinK >= salaryRange[0] && jobMaxK <= salaryRange[1];
+          const jobMinSalary = Math.floor(numbers[0] / 1000);
+          return jobMinSalary >= minSalary;
         }
         return false;
       })();
@@ -121,11 +119,11 @@ const Index = () => {
 
       return matchesSearch && salaryMatch && locationMatch && experienceMatch;
     });
-  }, [searchQuery, salaryRange, experience, location]);
+  }, [searchQuery, minSalary, experience, location]);
 
   const handleClearFilters = () => {
     setSearchQuery("");
-    setSalaryRange([30, 200]);
+    setMinSalary(30);
     setExperience("");
     setLocation("");
   };
@@ -134,7 +132,7 @@ const Index = () => {
     <div className="space-y-8">
       <FilterBar
         onSearchChange={setSearchQuery}
-        onSalaryChange={setSalaryRange}
+        onMinSalaryChange={setMinSalary}
         onExperienceChange={setExperience}
         onLocationChange={setLocation}
         onClearFilters={handleClearFilters}

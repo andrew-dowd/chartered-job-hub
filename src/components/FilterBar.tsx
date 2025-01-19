@@ -13,7 +13,7 @@ import { useState } from "react";
 
 interface FilterBarProps {
   onSearchChange: (search: string) => void;
-  onSalaryChange: (range: number[]) => void;
+  onMinSalaryChange: (minSalary: number) => void;
   onExperienceChange: (experience: string) => void;
   onLocationChange: (location: string) => void;
   onClearFilters: () => void;
@@ -21,12 +21,12 @@ interface FilterBarProps {
 
 export const FilterBar = ({
   onSearchChange,
-  onSalaryChange,
+  onMinSalaryChange,
   onExperienceChange,
   onLocationChange,
   onClearFilters,
 }: FilterBarProps) => {
-  const [salaryRange, setSalaryRange] = useState([30, 200]);
+  const [minSalary, setMinSalary] = useState(30);
   const [searchValue, setSearchValue] = useState("");
   const [experienceValue, setExperienceValue] = useState("");
   const [locationValue, setLocationValue] = useState("");
@@ -42,9 +42,9 @@ export const FilterBar = ({
     "Remote"
   ];
 
-  const handleSalaryChange = (newRange: number[]) => {
-    setSalaryRange(newRange);
-    onSalaryChange(newRange);
+  const handleMinSalaryChange = (value: number[]) => {
+    setMinSalary(value[0]);
+    onMinSalaryChange(value[0]);
   };
 
   const handleSearchChange = (value: string) => {
@@ -64,14 +64,13 @@ export const FilterBar = ({
 
   const handleClearFilters = () => {
     setSearchValue("");
-    setSalaryRange([30, 200]);
+    setMinSalary(30);
     setExperienceValue("");
     setLocationValue("");
     onClearFilters();
   };
 
-  const hasActiveFilters = searchValue || experienceValue || locationValue || 
-    salaryRange[0] !== 30 || salaryRange[1] !== 200;
+  const hasActiveFilters = searchValue || experienceValue || locationValue || minSalary !== 30;
 
   return (
     <div className="bg-white rounded-xl shadow-sm border p-6 mt-8">
@@ -90,19 +89,19 @@ export const FilterBar = ({
         </div>
 
         <div className="min-w-[240px] border-l border-gray-200 pl-4">
-          <p className="text-sm font-medium text-gray-600 mb-1">Salary Range</p>
+          <p className="text-sm font-medium text-gray-600 mb-1">Minimum Salary</p>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600">€{salaryRange[0]}k</span>
+            <span className="text-sm text-gray-600">€{minSalary}k</span>
             <Slider
-              defaultValue={[30, 200]}
+              defaultValue={[30]}
               max={200}
               min={30}
               step={5}
-              value={salaryRange}
-              onValueChange={handleSalaryChange}
+              value={[minSalary]}
+              onValueChange={handleMinSalaryChange}
               className="w-32"
             />
-            <span className="text-sm text-gray-600">€{salaryRange[1]}k</span>
+            <span className="text-sm text-gray-600">€200k</span>
           </div>
         </div>
 
