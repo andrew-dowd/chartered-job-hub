@@ -40,7 +40,11 @@ export const ProfileDropdown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="rounded-full bg-primary hover:bg-primary/90 text-white"
+        >
           <UserCircle2 className="h-6 w-6" />
         </Button>
       </DropdownMenuTrigger>
