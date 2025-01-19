@@ -9,30 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      jobs: {
-        Row: {
-          created_at: string
-          description: string | null
-          experience_level: string | null
-          id: number
-          reasoning: string | null
-        }
-        Insert: {
-          created_at: string
-          description?: string | null
-          experience_level?: string | null
-          id?: number
-          reasoning?: string | null
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          experience_level?: string | null
-          id?: number
-          reasoning?: string | null
-        }
-        Relationships: []
-      }
       saved_jobs: {
         Row: {
           apply_url: string
