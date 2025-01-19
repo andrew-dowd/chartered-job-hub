@@ -85,15 +85,15 @@ const SavedJobs = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-[50vh] bg-gray-50 flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-[50vh] bg-gray-50">
+      <div className="container mx-auto px-4 py-6">
         <div className="flex items-center gap-4 mb-6">
           <Button
             variant="ghost"
@@ -107,7 +107,7 @@ const SavedJobs = () => {
         </div>
 
         {savedJobs.length === 0 ? (
-          <div className="text-center py-12">
+          <div className="text-center py-8">
             <p className="text-gray-600">You haven't saved any jobs yet.</p>
           </div>
         ) : (
