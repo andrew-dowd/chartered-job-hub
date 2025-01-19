@@ -92,6 +92,7 @@ const Index = () => {
       setLoading(true);
 
       const query = buildQuery()
+        .order('posted_date', { ascending: false, nullsLast: true })
         .order('salary_range', { nullsFirst: false })
         .order('min_experience', { ascending: true })
         .range(page * JOBS_PER_PAGE, (page + 1) * JOBS_PER_PAGE - 1);
