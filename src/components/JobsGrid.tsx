@@ -25,7 +25,7 @@ export const JobsGrid = forwardRef<HTMLDivElement, JobsGridProps>(
         
         <AnimatePresence mode="wait">
           <motion.div 
-            key={jobs.length}
+            key={jobs.length} // This forces a re-render when the jobs array changes
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -43,15 +43,14 @@ export const JobsGrid = forwardRef<HTMLDivElement, JobsGridProps>(
                     transition={{ duration: 0.2, delay: index * 0.05 }}
                   >
                     <JobCard
-                      id={job.id}
                       title={job.title}
                       company={job.company}
                       location={job.location}
                       salary={job.salary_range || `€${job.salary_min / 1000}k - €${job.salary_max / 1000}k`}
-                      description={job.description || ""}
+                      description=""
                       reasoning={job.reasoning}
                       applyUrl={job.job_url}
-                      createdAt={job.posted_date || job.created_at}
+                      postedDate={job.posted_date}
                       minExperience={job.min_experience}
                       locationCategory={job.location_category}
                     />
@@ -66,15 +65,14 @@ export const JobsGrid = forwardRef<HTMLDivElement, JobsGridProps>(
                   transition={{ duration: 0.2, delay: index * 0.05 }}
                 >
                   <JobCard
-                    id={job.id}
                     title={job.title}
                     company={job.company}
                     location={job.location}
                     salary={job.salary_range || `€${job.salary_min / 1000}k - €${job.salary_max / 1000}k`}
-                    description={job.description || ""}
+                    description=""
                     reasoning={job.reasoning}
                     applyUrl={job.job_url}
-                    createdAt={job.posted_date || job.created_at}
+                    postedDate={job.posted_date}
                     minExperience={job.min_experience}
                     locationCategory={job.location_category}
                   />
