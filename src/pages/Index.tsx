@@ -183,6 +183,7 @@ const Index = () => {
                 reasoning={job.reasoning}
                 applyUrl={job.job_url}
                 postedDate={job.posted_date}
+                minExperience={job.min_experience}
               />
             ))}
           </div>

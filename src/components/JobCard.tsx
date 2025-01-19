@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookmarkPlus, BookmarkCheck, MapPin, Building2, Banknote, Clock } from "lucide-react";
+import { BookmarkPlus, BookmarkCheck, MapPin, Building2, Banknote, Clock, File } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +18,7 @@ interface JobCardProps {
   createdAt?: string;
   postedDate?: string;
   onUnsave?: (title: string, company: string) => void;
+  minExperience?: number | null;
 }
 
 export const JobCard = ({
@@ -31,6 +32,7 @@ export const JobCard = ({
   createdAt,
   postedDate,
   onUnsave,
+  minExperience,
 }: JobCardProps) => {
   const [saved, setSaved] = useState(false);
   const { toast } = useToast();
@@ -155,7 +157,15 @@ export const JobCard = ({
       <div className="flex justify-between items-start">
         <div className="space-y-4 flex-1">
           <div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-1">{title}</h3>
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
+              {minExperience !== null && minExperience !== undefined && (
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary">
+                  <File className="w-3.5 h-3.5 mr-1" />
+                  {minExperience}+ YOE
+                </span>
+              )}
+            </div>
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <Clock className="w-4 h-4" />
               <span>{timeAgo}</span>
