@@ -110,7 +110,8 @@ const Index = () => {
               company={job.company}
               location={job.location}
               salary={job.salary_range || `€${job.salary_min / 1000}k - €${job.salary_max / 1000}k`}
-              description={job.description}
+              description=""
+              reasoning={job.reasoning}
               applyUrl={job.job_url}
               createdAt={job.posted_date}
             />
