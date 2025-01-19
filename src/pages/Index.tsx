@@ -1,6 +1,11 @@
 import { JobCard } from "@/components/JobCard";
 import { FilterBar } from "@/components/FilterBar";
-import { CareerActions } from "@/components/CareerActions";
+</lov-replace>
+
+<lov-search>
+      <CareerActions />
+</lov-search>
+<lov-replace>
 import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
