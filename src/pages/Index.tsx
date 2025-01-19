@@ -27,6 +27,15 @@ const Index = () => {
     location: "",
   });
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    scrollToTop();
+  };
+
   useEffect(() => {
     fetchJobs();
   }, [filters, currentPage]);
@@ -144,7 +153,7 @@ const Index = () => {
       items.push(
         <PaginationItem key={i}>
           <PaginationLink
-            onClick={() => setCurrentPage(i)}
+            onClick={() => handlePageChange(i)}
             isActive={currentPage === i}
           >
             {i}
@@ -193,7 +202,7 @@ const Index = () => {
               <PaginationContent>
                 {currentPage > 1 && (
                   <PaginationItem>
-                    <PaginationPrevious onClick={() => setCurrentPage(currentPage - 1)} />
+                    <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />
                   </PaginationItem>
                 )}
                 
@@ -201,7 +210,7 @@ const Index = () => {
                 
                 {currentPage < totalPages && (
                   <PaginationItem>
-                    <PaginationNext onClick={() => setCurrentPage(currentPage + 1)} />
+                    <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
                   </PaginationItem>
                 )}
               </PaginationContent>
