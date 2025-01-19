@@ -9,7 +9,7 @@ export const Layout = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <NavBar />
-      <main className="w-full max-w-[2000px] mx-auto px-4 md:px-8 lg:px-12 pt-8 md:pt-12 pb-16 md:pb-24">
+      <main className="w-full max-w-[2000px] mx-auto px-4 md:px-6 lg:px-8 pt-4 md:pt-6 pb-16 md:pb-24">
         <Outlet />
       </main>
       {!isAuthPage && <NewsletterSubscription />}
