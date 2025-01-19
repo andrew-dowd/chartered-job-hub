@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookmarkPlus, BookmarkCheck, MapPin, Building2, Banknote, Clock, File, Globe, Book } from "lucide-react";
+import { BookmarkPlus, BookmarkCheck, MapPin, Building2, Banknote, Clock, File, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -209,12 +209,9 @@ export const JobCard = ({
             </Badge>
           )}
         </div>
-        <div className="flex items-start gap-2">
-          <Book className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
-          <p className="text-sm text-gray-600">
-            {reasoning || description}
-          </p>
-        </div>
+        <p className="text-sm text-gray-600">
+          {reasoning || description}
+        </p>
       </div>
       <div className="mt-6 flex justify-end">
         <Button 
