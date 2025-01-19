@@ -16,6 +16,7 @@ interface JobCardProps {
   reasoning?: string;
   applyUrl: string;
   createdAt?: string;
+  postedDate?: string;
   onUnsave?: (title: string, company: string) => void;
 }
 
@@ -28,6 +29,7 @@ export const JobCard = ({
   reasoning,
   applyUrl,
   createdAt,
+  postedDate,
   onUnsave,
 }: JobCardProps) => {
   const [saved, setSaved] = useState(false);
@@ -134,9 +136,12 @@ export const JobCard = ({
     }
   };
 
-  const timeAgo = createdAt 
-    ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
-    : "Recently posted";
+  // Use postedDate if available (from jobs table), otherwise fall back to createdAt (from saved_jobs table)
+  const timeAgo = postedDate 
+    ? formatDistanceToNow(new Date(postedDate), { addSuffix: true })
+    : createdAt 
+      ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
+      : "Recently posted";
 
   return (
     <Card className="p-6 hover:shadow-lg transition-shadow duration-200 bg-white">

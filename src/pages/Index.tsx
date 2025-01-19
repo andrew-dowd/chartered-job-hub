@@ -115,7 +115,7 @@ const Index = () => {
               description=""
               reasoning={job.reasoning}
               applyUrl={job.job_url}
-              createdAt={job.posted_date}
+              postedDate={job.posted_date}
             />
           ))}
         </div>
