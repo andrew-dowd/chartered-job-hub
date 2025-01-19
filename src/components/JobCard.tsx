@@ -6,6 +6,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
+import { Badge } from "@/components/ui/badge";
 
 interface JobCardProps {
   title: string;
@@ -157,15 +158,7 @@ export const JobCard = ({
       <div className="flex justify-between items-start">
         <div className="space-y-4 flex-1">
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
-              {minExperience !== null && minExperience !== undefined && (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary">
-                  <File className="w-3.5 h-3.5 mr-1" />
-                  {minExperience}+ YOE
-                </span>
-              )}
-            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-1">{title}</h3>
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <Clock className="w-4 h-4" />
               <span>{timeAgo}</span>
@@ -199,9 +192,17 @@ export const JobCard = ({
           {saved ? <BookmarkCheck className="w-5 h-5" /> : <BookmarkPlus className="w-5 h-5" />}
         </Button>
       </div>
-      <p className="mt-4 text-sm text-gray-600 line-clamp-2">
-        {reasoning || description}
-      </p>
+      <div className="mt-4">
+        {minExperience !== null && minExperience !== undefined && (
+          <Badge variant="secondary" className="mb-2">
+            <File className="w-3.5 h-3.5 mr-1 inline-block" />
+            {minExperience}+ YOE required
+          </Badge>
+        )}
+        <p className="text-sm text-gray-600 line-clamp-2">
+          {reasoning || description}
+        </p>
+      </div>
       <div className="mt-6 flex justify-end">
         <Button 
           asChild
