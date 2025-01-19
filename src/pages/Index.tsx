@@ -71,15 +71,11 @@ const Index = () => {
         </p>
       </div>
       
-      {jobs.length > 0 ? (
-        <JobsGrid jobs={jobs} lastJobRef={lastJobElementRef} />
-      ) : (
-        <div className="text-center py-8">
-          <p className="text-gray-600">
-            {loading ? "Loading jobs..." : "No jobs found matching your criteria."}
-          </p>
-        </div>
-      )}
+      <JobsGrid 
+        jobs={jobs} 
+        lastJobRef={lastJobElementRef} 
+        loading={loading}
+      />
       
       {loading && jobs.length > 0 && (
         <div className="text-center py-4">
