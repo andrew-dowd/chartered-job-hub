@@ -42,7 +42,6 @@ export const FilterBar = ({
   ];
 
   const trackFilterEvent = (filterName: string, value: string | number) => {
-    // @ts-ignore - Plausible is added via script
     if (window.plausible) {
       window.plausible('Filter Used', {
         props: {
