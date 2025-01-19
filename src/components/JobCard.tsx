@@ -1,210 +1,230 @@
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { BookmarkPlus, BookmarkCheck, MapPin, Building2, Banknote, Clock, File, Globe } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Bookmark, ExternalLink } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
+import { Badge } from "@/components/ui/badge";
 
 interface JobCardProps {
-  id?: string;
   title: string;
   company: string;
   location: string;
   salary: string;
   description: string;
+  reasoning?: string;
   applyUrl: string;
-  createdAt: string;
+  createdAt?: string;
+  postedDate?: string;
   onUnsave?: (title: string, company: string) => void;
   minExperience?: number | null;
-  locationCategory?: string | null;
-  reasoning?: string | null;
+  locationCategory?: string;
 }
 
-export function JobCard({
-  id,
+export const JobCard = ({
   title,
   company,
   location,
   salary,
   description,
+  reasoning,
   applyUrl,
   createdAt,
+  postedDate,
   onUnsave,
   minExperience,
   locationCategory,
-  reasoning,
-}: JobCardProps) {
-  const [isSaved, setIsSaved] = useState(false);
-  const [userId, setUserId] = useState<string | null>(null);
-  const [savedJobId, setSavedJobId] = useState<string | null>(null);
+}: JobCardProps) => {
+  const [saved, setSaved] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const [session, setSession] = useState(null);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user?.id) {
-        setUserId(session.user.id);
-        checkIfJobIsSaved(session.user.id);
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      setSession(currentSession);
+      if (currentSession?.user) {
+        checkIfSaved(currentSession.user.id);
       }
-    };
-    checkAuth();
-  }, [id]);
+    });
 
-  const checkIfJobIsSaved = async (currentUserId: string) => {
-    try {
-      if (!id) return; // Only check if we have a job ID
-
-      const { data, error } = await supabase
-        .from("saved_jobs")
-        .select("id")
-        .eq("user_id", currentUserId)
-        .eq("job_id", id)
-        .maybeSingle();
-
-      if (error) {
-        console.error("Error checking saved job:", error);
-        return;
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+      if (newSession?.user) {
+        checkIfSaved(newSession.user.id);
+      } else {
+        setSaved(false);
       }
+    });
 
-      setIsSaved(!!data);
-      if (data) {
-        setSavedJobId(data.id);
-      }
-    } catch (error) {
-      console.error("Error in checkIfJobIsSaved:", error);
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const checkIfSaved = async (userId: string) => {
+    const { data, error } = await supabase
+      .from("saved_jobs")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("title", title)
+      .eq("company", company)
+      .maybeSingle();
+
+    if (data && !error) {
+      setSaved(true);
     }
   };
 
-  const handleSaveToggle = async () => {
-    if (!userId) {
+  const handleSave = async () => {
+    if (!session) {
       toast({
-        title: "Authentication required",
-        description: "Please sign in to save jobs",
-        variant: "destructive",
+        title: "Sign in required",
+        description: "Please sign in or create an account to save jobs",
       });
-      return;
-    }
-
-    if (!id) {
-      console.error("No job ID provided");
+      navigate("/auth");
       return;
     }
 
     try {
-      if (isSaved && savedJobId) {
+      if (saved) {
         const { error } = await supabase
           .from("saved_jobs")
           .delete()
-          .eq("id", savedJobId);
+          .eq("user_id", session.user.id)
+          .eq("title", title)
+          .eq("company", company);
 
         if (error) throw error;
 
-        setIsSaved(false);
-        setSavedJobId(null);
+        setSaved(false);
+        toast({
+          title: "Job removed from saved jobs",
+          description: "You can always save it again later",
+        });
+        
         if (onUnsave) {
           onUnsave(title, company);
         }
-        toast({
-          title: "Job removed",
-          description: "Job has been removed from your saved jobs",
-        });
       } else {
-        const { error } = await supabase.from("saved_jobs").insert({
-          user_id: userId,
-          job_id: id,
-        });
+        const { error } = await supabase.from("saved_jobs").insert([
+          {
+            user_id: session.user.id,
+            title,
+            company,
+            location,
+            salary,
+            description,
+            apply_url: applyUrl,
+          },
+        ]);
 
         if (error) throw error;
 
-        setIsSaved(true);
+        setSaved(true);
         toast({
-          title: "Job saved",
-          description: "Job has been added to your saved jobs",
+          title: "Job saved successfully",
+          description: "Check your saved jobs to apply later",
         });
-        // Refresh the saved job ID
-        checkIfJobIsSaved(userId);
       }
     } catch (error) {
-      console.error("Error toggling save status:", error);
+      console.error("Error saving job:", error);
       toast({
         title: "Error",
-        description: "There was an error updating your saved jobs",
+        description: "There was an error saving the job. Please try again.",
         variant: "destructive",
       });
     }
   };
 
-  const truncateDescription = (text: string, maxLength: number = 200) => {
-    if (text.length <= maxLength) return text;
-    return text.slice(0, maxLength) + "...";
-  };
+  const timeAgo = postedDate 
+    ? formatDistanceToNow(new Date(postedDate), { addSuffix: true })
+    : createdAt 
+      ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
+      : "Recently posted";
+
+  const displaySalary = salary && 
+    salary !== "null" && 
+    salary !== "undefined" && 
+    salary.trim() !== "" && 
+    salary !== "€0k - €0k"
+      ? salary 
+      : "Not disclosed";
 
   return (
-    <Card className="w-full">
-      <CardContent className="p-6">
+    <Card className="h-full hover:shadow-lg transition-shadow duration-200 bg-white">
+      <div className="p-5 flex flex-col h-full">
         <div className="flex justify-between items-start mb-4">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">{title}</h3>
-            <p className="text-sm text-gray-600 mb-1">{company}</p>
-            <div className="flex flex-wrap gap-2 mb-2">
-              <Badge variant="secondary" className="text-xs">
-                {location}
-              </Badge>
-              {locationCategory && (
-                <Badge variant="outline" className="text-xs">
-                  {locationCategory}
-                </Badge>
-              )}
-              {minExperience && (
-                <Badge variant="outline" className="text-xs">
-                  {minExperience}+ years
-                </Badge>
-              )}
-              <Badge variant="secondary" className="text-xs">
-                {salary}
-              </Badge>
+          <div className="space-y-1.5">
+            <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{title}</h3>
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <Clock className="w-4 h-4" />
+              <span>{timeAgo}</span>
             </div>
           </div>
           <Button
-            variant="ghost"
+            variant="outline"
             size="icon"
-            onClick={handleSaveToggle}
+            onClick={handleSave}
             className={`${
-              isSaved ? "text-primary" : "text-gray-400"
-            } hover:text-primary`}
+              saved 
+                ? "bg-primary/10 text-primary border-primary hover:bg-primary/20" 
+                : "border-gray-200 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            } ml-2 flex-shrink-0`}
           >
-            <Bookmark className="h-5 w-5" fill={isSaved ? "currentColor" : "none"} />
+            {saved ? <BookmarkCheck className="w-4 h-4" /> : <BookmarkPlus className="w-4 h-4" />}
           </Button>
         </div>
 
-        <p className="text-sm text-gray-600 mb-4">
-          {truncateDescription(description)}
+        <div className="space-y-2 mb-4">
+          <div className="flex items-center text-gray-600">
+            <Building2 className="w-4 h-4 mr-2 flex-shrink-0" />
+            <span className="text-sm line-clamp-1">{company}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
+            <span className="text-sm line-clamp-1">{location}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <Banknote className="w-4 h-4 mr-2 flex-shrink-0" />
+            <span className="text-sm">{displaySalary}</span>
+          </div>
+        </div>
+
+        <div className="flex gap-2 mb-4">
+          {minExperience !== null && minExperience !== undefined && (
+            <Badge variant="secondary" className="text-xs">
+              <File className="w-3 h-3 mr-1" />
+              {minExperience}+ YOE
+            </Badge>
+          )}
+          {locationCategory && (
+            <Badge variant="secondary" className="text-xs">
+              <Globe className="w-3 h-3 mr-1" />
+              {locationCategory}
+            </Badge>
+          )}
+        </div>
+
+        <p className="text-sm text-gray-600 mb-4 flex-grow">
+          {reasoning || description}
         </p>
 
-        {reasoning && (
-          <div className="mb-4 p-3 bg-gray-50 rounded-md">
-            <p className="text-sm text-gray-600">{reasoning}</p>
-          </div>
-        )}
-
-        <div className="flex justify-between items-center">
-          <p className="text-xs text-gray-500">
-            Posted {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
-          </p>
-          <Button asChild variant="outline" size="sm">
-            <a
-              href={applyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2"
-            >
-              Apply <ExternalLink className="h-4 w-4" />
+        <div className="mt-auto">
+          <Button 
+            asChild
+            className="w-full bg-primary hover:bg-primary/90 text-white font-medium"
+          >
+            <a href={applyUrl} target="_blank" rel="noopener noreferrer">
+              Apply Now
             </a>
           </Button>
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
-}
+};

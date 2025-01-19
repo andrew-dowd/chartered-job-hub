@@ -74,32 +74,48 @@ export type Database = {
       }
       saved_jobs: {
         Row: {
+          apply_url: string
+          company: string
           created_at: string
+          description: string
           id: string
-          job_id: string
+          location: string
+          location_category: string | null
+          min_experience: number | null
+          reasoning: string | null
+          salary: string
+          title: string
           user_id: string
         }
         Insert: {
+          apply_url: string
+          company: string
           created_at?: string
+          description: string
           id?: string
-          job_id: string
+          location: string
+          location_category?: string | null
+          min_experience?: number | null
+          reasoning?: string | null
+          salary: string
+          title: string
           user_id: string
         }
         Update: {
+          apply_url?: string
+          company?: string
           created_at?: string
+          description?: string
           id?: string
-          job_id?: string
+          location?: string
+          location_category?: string | null
+          min_experience?: number | null
+          reasoning?: string | null
+          salary?: string
+          title?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "saved_jobs_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       talent_profiles: {
         Row: {

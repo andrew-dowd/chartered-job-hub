@@ -10,10 +10,9 @@ interface SavedJob {
   title: string;
   company: string;
   location: string;
-  salary_min: number | null;
-  salary_max: number | null;
+  salary: string;
   description: string;
-  job_url: string;
+  apply_url: string;
   created_at: string;
   min_experience: number | null;
   location_category: string | null;
@@ -58,50 +57,17 @@ const SavedJobs = () => {
     try {
       const { data, error } = await supabase
         .from("saved_jobs")
-        .select(`
-          job_id,
-          jobs (
-            id,
-            title,
-            company,
-            location,
-            salary_min,
-            salary_max,
-            description,
-            job_url,
-            created_at,
-            min_experience,
-            location_category,
-            reasoning
-          )
-        `)
-        .eq("user_id", userId);
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
 
       if (error) {
         console.error("Error fetching saved jobs:", error);
         return;
       }
 
-      // Transform the data to match the SavedJob interface
-      const transformedJobs = data
-        .map((item: any) => ({
-          id: item.jobs.id,
-          title: item.jobs.title,
-          company: item.jobs.company,
-          location: item.jobs.location,
-          salary_min: item.jobs.salary_min,
-          salary_max: item.jobs.salary_max,
-          description: item.jobs.description,
-          job_url: item.jobs.job_url,
-          created_at: item.jobs.created_at,
-          min_experience: item.jobs.min_experience,
-          location_category: item.jobs.location_category,
-          reasoning: item.jobs.reasoning,
-        }))
-        .filter((job: any) => job.id); // Filter out any null jobs
-
-      console.log("Fetched saved jobs:", transformedJobs.length);
-      setSavedJobs(transformedJobs);
+      console.log("Fetched saved jobs:", data?.length);
+      setSavedJobs(data || []);
       setLoading(false);
     } catch (error) {
       console.error("Error in fetchSavedJobs:", error);
@@ -152,15 +118,12 @@ const SavedJobs = () => {
             {savedJobs.map((job) => (
               <JobCard
                 key={job.id}
-                id={job.id}
                 title={job.title}
                 company={job.company}
                 location={job.location}
-                salary={`${job.salary_min ? `$${job.salary_min}` : ''} ${
-                  job.salary_max ? `- $${job.salary_max}` : ''
-                }`}
+                salary={job.salary}
                 description={job.description}
-                applyUrl={job.job_url}
+                applyUrl={job.apply_url}
                 createdAt={job.created_at}
                 onUnsave={onJobUnsaved}
                 minExperience={job.min_experience}
