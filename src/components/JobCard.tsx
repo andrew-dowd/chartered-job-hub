@@ -165,10 +165,14 @@ export const JobCard = ({
           </div>
         </div>
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
           onClick={handleSave}
-          className={`${saved ? "text-primary" : "text-gray-400"} ml-2`}
+          className={`${
+            saved 
+              ? "bg-primary/10 text-primary border-primary hover:bg-primary/20" 
+              : "border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          } ml-2`}
         >
           {saved ? <BookmarkCheck className="w-5 h-5" /> : <BookmarkPlus className="w-5 h-5" />}
         </Button>
