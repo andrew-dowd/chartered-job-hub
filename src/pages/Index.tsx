@@ -54,7 +54,7 @@ const Index = () => {
       let query = supabase
         .from("jobs")
         .select("*")
-        .order('salary_range', { nullsLast: true }) // Order by salary_range not null first
+        .order('salary_range', { nullsFirst: false }) // Order by salary_range not null first
         .order('min_experience', { ascending: true }) // Then order by min_experience
         .range(page * JOBS_PER_PAGE, (page + 1) * JOBS_PER_PAGE - 1);
 
