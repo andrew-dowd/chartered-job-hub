@@ -156,72 +156,74 @@ export const JobCard = ({
       : "Not disclosed";
 
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow duration-200 bg-white flex flex-col h-full">
-      <div className="flex justify-between items-start">
-        <div className="space-y-4 flex-1">
-          <div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-1">{title}</h3>
+    <Card className="h-full hover:shadow-lg transition-shadow duration-200 bg-white">
+      <div className="p-5 flex flex-col h-full">
+        <div className="flex justify-between items-start mb-4">
+          <div className="space-y-1.5">
+            <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{title}</h3>
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <Clock className="w-4 h-4" />
               <span>{timeAgo}</span>
             </div>
           </div>
-          <div className="space-y-2">
-            <div className="flex items-center text-gray-600">
-              <Building2 className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span className="text-sm">{company}</span>
-            </div>
-            <div className="flex items-center text-gray-600">
-              <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span className="text-sm">{location}</span>
-            </div>
-            <div className="flex items-center text-gray-600">
-              <Banknote className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span className="text-sm">{displaySalary}</span>
-            </div>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleSave}
+            className={`${
+              saved 
+                ? "bg-primary/10 text-primary border-primary hover:bg-primary/20" 
+                : "border-gray-200 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            } ml-2 flex-shrink-0`}
+          >
+            {saved ? <BookmarkCheck className="w-4 h-4" /> : <BookmarkPlus className="w-4 h-4" />}
+          </Button>
+        </div>
+
+        <div className="space-y-2 mb-4">
+          <div className="flex items-center text-gray-600">
+            <Building2 className="w-4 h-4 mr-2 flex-shrink-0" />
+            <span className="text-sm line-clamp-1">{company}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
+            <span className="text-sm line-clamp-1">{location}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <Banknote className="w-4 h-4 mr-2 flex-shrink-0" />
+            <span className="text-sm">{displaySalary}</span>
           </div>
         </div>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={handleSave}
-          className={`${
-            saved 
-              ? "bg-primary/10 text-primary border-primary hover:bg-primary/20" 
-              : "border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-          } ml-2`}
-        >
-          {saved ? <BookmarkCheck className="w-5 h-5" /> : <BookmarkPlus className="w-5 h-5" />}
-        </Button>
-      </div>
-      <div className="mt-4 flex-grow">
-        <div className="flex gap-2 mb-2">
+
+        <div className="flex gap-2 mb-4">
           {minExperience !== null && minExperience !== undefined && (
-            <Badge variant="secondary">
-              <File className="w-3.5 h-3.5 mr-1 inline-block" />
+            <Badge variant="secondary" className="text-xs">
+              <File className="w-3 h-3 mr-1" />
               {minExperience}+ YOE
             </Badge>
           )}
           {locationCategory && (
-            <Badge variant="secondary">
-              <Globe className="w-3.5 h-3.5 mr-1 inline-block" />
+            <Badge variant="secondary" className="text-xs">
+              <Globe className="w-3 h-3 mr-1" />
               {locationCategory}
             </Badge>
           )}
         </div>
-        <p className="text-sm text-gray-600">
+
+        <p className="text-sm text-gray-600 line-clamp-3 mb-4 flex-grow">
           {reasoning || description}
         </p>
-      </div>
-      <div className="mt-6 flex justify-end">
-        <Button 
-          asChild
-          className="bg-primary hover:bg-primary/90 text-white font-medium px-6"
-        >
-          <a href={applyUrl} target="_blank" rel="noopener noreferrer">
-            Apply Now
-          </a>
-        </Button>
+
+        <div className="mt-auto">
+          <Button 
+            asChild
+            className="w-full bg-primary hover:bg-primary/90 text-white font-medium"
+          >
+            <a href={applyUrl} target="_blank" rel="noopener noreferrer">
+              Apply Now
+            </a>
+          </Button>
+        </div>
       </div>
     </Card>
   );

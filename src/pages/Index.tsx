@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-const JOBS_PER_PAGE = 18;
+const JOBS_PER_PAGE = 24;
 
 const Index = () => {
   const [jobs, setJobs] = useState([]);
@@ -150,7 +150,7 @@ const Index = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-[1600px] mx-auto space-y-6">
       <FilterBar
         onSearchChange={handleSearchChange}
         onMinSalaryChange={handleMinSalaryChange}
@@ -159,15 +159,14 @@ const Index = () => {
         onClearFilters={handleClearFilters}
       />
       
-      {/* Job count display */}
       <div className="bg-white rounded-lg p-4 shadow-sm border">
-        <p className="text-lg font-medium text-gray-900">
+        <p className="text-lg">
           Found <span className="text-primary font-semibold">{totalJobs}</span> matching jobs
         </p>
       </div>
       
       {jobs.length > 0 ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {jobs.map((job, index) => {
             if (jobs.length === index + 1) {
               return (
