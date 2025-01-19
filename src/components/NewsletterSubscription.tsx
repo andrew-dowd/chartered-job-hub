@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Toaster } from "@/components/ui/toaster";
 
 export const NewsletterSubscription = () => {
   const [email, setEmail] = useState("");
@@ -79,6 +80,7 @@ export const NewsletterSubscription = () => {
           </form>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 };
