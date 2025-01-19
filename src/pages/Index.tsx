@@ -1,11 +1,5 @@
 import { JobCard } from "@/components/JobCard";
 import { FilterBar } from "@/components/FilterBar";
-</lov-replace>
-
-<lov-search>
-      <CareerActions />
-</lov-search>
-<lov-replace>
 import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -157,7 +151,6 @@ const Index = () => {
 
   return (
     <div className="space-y-6">
-      <CareerActions />
       <FilterBar
         onSearchChange={handleSearchChange}
         onMinSalaryChange={handleMinSalaryChange}
