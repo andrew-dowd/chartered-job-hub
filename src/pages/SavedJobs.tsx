@@ -14,6 +14,9 @@ interface SavedJob {
   description: string;
   apply_url: string;
   created_at: string;
+  min_experience: number | null;
+  location_category: string | null;
+  reasoning: string | null;
 }
 
 const SavedJobs = () => {
@@ -111,7 +114,7 @@ const SavedJobs = () => {
             <p className="text-gray-600">You haven't saved any jobs yet.</p>
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {savedJobs.map((job) => (
               <JobCard
                 key={job.id}
@@ -123,6 +126,9 @@ const SavedJobs = () => {
                 applyUrl={job.apply_url}
                 createdAt={job.created_at}
                 onUnsave={onJobUnsaved}
+                minExperience={job.min_experience}
+                locationCategory={job.location_category}
+                reasoning={job.reasoning}
               />
             ))}
           </div>

@@ -80,6 +80,9 @@ export type Database = {
           description: string
           id: string
           location: string
+          location_category: string | null
+          min_experience: number | null
+          reasoning: string | null
           salary: string
           title: string
           user_id: string
@@ -91,6 +94,9 @@ export type Database = {
           description: string
           id?: string
           location: string
+          location_category?: string | null
+          min_experience?: number | null
+          reasoning?: string | null
           salary: string
           title: string
           user_id: string
@@ -102,6 +108,9 @@ export type Database = {
           description?: string
           id?: string
           location?: string
+          location_category?: string | null
+          min_experience?: number | null
+          reasoning?: string | null
           salary?: string
           title?: string
           user_id?: string
