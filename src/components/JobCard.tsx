@@ -1,15 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BookmarkPlus, BookmarkCheck, MapPin, Building2, Banknote, Clock, File, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import { formatDistanceToNow } from "date-fns";
-import { Badge } from "@/components/ui/badge";
+import { JobCardHeader } from "./job-card/JobCardHeader";
+import { JobCardDetails } from "./job-card/JobCardDetails";
+import { JobCardBadges } from "./job-card/JobCardBadges";
 
 interface JobCardProps {
-  id: string; // Add this line
+  id: string;
   title: string;
   company: string;
   location: string;
@@ -45,7 +45,6 @@ export const JobCard = ({
   const [session, setSession] = useState(null);
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
       setSession(currentSession);
       if (currentSession?.user) {
@@ -53,7 +52,6 @@ export const JobCard = ({
       }
     });
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, newSession) => {
@@ -136,83 +134,27 @@ export const JobCard = ({
     }
   };
 
-  const timeAgo = (() => {
-    try {
-      if (postedDate) {
-        return formatDistanceToNow(new Date(postedDate), { addSuffix: true });
-      }
-      if (createdAt) {
-        return formatDistanceToNow(new Date(createdAt), { addSuffix: true });
-      }
-      return "Recently posted";
-    } catch (error) {
-      console.error("Error formatting date:", error);
-      return "Recently posted";
-    }
-  })();
-
-  const displaySalary = salary && 
-    salary !== "null" && 
-    salary !== "undefined" && 
-    salary.trim() !== "" && 
-    salary !== "€0k - €0k"
-      ? salary 
-      : "Not disclosed";
-
   return (
     <Card className="h-full hover:shadow-lg transition-shadow duration-200 bg-white">
       <div className="p-5 flex flex-col h-full">
-        <div className="flex justify-between items-start mb-4">
-          <div className="space-y-1.5">
-            <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{title}</h3>
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <Clock className="w-4 h-4" />
-              <span>{timeAgo}</span>
-            </div>
-          </div>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={handleSave}
-            className={`${
-              saved 
-                ? "bg-primary/10 text-primary border-primary hover:bg-primary/20" 
-                : "border-gray-200 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-            } ml-2 flex-shrink-0`}
-          >
-            {saved ? <BookmarkCheck className="w-4 h-4" /> : <BookmarkPlus className="w-4 h-4" />}
-          </Button>
-        </div>
+        <JobCardHeader
+          title={title}
+          createdAt={createdAt}
+          postedDate={postedDate}
+          saved={saved}
+          onSave={handleSave}
+        />
 
-        <div className="space-y-2 mb-4">
-          <div className="flex items-center text-gray-600">
-            <Building2 className="w-4 h-4 mr-2 flex-shrink-0" />
-            <span className="text-sm line-clamp-1">{company}</span>
-          </div>
-          <div className="flex items-center text-gray-600">
-            <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
-            <span className="text-sm line-clamp-1">{location}</span>
-          </div>
-          <div className="flex items-center text-gray-600">
-            <Banknote className="w-4 h-4 mr-2 flex-shrink-0" />
-            <span className="text-sm">{displaySalary}</span>
-          </div>
-        </div>
+        <JobCardDetails
+          company={company}
+          location={location}
+          salary={salary}
+        />
 
-        <div className="flex gap-2 mb-4">
-          {minExperience !== null && minExperience !== undefined && (
-            <Badge variant="secondary" className="text-xs">
-              <File className="w-3 h-3 mr-1" />
-              {minExperience}+ YOE
-            </Badge>
-          )}
-          {locationCategory && (
-            <Badge variant="secondary" className="text-xs">
-              <Globe className="w-3 h-3 mr-1" />
-              {locationCategory}
-            </Badge>
-          )}
-        </div>
+        <JobCardBadges
+          minExperience={minExperience}
+          locationCategory={locationCategory}
+        />
 
         <p className="text-sm text-gray-600 mb-4 flex-grow">
           {reasoning || description}
