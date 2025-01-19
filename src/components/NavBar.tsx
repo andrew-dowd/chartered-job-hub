@@ -8,7 +8,7 @@ export const NavBar = () => {
 
   return (
     <header className="bg-white border-b">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 py-4 flex justify-between items-center">
         <Link to="/" className="flex flex-col">
           <h1 className="text-2xl font-bold text-gray-900">Chartered Jobs</h1>
           <p className="text-sm text-gray-600">Find your next role as a Chartered Accountant in Ireland</p>
