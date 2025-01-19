@@ -112,9 +112,9 @@ export const FilterBar = ({
               <SelectValue placeholder="Select years" />
             </SelectTrigger>
             <SelectContent className="bg-white border shadow-lg">
-              <SelectItem value="0-2" className="hover:bg-gray-50">0-2 years</SelectItem>
-              <SelectItem value="3-5" className="hover:bg-gray-50">3-5 years</SelectItem>
-              <SelectItem value="5+" className="hover:bg-gray-50">5+ years</SelectItem>
+              <SelectItem value="0-2 years" className="hover:bg-gray-50">0-2 years</SelectItem>
+              <SelectItem value="3-5 years" className="hover:bg-gray-50">3-5 years</SelectItem>
+              <SelectItem value="5+ years" className="hover:bg-gray-50">5+ years</SelectItem>
             </SelectContent>
           </Select>
         </div>

@@ -35,19 +35,8 @@ const Index = () => {
         query = query.gte("min_salary", filters.minSalary * 1000);
       }
 
-      // Map the experience filter values to the experience_level field
       if (filters.experience) {
-        switch (filters.experience) {
-          case "0-2":
-            query = query.eq("experience_level", "Junior");
-            break;
-          case "3-5":
-            query = query.eq("experience_level", "Mid-Level");
-            break;
-          case "5+":
-            query = query.eq("experience_level", "Senior");
-            break;
-        }
+        query = query.eq("experience_level", filters.experience);
       }
 
       if (filters.location) {
