@@ -196,7 +196,7 @@ export const JobCard = ({
         {minExperience !== null && minExperience !== undefined && (
           <Badge variant="secondary" className="mb-2">
             <File className="w-3.5 h-3.5 mr-1 inline-block" />
-            {minExperience}+ YOE required
+            {minExperience}+ YOE
           </Badge>
         )}
         <p className="text-sm text-gray-600">
