@@ -9,11 +9,12 @@ export interface JobFilters {
   location: string;
 }
 
-export const useJobs = (page: number, filters: JobFilters) => {
+export const useJobs = (initialPage: number, filters: JobFilters) => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [totalJobs, setTotalJobs] = useState(0);
+  const [page, setPage] = useState(initialPage);
   const { toast } = useToast();
 
   const JOBS_PER_PAGE = 24;
@@ -106,5 +107,5 @@ export const useJobs = (page: number, filters: JobFilters) => {
     fetchJobs();
   }, [filters, page]);
 
-  return { jobs, loading, hasMore, totalJobs };
+  return { jobs, loading, hasMore, totalJobs, setPage };
 };

@@ -4,7 +4,6 @@ import { useState, useRef, useCallback } from "react";
 import { useJobs, JobFilters } from "@/hooks/useJobs";
 
 const Index = () => {
-  const [page, setPage] = useState(0);
   const [filters, setFilters] = useState<JobFilters>({
     searchQuery: "",
     minSalary: 30,
@@ -12,7 +11,7 @@ const Index = () => {
     location: "",
   });
 
-  const { jobs, loading, hasMore, totalJobs } = useJobs(page, filters);
+  const { jobs, loading, hasMore, totalJobs, setPage } = useJobs(0, filters);
   
   const observer = useRef(null);
   const lastJobElementRef = useCallback(node => {
@@ -28,7 +27,7 @@ const Index = () => {
     });
     
     if (node) observer.current.observe(node);
-  }, [loading, hasMore]);
+  }, [loading, hasMore, setPage]);
 
   const handleSearchChange = (search: string) => {
     setFilters(prev => ({ ...prev, searchQuery: search }));
