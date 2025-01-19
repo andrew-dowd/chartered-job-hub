@@ -41,24 +41,42 @@ export const FilterBar = ({
     "International"
   ];
 
+  const trackFilterEvent = (filterName: string, value: string | number) => {
+    // @ts-ignore - Plausible is added via script
+    if (window.plausible) {
+      window.plausible('Filter Used', {
+        props: {
+          filter: filterName,
+          value: String(value)
+        }
+      });
+    }
+  };
+
   const handleMinSalaryChange = (value: number[]) => {
     setMinSalary(value[0]);
     onMinSalaryChange(value[0]);
+    trackFilterEvent('salary', value[0]);
   };
 
   const handleSearchChange = (value: string) => {
     setSearchValue(value);
     onSearchChange(value);
+    if (value.length > 2) {
+      trackFilterEvent('search', value);
+    }
   };
 
   const handleExperienceChange = (value: string) => {
     setExperienceValue(value);
     onExperienceChange(value);
+    trackFilterEvent('experience', value);
   };
 
   const handleLocationChange = (value: string) => {
     setLocationValue(value);
     onLocationChange(value.toLowerCase());
+    trackFilterEvent('location', value);
   };
 
   const handleClearFilters = () => {
@@ -67,6 +85,7 @@ export const FilterBar = ({
     setExperienceValue("");
     setLocationValue("");
     onClearFilters();
+    trackFilterEvent('clear_filters', 'all');
   };
 
   const hasActiveFilters = searchValue || experienceValue || locationValue || minSalary !== 30;
