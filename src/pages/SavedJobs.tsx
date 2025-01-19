@@ -106,53 +106,51 @@ const SavedJobs = () => {
 
   if (loading) {
     return (
-      <div className="min-h-[50vh] bg-gray-50 flex items-center justify-center">
+      <div className="min-h-[50vh] flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-[50vh] bg-gray-50">
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex items-center gap-4 mb-6">
-          <Button
-            variant="ghost"
-            onClick={handleBackToJobs}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Jobs
-          </Button>
-          <h1 className="text-2xl font-bold text-gray-900">Saved Jobs</h1>
-        </div>
-
-        {savedJobs.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-600">You haven't saved any jobs yet.</p>
-          </div>
-        ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {savedJobs.map((job) => (
-              <JobCard
-                key={job.id}
-                id={job.id}
-                title={job.title}
-                company={job.company}
-                location={job.location}
-                salary={job.salary_range || ""}
-                description={job.description}
-                applyUrl={job.job_url}
-                createdAt={job.created_at}
-                onUnsave={onJobUnsaved}
-                minExperience={job.min_experience}
-                locationCategory={job.location_category}
-                reasoning={job.reasoning}
-              />
-            ))}
-          </div>
-        )}
+    <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <Button
+          variant="ghost"
+          onClick={handleBackToJobs}
+          className="flex items-center gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Jobs
+        </Button>
+        <h1 className="text-2xl font-bold text-gray-900">Saved Jobs</h1>
       </div>
+
+      {savedJobs.length === 0 ? (
+        <div className="bg-white rounded-lg p-6 shadow-sm border text-center">
+          <p className="text-gray-600">You haven't saved any jobs yet.</p>
+        </div>
+      ) : (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {savedJobs.map((job) => (
+            <JobCard
+              key={job.id}
+              id={job.id}
+              title={job.title}
+              company={job.company}
+              location={job.location}
+              salary={job.salary_range || ""}
+              description={job.description}
+              applyUrl={job.job_url}
+              createdAt={job.created_at}
+              onUnsave={onJobUnsaved}
+              minExperience={job.min_experience}
+              locationCategory={job.location_category}
+              reasoning={job.reasoning}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
