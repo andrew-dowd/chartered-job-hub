@@ -14,11 +14,16 @@ export const NewsletterSubscription = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.functions.invoke('subscribe-newsletter', {
+      const { data, error } = await supabase.functions.invoke('subscribe-newsletter', {
         body: { email }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Newsletter subscription error:', error);
+        throw error;
+      }
+
+      console.log('Subscription response:', data);
 
       toast({
         title: "Successfully subscribed!",
@@ -26,11 +31,11 @@ export const NewsletterSubscription = () => {
       });
       
       setEmail("");
-    } catch (error) {
+    } catch (error: any) {
       console.error('Newsletter subscription error:', error);
       toast({
         title: "Subscription failed",
-        description: "Please try again later.",
+        description: error.message || "Please try again later.",
         variant: "destructive",
       });
     } finally {
