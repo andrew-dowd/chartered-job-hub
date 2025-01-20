@@ -77,7 +77,7 @@ export const FilterBar = ({
     trackFilterEvent('clear_filters', 'all');
   };
 
-  const hasActiveFilters = searchValue || experienceValue || locationValue || minSalary !== 30 || includeMissingSalary;
+  const hasActiveFilters: boolean = Boolean(searchValue || experienceValue || locationValue || minSalary !== 30 || includeMissingSalary);
 
   return (
     <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6 mt-8">
