@@ -38,7 +38,10 @@ export const SalaryFilter = ({
           </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-4" align="start">
+      <PopoverContent 
+        className="w-80 p-4 bg-white border border-gray-200 shadow-lg" 
+        align="start"
+      >
         <div className="space-y-4">
           <div>
             <h4 className="font-medium mb-2">Minimum Salary</h4>
