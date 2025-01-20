@@ -84,9 +84,9 @@ export const FilterBar = ({
 
   return (
     <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6 mt-8">
-      <div className="flex flex-col md:flex-row gap-4 items-center">
+      <div className="flex flex-col gap-4">
         {/* Search Input */}
-        <div className="flex-1 min-w-0 max-w-2xl">
+        <div className="w-full">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
@@ -99,24 +99,31 @@ export const FilterBar = ({
           </div>
         </div>
 
-        <div className="flex flex-wrap md:flex-nowrap gap-2 items-center">
-          <SalaryFilter
-            minSalary={minSalary}
-            includeMissingSalary={includeMissingSalary}
-            onMinSalaryChange={handleMinSalaryChange}
-          />
-          <ExperienceFilter
-            value={experienceValue}
-            onChange={handleExperienceChange}
-          />
-          <LocationFilter
-            value={locationValue}
-            onChange={handleLocationChange}
-          />
+        {/* Filters Container */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-row gap-2 w-full">
+          <div className="flex-1 md:flex-none">
+            <SalaryFilter
+              minSalary={minSalary}
+              includeMissingSalary={includeMissingSalary}
+              onMinSalaryChange={handleMinSalaryChange}
+            />
+          </div>
+          <div className="flex-1 md:flex-none">
+            <ExperienceFilter
+              value={experienceValue}
+              onChange={handleExperienceChange}
+            />
+          </div>
+          <div className="flex-1 md:flex-none">
+            <LocationFilter
+              value={locationValue}
+              onChange={handleLocationChange}
+            />
+          </div>
           
           <Button 
             onClick={handleClearFilters}
-            className="h-12 w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0"
+            className="h-12 w-full sm:w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0"
             size="icon"
             aria-label={hasActiveFilters ? "Clear filters" : "Search"}
           >
