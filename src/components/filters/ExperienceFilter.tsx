@@ -15,9 +15,9 @@ interface ExperienceFilterProps {
 export const ExperienceFilter = ({ value, onChange }: ExperienceFilterProps) => {
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="w-[180px] h-12 bg-white border-gray-200">
+      <SelectTrigger className="w-full h-12 bg-white border-gray-200">
         <div className="flex items-center">
-          <Clock className="mr-2 h-4 w-4 text-gray-500" />
+          <Clock className="mr-2 h-4 w-4 text-gray-500 shrink-0" />
           <SelectValue placeholder="Experience" />
         </div>
       </SelectTrigger>
