@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search, X } from "lucide-react";
 import { useState } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { SearchInput } from "./filters/SearchInput";
 import { SalaryFilter } from "./filters/SalaryFilter";
 import { ExperienceFilter } from "./filters/ExperienceFilter";
 import { LocationFilter } from "./filters/LocationFilter";
+import { ClearFiltersButton } from "./filters/ClearFiltersButton";
 
 interface FilterBarProps {
   onSearchChange: (search: string) => void;
@@ -27,7 +25,6 @@ export const FilterBar = ({
   const [searchValue, setSearchValue] = useState("");
   const [experienceValue, setExperienceValue] = useState("");
   const [locationValue, setLocationValue] = useState("");
-  const isMobile = useIsMobile();
 
   const trackFilterEvent = (filterName: string, value: string | number) => {
     if (window.plausible) {
@@ -85,19 +82,8 @@ export const FilterBar = ({
   return (
     <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6 mt-8">
       <div className="flex flex-col gap-4">
-        {/* Search Input */}
-        <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
-          <Input
-            type="text"
-            placeholder={isMobile ? "Search jobs..." : "Search jobs by title, company, location or description..."}
-            value={searchValue}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-10 pr-4 h-12 w-full rounded-lg border-gray-200 text-base"
-          />
-        </div>
-
-        {/* Filters Container */}
+        <SearchInput value={searchValue} onChange={handleSearchChange} />
+        
         <div className="grid grid-cols-1 md:flex md:flex-nowrap gap-3">
           <div className="grid grid-cols-2 md:flex gap-3 flex-1">
             <div className="col-span-2 md:col-span-1 md:flex-1">
@@ -117,18 +103,10 @@ export const FilterBar = ({
             />
           </div>
           
-          <Button 
+          <ClearFiltersButton 
+            hasActiveFilters={hasActiveFilters}
             onClick={handleClearFilters}
-            className="h-12 w-full md:w-12 bg-primary hover:bg-primary/90 rounded-lg md:rounded-full flex items-center justify-center p-0"
-            size="icon"
-            aria-label={hasActiveFilters ? "Clear filters" : "Search"}
-          >
-            {hasActiveFilters ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Search className="h-5 w-5" />
-            )}
-          </Button>
+          />
         </div>
       </div>
     </div>
