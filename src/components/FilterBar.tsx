@@ -102,8 +102,9 @@ export const FilterBar = ({
 
   return (
     <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6 mt-8">
-      <div className="flex flex-col md:flex-row gap-4 md:items-center">
-        <div className="flex-1 min-w-0 md:min-w-[200px]">
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Search Input */}
+        <div className="flex-1 min-w-0">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
@@ -116,10 +117,11 @@ export const FilterBar = ({
           </div>
         </div>
 
-        <div className="w-full md:w-auto md:min-w-[240px] md:border-l md:border-gray-200 md:pl-4">
-          <p className="text-sm font-medium text-gray-600 mb-1">Minimum Salary</p>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600 min-w-[48px]">€{minSalary}k</span>
+        {/* Salary Filter */}
+        <div className="w-full md:w-[280px] md:border-l md:border-gray-200 md:pl-6">
+          <p className="text-sm font-medium text-gray-700 mb-2">Minimum Salary</p>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-gray-600 min-w-[48px]">€{minSalary}k</span>
             <Slider
               defaultValue={[30]}
               max={200}
@@ -129,9 +131,9 @@ export const FilterBar = ({
               onValueChange={handleMinSalaryChange}
               className="flex-1"
             />
-            <span className="text-sm text-gray-600 text-right">€200k</span>
+            <span className="text-sm font-medium text-gray-600 min-w-[48px] text-right">€200k</span>
           </div>
-          <div className="mt-2 flex items-center space-x-2">
+          <div className="mt-3 flex items-center space-x-2">
             <Checkbox
               id="includeMissingSalary"
               checked={includeMissingSalary}
@@ -139,17 +141,18 @@ export const FilterBar = ({
             />
             <label
               htmlFor="includeMissingSalary"
-              className="text-sm text-gray-600 cursor-pointer"
+              className="text-sm text-gray-600 cursor-pointer hover:text-gray-900 transition-colors"
             >
               Include jobs without salary
             </label>
           </div>
         </div>
 
-        <div className="w-full md:w-auto md:min-w-[160px] md:border-l md:border-gray-200 md:pl-4">
-          <p className="text-sm font-medium text-gray-600 mb-1">Experience</p>
+        {/* Experience Filter */}
+        <div className="w-full md:w-[180px] md:border-l md:border-gray-200 md:pl-6">
+          <p className="text-sm font-medium text-gray-700 mb-2">Experience</p>
           <Select value={experienceValue} onValueChange={handleExperienceChange}>
-            <SelectTrigger className="w-full bg-white border-gray-200">
+            <SelectTrigger className="w-full bg-white border-gray-200 h-12">
               <SelectValue placeholder="Select years" />
             </SelectTrigger>
             <SelectContent className="bg-white border shadow-lg">
@@ -160,10 +163,11 @@ export const FilterBar = ({
           </Select>
         </div>
 
-        <div className="w-full md:w-auto md:min-w-[160px] md:border-l md:border-gray-200 md:pl-4">
-          <p className="text-sm font-medium text-gray-600 mb-1">Location</p>
+        {/* Location Filter */}
+        <div className="w-full md:w-[180px] md:border-l md:border-gray-200 md:pl-6">
+          <p className="text-sm font-medium text-gray-700 mb-2">Location</p>
           <Select value={locationValue} onValueChange={handleLocationChange}>
-            <SelectTrigger className="w-full bg-white border-gray-200">
+            <SelectTrigger className="w-full bg-white border-gray-200 h-12">
               <SelectValue placeholder="Select location" />
             </SelectTrigger>
             <SelectContent className="bg-white border shadow-lg">
@@ -180,17 +184,21 @@ export const FilterBar = ({
           </Select>
         </div>
 
-        <Button 
-          onClick={handleClearFilters}
-          className="h-12 w-full md:w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0"
-          size="icon"
-        >
-          {hasActiveFilters ? (
-            <X className="h-5 w-5" />
-          ) : (
-            <Search className="h-5 w-5" />
-          )}
-        </Button>
+        {/* Clear/Search Button */}
+        <div className="flex items-end">
+          <Button 
+            onClick={handleClearFilters}
+            className="h-12 w-full md:w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0"
+            size="icon"
+            aria-label={hasActiveFilters ? "Clear filters" : "Search"}
+          >
+            {hasActiveFilters ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Search className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
       </div>
     </div>
   );
