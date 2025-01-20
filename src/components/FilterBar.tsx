@@ -1,17 +1,11 @@
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Checkbox } from "@/components/ui/checkbox";
+import { SalaryFilter } from "./filters/SalaryFilter";
+import { ExperienceFilter } from "./filters/ExperienceFilter";
+import { LocationFilter } from "./filters/LocationFilter";
 
 interface FilterBarProps {
   onSearchChange: (search: string) => void;
@@ -34,16 +28,6 @@ export const FilterBar = ({
   const [experienceValue, setExperienceValue] = useState("");
   const [locationValue, setLocationValue] = useState("");
   const isMobile = useIsMobile();
-  
-  const LOCATIONS = [
-    "Dublin",
-    "Leinster",
-    "Munster",
-    "Connacht",
-    "Ulster",
-    "Remote",
-    "International"
-  ];
 
   const trackFilterEvent = (filterName: string, value: string | number) => {
     if (window.plausible) {
@@ -56,16 +40,14 @@ export const FilterBar = ({
     }
   };
 
-  const handleMinSalaryChange = (value: number[]) => {
-    setMinSalary(value[0]);
-    onMinSalaryChange(value[0], includeMissingSalary);
-    trackFilterEvent('salary', value[0]);
-  };
-
-  const handleIncludeMissingSalaryChange = (checked: boolean) => {
-    setIncludeMissingSalary(checked);
-    onMinSalaryChange(minSalary, checked);
-    trackFilterEvent('include_missing_salary', checked ? 'true' : 'false');
+  const handleMinSalaryChange = (value: number, includeMissing: boolean) => {
+    setMinSalary(value);
+    setIncludeMissingSalary(includeMissing);
+    onMinSalaryChange(value, includeMissing);
+    trackFilterEvent('salary', value);
+    if (includeMissing !== includeMissingSalary) {
+      trackFilterEvent('include_missing_salary', includeMissing ? 'true' : 'false');
+    }
   };
 
   const handleSearchChange = (value: string) => {
@@ -102,9 +84,9 @@ export const FilterBar = ({
 
   return (
     <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6 mt-8">
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col md:flex-row gap-4 items-center">
         {/* Search Input */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 max-w-2xl">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
@@ -117,78 +99,24 @@ export const FilterBar = ({
           </div>
         </div>
 
-        {/* Salary Filter */}
-        <div className="w-full md:w-[280px] md:border-l md:border-gray-200 md:pl-6">
-          <p className="text-sm font-medium text-gray-700 mb-2">Minimum Salary</p>
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-gray-600 min-w-[48px]">€{minSalary}k</span>
-            <Slider
-              defaultValue={[30]}
-              max={200}
-              min={30}
-              step={5}
-              value={[minSalary]}
-              onValueChange={handleMinSalaryChange}
-              className="flex-1"
-            />
-            <span className="text-sm font-medium text-gray-600 min-w-[48px] text-right">€200k</span>
-          </div>
-          <div className="mt-3 flex items-center space-x-2">
-            <Checkbox
-              id="includeMissingSalary"
-              checked={includeMissingSalary}
-              onCheckedChange={handleIncludeMissingSalaryChange}
-            />
-            <label
-              htmlFor="includeMissingSalary"
-              className="text-sm text-gray-600 cursor-pointer hover:text-gray-900 transition-colors"
-            >
-              Include jobs without salary
-            </label>
-          </div>
-        </div>
-
-        {/* Experience Filter */}
-        <div className="w-full md:w-[180px] md:border-l md:border-gray-200 md:pl-6">
-          <p className="text-sm font-medium text-gray-700 mb-2">Experience</p>
-          <Select value={experienceValue} onValueChange={handleExperienceChange}>
-            <SelectTrigger className="w-full bg-white border-gray-200 h-12">
-              <SelectValue placeholder="Select years" />
-            </SelectTrigger>
-            <SelectContent className="bg-white border shadow-lg">
-              <SelectItem value="0-2 years" className="hover:bg-gray-50">0-2 years</SelectItem>
-              <SelectItem value="3-5 years" className="hover:bg-gray-50">3-5 years</SelectItem>
-              <SelectItem value="5+ years" className="hover:bg-gray-50">5+ years</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Location Filter */}
-        <div className="w-full md:w-[180px] md:border-l md:border-gray-200 md:pl-6">
-          <p className="text-sm font-medium text-gray-700 mb-2">Location</p>
-          <Select value={locationValue} onValueChange={handleLocationChange}>
-            <SelectTrigger className="w-full bg-white border-gray-200 h-12">
-              <SelectValue placeholder="Select location" />
-            </SelectTrigger>
-            <SelectContent className="bg-white border shadow-lg">
-              {LOCATIONS.map((location) => (
-                <SelectItem 
-                  key={location} 
-                  value={location}
-                  className="hover:bg-gray-50"
-                >
-                  {location}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Clear/Search Button */}
-        <div className="flex items-end">
+        <div className="flex flex-wrap md:flex-nowrap gap-2 items-center">
+          <SalaryFilter
+            minSalary={minSalary}
+            includeMissingSalary={includeMissingSalary}
+            onMinSalaryChange={handleMinSalaryChange}
+          />
+          <ExperienceFilter
+            value={experienceValue}
+            onChange={handleExperienceChange}
+          />
+          <LocationFilter
+            value={locationValue}
+            onChange={handleLocationChange}
+          />
+          
           <Button 
             onClick={handleClearFilters}
-            className="h-12 w-full md:w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0"
+            className="h-12 w-12 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center p-0"
             size="icon"
             aria-label={hasActiveFilters ? "Clear filters" : "Search"}
           >
