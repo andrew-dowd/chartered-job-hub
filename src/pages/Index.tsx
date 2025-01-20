@@ -7,6 +7,7 @@ const Index = () => {
   const [filters, setFilters] = useState<JobFilters>({
     searchQuery: "",
     minSalary: 30,
+    includeMissingSalary: false,
     experience: "",
     location: "",
   });
@@ -33,8 +34,8 @@ const Index = () => {
     setFilters(prev => ({ ...prev, searchQuery: search }));
   };
 
-  const handleMinSalaryChange = (minSalary: number) => {
-    setFilters(prev => ({ ...prev, minSalary }));
+  const handleMinSalaryChange = (minSalary: number, includeMissingSalary: boolean) => {
+    setFilters(prev => ({ ...prev, minSalary, includeMissingSalary }));
   };
 
   const handleExperienceChange = (experience: string) => {
@@ -50,6 +51,7 @@ const Index = () => {
     setFilters({
       searchQuery: "",
       minSalary: 30,
+      includeMissingSalary: false,
       experience: "",
       location: "",
     });

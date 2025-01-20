@@ -11,10 +11,11 @@ import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface FilterBarProps {
   onSearchChange: (search: string) => void;
-  onMinSalaryChange: (minSalary: number) => void;
+  onMinSalaryChange: (minSalary: number, includeMissingSalary: boolean) => void;
   onExperienceChange: (experience: string) => void;
   onLocationChange: (location: string) => void;
   onClearFilters: () => void;
@@ -28,6 +29,7 @@ export const FilterBar = ({
   onClearFilters,
 }: FilterBarProps) => {
   const [minSalary, setMinSalary] = useState(30);
+  const [includeMissingSalary, setIncludeMissingSalary] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [experienceValue, setExperienceValue] = useState("");
   const [locationValue, setLocationValue] = useState("");
@@ -56,8 +58,14 @@ export const FilterBar = ({
 
   const handleMinSalaryChange = (value: number[]) => {
     setMinSalary(value[0]);
-    onMinSalaryChange(value[0]);
+    onMinSalaryChange(value[0], includeMissingSalary);
     trackFilterEvent('salary', value[0]);
+  };
+
+  const handleIncludeMissingSalaryChange = (checked: boolean) => {
+    setIncludeMissingSalary(checked);
+    onMinSalaryChange(minSalary, checked);
+    trackFilterEvent('include_missing_salary', checked ? 'true' : 'false');
   };
 
   const handleSearchChange = (value: string) => {
@@ -85,11 +93,12 @@ export const FilterBar = ({
     setMinSalary(30);
     setExperienceValue("");
     setLocationValue("");
+    setIncludeMissingSalary(false);
     onClearFilters();
     trackFilterEvent('clear_filters', 'all');
   };
 
-  const hasActiveFilters = searchValue || experienceValue || locationValue || minSalary !== 30;
+  const hasActiveFilters = searchValue || experienceValue || locationValue || minSalary !== 30 || includeMissingSalary;
 
   return (
     <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6 mt-8">
@@ -121,6 +130,19 @@ export const FilterBar = ({
               className="flex-1"
             />
             <span className="text-sm text-gray-600 text-right">€200k</span>
+          </div>
+          <div className="mt-2 flex items-center space-x-2">
+            <Checkbox
+              id="includeMissingSalary"
+              checked={includeMissingSalary}
+              onCheckedChange={handleIncludeMissingSalaryChange}
+            />
+            <label
+              htmlFor="includeMissingSalary"
+              className="text-sm text-gray-600 cursor-pointer"
+            >
+              Include jobs without salary
+            </label>
           </div>
         </div>
 
