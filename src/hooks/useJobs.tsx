@@ -61,7 +61,11 @@ export const useJobs = (initialPage: number, filters: JobFilters) => {
   const fetchJobs = async () => {
     try {
       console.log("Fetching jobs with filters:", filters, "page:", page);
-      setLoading(true);
+      
+      // Only show loading state for initial load or filter changes
+      if (page === 0) {
+        setLoading(true);
+      }
 
       const query = buildQuery()
         .order('posted_date', { ascending: false, nullsFirst: false })
