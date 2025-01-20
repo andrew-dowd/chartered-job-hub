@@ -27,10 +27,10 @@ export const SalaryFilter = ({
       <PopoverTrigger asChild>
         <Button 
           variant="outline" 
-          className="h-12 w-full border-gray-200 bg-white hover:bg-gray-50 px-4 justify-start font-normal"
+          className="h-12 border-gray-200 bg-white hover:bg-gray-50 px-4 justify-start font-normal w-[180px]"
         >
-          <EuroIcon className="mr-2 h-4 w-4 text-gray-500 shrink-0" />
-          <span className="text-gray-600 truncate">
+          <EuroIcon className="mr-2 h-4 w-4 text-gray-500" />
+          <span className="text-gray-600">
             {minSalary === 30 && !includeMissingSalary 
               ? "Salary" 
               : `€${minSalary}k+${includeMissingSalary ? " (incl. unspecified)" : ""}`

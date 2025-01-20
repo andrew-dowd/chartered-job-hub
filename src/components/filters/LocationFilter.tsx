@@ -25,9 +25,9 @@ export const LocationFilter = ({ value, onChange }: LocationFilterProps) => {
 
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="w-full h-12 bg-white border-gray-200">
+      <SelectTrigger className="w-[180px] h-12 bg-white border-gray-200">
         <div className="flex items-center">
-          <MapPin className="mr-2 h-4 w-4 text-gray-500 shrink-0" />
+          <MapPin className="mr-2 h-4 w-4 text-gray-500" />
           <SelectValue placeholder="Location" />
         </div>
       </SelectTrigger>
