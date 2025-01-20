@@ -26,7 +26,7 @@ export const useJobs = (initialPage: number, filters: JobFilters) => {
       .select(countOnly ? 'count' : '*', { count: 'exact' });
 
     if (filters.searchQuery) {
-      query = query.or(`title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%,description.ilike.%${filters.searchQuery}%`);
+      query = query.or(`title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%,description.ilike.%${filters.searchQuery}%,location.ilike.%${filters.searchQuery}%`);
     }
     
     if (filters.minSalary > 30) {
