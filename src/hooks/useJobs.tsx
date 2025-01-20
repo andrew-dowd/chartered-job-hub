@@ -26,10 +26,9 @@ export const useJobs = (initialPage: number, filters: JobFilters) => {
       .select(countOnly ? 'count' : '*', { count: 'exact' });
 
     if (filters.searchQuery) {
-      query = query.or(`title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%`);
+      query = query.or(`title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%,description.ilike.%${filters.searchQuery}%`);
     }
     
-    // Handle salary filtering with the new includeMissingSalary option
     if (filters.minSalary > 30) {
       if (filters.includeMissingSalary) {
         query = query.or(`min_salary.gte.${filters.minSalary * 1000},min_salary.is.null`);
