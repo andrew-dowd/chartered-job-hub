@@ -49,9 +49,13 @@ export const useJobs = (initialPage: number, filters: JobFilters) => {
 
   const fetchTotalCount = async () => {
     try {
+      console.log("Fetching total count with filters:", filters);
       const { count, error } = await buildQuery(true);
       
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching count:", error);
+        throw error;
+      }
       
       console.log("Total matching jobs:", count);
       setTotalJobs(count || 0);
@@ -82,11 +86,14 @@ export const useJobs = (initialPage: number, filters: JobFilters) => {
 
       const { data, error } = await query;
 
-      if (error) throw error;
+      if (error) {
+        console.error("Query error:", error);
+        throw error;
+      }
 
-      console.log("Fetched jobs:", data);
+      console.log("Fetched jobs:", data?.length || 0, "jobs");
       
-      if (data.length < JOBS_PER_PAGE) {
+      if (data && data.length < JOBS_PER_PAGE) {
         setHasMore(false);
       }
 
