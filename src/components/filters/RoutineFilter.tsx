@@ -15,10 +15,10 @@ export const RoutineFilter = ({ value, onChange }: RoutineFilterProps) => {
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger className="h-12 w-full">
-        <SelectValue placeholder="Routine" />
+        <SelectValue placeholder="Work Location" />
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="all">All routines</SelectItem>
+      <SelectContent className="bg-white">
+        <SelectItem value="all">Work Location</SelectItem>
         <SelectItem value="remote">Remote</SelectItem>
         <SelectItem value="hybrid">Hybrid</SelectItem>
         <SelectItem value="office">Office</SelectItem>
