@@ -18,7 +18,8 @@ import {
   Building,
   Clock,
   BookmarkPlus,
-  Star
+  Star,
+  GraduationCap,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { useState } from "react";
