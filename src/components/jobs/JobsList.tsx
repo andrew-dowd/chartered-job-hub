@@ -34,6 +34,7 @@ export const JobsList = ({ jobs, lastJobRef }: JobsListProps) => {
               postedDate={job.posted_date}
               minExperience={job.min_experience}
               locationCategory={job.location_category}
+              routine={job.routine}
             />
           </motion.div>
         );

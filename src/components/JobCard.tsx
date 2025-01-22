@@ -22,6 +22,7 @@ interface JobCardProps {
   onUnsave?: (jobId: string) => void;
   minExperience?: number | null;
   locationCategory?: string;
+  routine?: string | null;
 }
 
 export const JobCard = ({
@@ -38,6 +39,7 @@ export const JobCard = ({
   onUnsave,
   minExperience,
   locationCategory,
+  routine,
 }: JobCardProps) => {
   const [saved, setSaved] = useState(false);
   const { toast } = useToast();
@@ -154,6 +156,7 @@ export const JobCard = ({
         <JobCardBadges
           minExperience={minExperience}
           locationCategory={locationCategory}
+          routine={routine}
         />
 
         <p className="text-sm text-gray-600 mb-4 flex-grow">

@@ -11,4 +11,5 @@ export interface Job {
   posted_date?: string;
   min_experience?: number | null;
   location_category?: string;
+  routine?: string | null;
 }
