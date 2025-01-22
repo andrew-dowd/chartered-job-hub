@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { BookmarkIcon, BriefcaseIcon, Users, Mail, HelpCircle, LogIn } from "lucide-react";
+import { BookmarkIcon, BriefcaseIcon, Users, Mail, HelpCircle, LogOut } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -10,7 +10,9 @@ export const AuthenticatedMenuItems = () => {
 
   const handleSignOut = async () => {
     try {
+      console.log("Attempting to sign out...");
       const { error } = await supabase.auth.signOut();
+      
       if (error) {
         console.error("Error signing out:", error);
         toast({
@@ -21,10 +23,16 @@ export const AuthenticatedMenuItems = () => {
         return;
       }
       
+      // Even if there's no session, we want to clean up the UI state
+      console.log("Sign out successful");
       toast({
         title: "Signed out successfully",
         description: "You have been signed out of your account",
       });
+      
+      // Force navigation to auth page
+      navigate("/auth");
+      
     } catch (error) {
       console.error("Unexpected error during sign out:", error);
       toast({
@@ -32,6 +40,9 @@ export const AuthenticatedMenuItems = () => {
         description: "An unexpected error occurred",
         variant: "destructive",
       });
+      
+      // Force navigation to auth page even on error
+      navigate("/auth");
     }
   };
 
@@ -71,7 +82,7 @@ export const AuthenticatedMenuItems = () => {
       </DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
-        <LogIn className="mr-2 h-4 w-4" />
+        <LogOut className="mr-2 h-4 w-4" />
         Sign Out
       </DropdownMenuItem>
     </>
