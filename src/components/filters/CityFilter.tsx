@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Building2 } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface CityFilterProps {
@@ -49,7 +49,7 @@ export const CityFilter = ({ value, onChange }: CityFilterProps) => {
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger className="w-full h-12 bg-white border-gray-200">
         <div className="flex items-center">
-          <Building2 className="mr-2 h-4 w-4 text-gray-500 shrink-0" />
+          <MapPin className="mr-2 h-4 w-4 text-gray-500 shrink-0" />
           <SelectValue placeholder={loading ? "Loading cities..." : "City"} />
         </div>
       </SelectTrigger>
