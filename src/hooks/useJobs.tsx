@@ -33,11 +33,11 @@ export const useJobs = (initialPage: number, filters: JobFilters) => {
     
     if (filters.minSalary > 30 || filters.maxSalary < 200) {
       if (filters.includeMissingSalary) {
-        query = query.or(`min_salary.is.null,and(min_salary.gte.${filters.minSalary * 1000},max_salary.lte.${filters.maxSalary * 1000})`);
+        query = query.or(`salary_min.is.null,and(salary_min.gte.${filters.minSalary * 1000},salary_max.lte.${filters.maxSalary * 1000})`);
       } else {
         query = query
-          .gte('min_salary', filters.minSalary * 1000)
-          .lte('max_salary', filters.maxSalary * 1000);
+          .gte('salary_min', filters.minSalary * 1000)
+          .lte('salary_max', filters.maxSalary * 1000);
       }
     }
     
