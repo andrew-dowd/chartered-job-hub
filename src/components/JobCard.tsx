@@ -29,7 +29,7 @@ interface JobCardProps {
   industry?: string;
   employmentType?: string;
   qualification?: string;
-  otherKeyExperience?: string;
+  other_key_experience?: string;
 }
 
 export const JobCard = ({
@@ -52,7 +52,7 @@ export const JobCard = ({
   industry,
   employmentType,
   qualification,
-  otherKeyExperience,
+  other_key_experience,
 }: JobCardProps) => {
   const [saved, setSaved] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -219,10 +219,12 @@ export const JobCard = ({
           employmentType,
           qualification,
           reasoning,
-          otherKeyExperience,
+          other_key_experience,
           applyUrl,
         }}
       />
     </>
   );
 };
+
+export default JobCard;
