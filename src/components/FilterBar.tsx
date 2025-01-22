@@ -8,7 +8,7 @@ import { ClearFiltersButton } from "./filters/ClearFiltersButton";
 
 interface FilterBarProps {
   onSearchChange: (search: string) => void;
-  onMinSalaryChange: (minSalary: number, maxSalary: number, includeMissingSalary: boolean) => void;
+  onMinSalaryChange: (minSalary: number, includeMissingSalary: boolean) => void;
   onExperienceChange: (experience: string) => void;
   onLocationChange: (location: string) => void;
   onCityChange: (city: string) => void;
@@ -24,7 +24,6 @@ export const FilterBar = ({
   onClearFilters,
 }: FilterBarProps) => {
   const [minSalary, setMinSalary] = useState(30);
-  const [maxSalary, setMaxSalary] = useState(200);
   const [includeMissingSalary, setIncludeMissingSalary] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [experienceValue, setExperienceValue] = useState("");
@@ -42,12 +41,11 @@ export const FilterBar = ({
     }
   };
 
-  const handleMinSalaryChange = (min: number, max: number, includeMissing: boolean) => {
-    setMinSalary(min);
-    setMaxSalary(max);
+  const handleMinSalaryChange = (value: number, includeMissing: boolean) => {
+    setMinSalary(value);
     setIncludeMissingSalary(includeMissing);
-    onMinSalaryChange(min, max, includeMissing);
-    trackFilterEvent('salary_range', `${min}k-${max}k`);
+    onMinSalaryChange(value, includeMissing);
+    trackFilterEvent('salary', value);
     if (includeMissing !== includeMissingSalary) {
       trackFilterEvent('include_missing_salary', includeMissing ? 'true' : 'false');
     }
@@ -82,7 +80,6 @@ export const FilterBar = ({
   const handleClearFilters = () => {
     setSearchValue("");
     setMinSalary(30);
-    setMaxSalary(200);
     setExperienceValue("");
     setLocationValue("");
     setCityValue("");
@@ -97,7 +94,6 @@ export const FilterBar = ({
     locationValue || 
     cityValue || 
     minSalary !== 30 || 
-    maxSalary !== 200 || 
     includeMissingSalary
   );
 
@@ -111,7 +107,6 @@ export const FilterBar = ({
             <div className="col-span-2 md:col-span-1 md:flex-1">
               <SalaryFilter
                 minSalary={minSalary}
-                maxSalary={maxSalary}
                 includeMissingSalary={includeMissingSalary}
                 onMinSalaryChange={handleMinSalaryChange}
               />

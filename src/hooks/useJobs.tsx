@@ -5,7 +5,6 @@ import { useToast } from "@/hooks/use-toast";
 export interface JobFilters {
   searchQuery: string;
   minSalary: number;
-  maxSalary: number;
   includeMissingSalary: boolean;
   experience: string;
   location: string;
@@ -31,13 +30,11 @@ export const useJobs = (initialPage: number, filters: JobFilters) => {
       query = query.or(`title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%,description.ilike.%${filters.searchQuery}%,location.ilike.%${filters.searchQuery}%`);
     }
     
-    if (filters.minSalary > 30 || filters.maxSalary < 200) {
+    if (filters.minSalary > 30) {
       if (filters.includeMissingSalary) {
-        query = query.or(`salary_min.is.null,and(salary_min.gte.${filters.minSalary * 1000},salary_max.lte.${filters.maxSalary * 1000})`);
+        query = query.or(`min_salary.gte.${filters.minSalary * 1000},min_salary.is.null`);
       } else {
-        query = query
-          .gte('salary_min', filters.minSalary * 1000)
-          .lte('salary_max', filters.maxSalary * 1000);
+        query = query.gte("min_salary", filters.minSalary * 1000);
       }
     }
     
