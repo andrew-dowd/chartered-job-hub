@@ -26,36 +26,50 @@ export const SignUpForm = ({ onToggle }: { onToggle: () => void }) => {
           title: "Error",
           description: "Please enter both email and password",
         });
+        setLoading(false);
         return;
       }
 
-      const { data, error } = await supabase.auth.signUp({
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          // This ensures the user is immediately signed in after signup
+          data: {
+            email_confirmed: true
+          }
+        }
       });
 
-      if (error) {
-        console.error("Auth error:", error);
+      if (signUpError) {
+        console.error("Signup error:", signUpError);
         toast({
           variant: "destructive",
-          title: "Authentication Error",
-          description: error.message,
+          title: "Signup Error",
+          description: signUpError.message,
         });
-      } else if (data.user) {
-        // If we have a user object, signup was successful
-        toast({
-          title: "Success",
-          description: "Account created successfully",
+      } else if (signUpData.user) {
+        console.log("Signup successful:", signUpData);
+        // Sign in the user immediately after signup
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
         });
-        // Redirect to home page after successful signup
-        navigate('/');
-      } else {
-        // This case should not happen with email confirmation disabled
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Something went wrong. Please try again.",
-        });
+
+        if (signInError) {
+          console.error("Auto-login error:", signInError);
+          toast({
+            variant: "destructive",
+            title: "Login Error",
+            description: "Account created but couldn't log in automatically. Please try logging in.",
+          });
+        } else {
+          toast({
+            title: "Success",
+            description: "Account created and logged in successfully",
+          });
+          navigate('/');
+        }
       }
     } catch (error) {
       console.error("Unexpected error:", error);
