@@ -3,6 +3,7 @@ import { SearchInput } from "./filters/SearchInput";
 import { SalaryFilter } from "./filters/SalaryFilter";
 import { ExperienceFilter } from "./filters/ExperienceFilter";
 import { LocationFilter } from "./filters/LocationFilter";
+import { CityFilter } from "./filters/CityFilter";
 import { ClearFiltersButton } from "./filters/ClearFiltersButton";
 
 interface FilterBarProps {
@@ -10,6 +11,7 @@ interface FilterBarProps {
   onMinSalaryChange: (minSalary: number, includeMissingSalary: boolean) => void;
   onExperienceChange: (experience: string) => void;
   onLocationChange: (location: string) => void;
+  onCityChange: (city: string) => void;
   onClearFilters: () => void;
 }
 
@@ -18,6 +20,7 @@ export const FilterBar = ({
   onMinSalaryChange,
   onExperienceChange,
   onLocationChange,
+  onCityChange,
   onClearFilters,
 }: FilterBarProps) => {
   const [minSalary, setMinSalary] = useState(30);
@@ -25,6 +28,7 @@ export const FilterBar = ({
   const [searchValue, setSearchValue] = useState("");
   const [experienceValue, setExperienceValue] = useState("");
   const [locationValue, setLocationValue] = useState("");
+  const [cityValue, setCityValue] = useState("");
 
   const trackFilterEvent = (filterName: string, value: string | number) => {
     if (window.plausible) {
@@ -67,17 +71,31 @@ export const FilterBar = ({
     trackFilterEvent('location', value);
   };
 
+  const handleCityChange = (value: string) => {
+    setCityValue(value);
+    onCityChange(value);
+    trackFilterEvent('city', value);
+  };
+
   const handleClearFilters = () => {
     setSearchValue("");
     setMinSalary(30);
     setExperienceValue("");
     setLocationValue("");
+    setCityValue("");
     setIncludeMissingSalary(false);
     onClearFilters();
     trackFilterEvent('clear_filters', 'all');
   };
 
-  const hasActiveFilters: boolean = Boolean(searchValue || experienceValue || locationValue || minSalary !== 30 || includeMissingSalary);
+  const hasActiveFilters: boolean = Boolean(
+    searchValue || 
+    experienceValue || 
+    locationValue || 
+    cityValue || 
+    minSalary !== 30 || 
+    includeMissingSalary
+  );
 
   return (
     <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6 mt-8">
@@ -100,6 +118,10 @@ export const FilterBar = ({
             <LocationFilter
               value={locationValue}
               onChange={handleLocationChange}
+            />
+            <CityFilter
+              value={cityValue}
+              onChange={handleCityChange}
             />
           </div>
           

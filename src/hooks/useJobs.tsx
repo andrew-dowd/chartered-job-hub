@@ -8,6 +8,7 @@ export interface JobFilters {
   includeMissingSalary: boolean;
   experience: string;
   location: string;
+  city: string;
 }
 
 export const useJobs = (initialPage: number, filters: JobFilters) => {
@@ -42,6 +43,9 @@ export const useJobs = (initialPage: number, filters: JobFilters) => {
     }
     if (filters.location) {
       query = query.ilike("location_category", filters.location);
+    }
+    if (filters.city) {
+      query = query.ilike("city", filters.city);
     }
 
     return query;

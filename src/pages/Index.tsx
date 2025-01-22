@@ -10,6 +10,7 @@ const Index = () => {
     includeMissingSalary: false,
     experience: "",
     location: "",
+    city: "",
   });
 
   const { jobs, loading, hasMore, totalJobs, setPage } = useJobs(0, filters);
@@ -47,6 +48,10 @@ const Index = () => {
     setFilters(prev => ({ ...prev, location }));
   };
 
+  const handleCityChange = (city: string) => {
+    setFilters(prev => ({ ...prev, city }));
+  };
+
   const handleClearFilters = () => {
     setFilters({
       searchQuery: "",
@@ -54,6 +59,7 @@ const Index = () => {
       includeMissingSalary: false,
       experience: "",
       location: "",
+      city: "",
     });
   };
 
@@ -64,6 +70,7 @@ const Index = () => {
         onMinSalaryChange={handleMinSalaryChange}
         onExperienceChange={handleExperienceChange}
         onLocationChange={handleLocationChange}
+        onCityChange={handleCityChange}
         onClearFilters={handleClearFilters}
       />
       
