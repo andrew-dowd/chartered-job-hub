@@ -22,7 +22,6 @@ export const RoutineFilter = ({ value, onChange }: RoutineFilterProps) => {
         </div>
       </SelectTrigger>
       <SelectContent className="bg-white">
-        <SelectItem value="all">Work Location</SelectItem>
         <SelectItem value="remote">Remote</SelectItem>
         <SelectItem value="hybrid">Hybrid</SelectItem>
         <SelectItem value="office">Office</SelectItem>
