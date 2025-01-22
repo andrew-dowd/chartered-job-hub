@@ -5,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Building2 } from "lucide-react";
 
 interface RoutineFilterProps {
   value: string;
@@ -15,7 +16,10 @@ export const RoutineFilter = ({ value, onChange }: RoutineFilterProps) => {
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger className="h-12 w-full">
-        <SelectValue placeholder="Work Location" />
+        <div className="flex items-center">
+          <Building2 className="mr-2 h-4 w-4 text-gray-500 shrink-0" />
+          <SelectValue placeholder="Work Location" />
+        </div>
       </SelectTrigger>
       <SelectContent className="bg-white">
         <SelectItem value="all">Work Location</SelectItem>
