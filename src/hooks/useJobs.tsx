@@ -67,6 +67,12 @@ export const useJobs = (initialPage: number, filters: JobFilters) => {
       
       console.log("Total matching jobs:", count);
       setTotalJobs(count || 0);
+      
+      // If the total count is less than or equal to the current page * items per page,
+      // there are no more items to load
+      if (count <= (page + 1) * JOBS_PER_PAGE) {
+        setHasMore(false);
+      }
     } catch (error) {
       console.error("Error fetching total count:", error);
       toast({
@@ -86,22 +92,39 @@ export const useJobs = (initialPage: number, filters: JobFilters) => {
         setLoading(true);
       }
 
+      const startIndex = page * JOBS_PER_PAGE;
+      
+      // Check if we're trying to fetch beyond the total count
+      if (totalJobs > 0 && startIndex >= totalJobs) {
+        console.log("Attempted to fetch beyond available jobs, skipping fetch");
+        setHasMore(false);
+        setLoading(false);
+        return;
+      }
+
       const query = buildQuery()
         .order('posted_date', { ascending: false, nullsFirst: false })
         .order('salary_range', { nullsFirst: false })
         .order('min_experience', { ascending: true })
-        .range(page * JOBS_PER_PAGE, (page + 1) * JOBS_PER_PAGE - 1);
+        .range(startIndex, startIndex + JOBS_PER_PAGE - 1);
 
       const { data, error } = await query;
 
       if (error) {
+        // If we get a 416 error, it means we've reached the end
+        if (error.code === '416') {
+          console.log("Reached end of results");
+          setHasMore(false);
+          return;
+        }
         console.error("Query error:", error);
         throw error;
       }
 
       console.log("Fetched jobs:", data?.length || 0, "jobs");
       
-      if (data && data.length < JOBS_PER_PAGE) {
+      // If we got less data than requested, there are no more pages
+      if (!data || data.length < JOBS_PER_PAGE) {
         setHasMore(false);
       }
 
