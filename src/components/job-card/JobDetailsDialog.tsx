@@ -148,7 +148,7 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
     console.log(`Rendering section ${title}:`, content); // Debug log
     if (!content) return null;
     return (
-      <div className="mb-6">
+      <div className="mb-4">
         <div className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-2">
           {icon}
           <h3>{title}</h3>
@@ -228,10 +228,10 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
           </div>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
           {renderSection("Requirements Summary", reasoning, <Star className="w-5 h-5 text-primary" />)}
-          {renderSection("Other Experience", other_key_experience, <Briefcase className="w-5 h-5 text-primary" />)}
           {renderSection("Responsibilities", responsibilities, <ListChecks className="w-5 h-5 text-primary" />)}
+          {renderSection("Other Experience", other_key_experience, <Briefcase className="w-5 h-5 text-primary" />)}
           {renderSection("Perks", perks, <Gift className="w-5 h-5 text-primary" />)}
           
           {description && (
