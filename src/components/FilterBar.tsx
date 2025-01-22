@@ -32,7 +32,7 @@ export const FilterBar = ({
   const [experienceValue, setExperienceValue] = useState("");
   const [locationValue, setLocationValue] = useState("");
   const [cityValue, setCityValue] = useState("");
-  const [routineValue, setRoutineValue] = useState("");
+  const [routineValue, setRoutineValue] = useState("all");
 
   const trackFilterEvent = (filterName: string, value: string | number) => {
     if (window.plausible) {
@@ -83,7 +83,7 @@ export const FilterBar = ({
 
   const handleRoutineChange = (value: string) => {
     setRoutineValue(value);
-    onRoutineChange(value.toLowerCase());
+    onRoutineChange(value === "all" ? "" : value.toLowerCase());
     trackFilterEvent('routine', value);
   };
 
@@ -93,7 +93,7 @@ export const FilterBar = ({
     setExperienceValue("");
     setLocationValue("");
     setCityValue("");
-    setRoutineValue("");
+    setRoutineValue("all");
     setIncludeMissingSalary(false);
     onClearFilters();
     trackFilterEvent('clear_filters', 'all');
@@ -104,7 +104,7 @@ export const FilterBar = ({
     experienceValue || 
     locationValue || 
     cityValue || 
-    routineValue ||
+    routineValue !== "all" ||
     minSalary !== 30 || 
     includeMissingSalary
   );

@@ -18,7 +18,7 @@ export const RoutineFilter = ({ value, onChange }: RoutineFilterProps) => {
         <SelectValue placeholder="Routine" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="">All routines</SelectItem>
+        <SelectItem value="all">All routines</SelectItem>
         <SelectItem value="remote">Remote</SelectItem>
         <SelectItem value="hybrid">Hybrid</SelectItem>
         <SelectItem value="office">Office</SelectItem>
