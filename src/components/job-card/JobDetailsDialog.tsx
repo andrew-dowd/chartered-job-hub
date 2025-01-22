@@ -144,6 +144,21 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
     return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : '';
   };
 
+  const formatDescription = (text: string) => {
+    // Split by double newlines to separate paragraphs
+    return text.split(/\n\n+/).map((paragraph, index) => (
+      <p key={index} className="mb-3 last:mb-0">
+        {/* Split by single newlines within paragraphs */}
+        {paragraph.split(/\n/).map((line, lineIndex) => (
+          <>
+            {lineIndex > 0 && <br />}
+            {line}
+          </>
+        ))}
+      </p>
+    ));
+  };
+
   const renderSection = (title: string, content: string | undefined, icon: React.ReactNode) => {
     console.log(`Rendering section ${title}:`, content); // Debug log
     if (!content) return null;
@@ -153,7 +168,9 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
           {icon}
           <h3>{title}</h3>
         </div>
-        <p className="text-gray-600 whitespace-pre-line pl-7">{content}</p>
+        <div className="text-gray-600 pl-7">
+          {title === "Full Description" ? formatDescription(content) : content}
+        </div>
       </div>
     );
   };
