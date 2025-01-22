@@ -54,6 +54,12 @@ export const JobCard = ({
   qualification,
   other_key_experience,
 }: JobCardProps) => {
+  console.log("Job card props:", { // Debug log
+    responsibilities,
+    perks,
+    other_key_experience,
+  });
+
   const [saved, setSaved] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const { toast } = useToast();
@@ -221,6 +227,8 @@ export const JobCard = ({
           reasoning,
           other_key_experience,
           applyUrl,
+          postedDate,
+          id,
         }}
       />
     </>

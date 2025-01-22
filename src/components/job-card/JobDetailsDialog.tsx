@@ -54,6 +54,7 @@ interface JobDetailsDialogProps {
 }
 
 export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogProps) => {
+  console.log("Job data in dialog:", job); // Debug log
   const [session, setSession] = useState(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -79,6 +80,12 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
     applyUrl,
     postedDate,
   } = job;
+
+  console.log("Extracted job fields:", { // Debug log
+    responsibilities,
+    perks,
+    other_key_experience,
+  });
 
   const timeAgo = postedDate ? formatDistanceToNow(new Date(postedDate), { addSuffix: true }) : "Recently";
 
@@ -138,6 +145,7 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
   };
 
   const renderSection = (title: string, content: string | undefined, icon: React.ReactNode) => {
+    console.log(`Rendering section ${title}:`, content); // Debug log
     if (!content) return null;
     return (
       <div className="mb-6">
@@ -152,111 +160,109 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-        <div className="flex flex-col h-full">
-          <DialogHeader className="space-y-6">
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <Clock className="w-4 h-4" />
-                <span>{timeAgo}</span>
-              </div>
-              
-              <div className="space-y-2">
-                <DialogTitle className="text-3xl font-bold text-gray-900">{title}</DialogTitle>
-                <div className="flex items-center gap-2 text-xl font-semibold text-gray-700">
-                  <Building2 className="w-5 h-5" />
-                  <span>{company}</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center text-gray-600">
-                  <MapPin className="w-5 h-5 mr-2" />
-                  <span className="text-lg">{location}</span>
-                </div>
-                <div className="flex items-center text-gray-600">
-                  <Banknote className="w-5 h-5 mr-2" />
-                  <span className="text-lg">{salary}</span>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {minExperience && (
-                  <Badge variant="secondary" className="text-sm">
-                    <Briefcase className="w-3 h-3 mr-1" />
-                    {minExperience}+ YOE
-                  </Badge>
-                )}
-                {locationCategory && (
-                  <Badge variant="secondary" className="text-sm">
-                    <Globe className="w-3 h-3 mr-1" />
-                    {locationCategory}
-                  </Badge>
-                )}
-                {routine && (
-                  <Badge variant="secondary" className="text-sm">
-                    <Clock className="w-3 h-3 mr-1" />
-                    {capitalizeFirstLetter(routine)}
-                  </Badge>
-                )}
-                {industry && (
-                  <Badge variant="secondary" className="text-sm">
-                    <Building className="w-3 h-3 mr-1" />
-                    {industry}
-                  </Badge>
-                )}
-                {employmentType && (
-                  <Badge variant="secondary" className="text-sm">
-                    <Calendar className="w-3 h-3 mr-1" />
-                    {employmentType}
-                  </Badge>
-                )}
-                {qualification && (
-                  <Badge variant="secondary" className="text-sm">
-                    <GraduationCap className="w-3 h-3 mr-1" />
-                    {qualification}
-                  </Badge>
-                )}
-              </div>
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogHeader className="space-y-6 flex-shrink-0">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <Clock className="w-4 h-4" />
+              <span>{timeAgo}</span>
             </div>
-          </DialogHeader>
-
-          <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
-            {renderSection("Requirements Summary", reasoning, <Star className="w-5 h-5 text-primary" />)}
-            {renderSection("Other Experience", other_key_experience, <Briefcase className="w-5 h-5 text-primary" />)}
-            {renderSection("Responsibilities", responsibilities, <ListChecks className="w-5 h-5 text-primary" />)}
-            {renderSection("Perks", perks, <Gift className="w-5 h-5 text-primary" />)}
-          </div>
-
-          <div className="border-t bg-white p-6 space-y-6">
-            {description && (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-lg font-semibold text-gray-900">
-                  <FileText className="w-5 h-5 text-primary" />
-                  <h3>Full Description</h3>
-                </div>
-                <p className="text-gray-600 whitespace-pre-line">{description}</p>
-              </div>
-            )}
             
-            <div className="flex gap-4">
-              <Button 
-                asChild
-                className="flex-1"
-              >
-                <a href={applyUrl} target="_blank" rel="noopener noreferrer">
-                  Apply Now
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleSave}
-                className="flex-1"
-              >
-                <BookmarkPlus className="w-4 h-4 mr-2" />
-                Save Job
-              </Button>
+            <div className="space-y-2">
+              <DialogTitle className="text-3xl font-bold text-gray-900">{title}</DialogTitle>
+              <div className="flex items-center gap-2 text-xl font-semibold text-gray-700">
+                <Building2 className="w-5 h-5" />
+                <span>{company}</span>
+              </div>
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center text-gray-600">
+                <MapPin className="w-5 h-5 mr-2" />
+                <span className="text-lg">{location}</span>
+              </div>
+              <div className="flex items-center text-gray-600">
+                <Banknote className="w-5 h-5 mr-2" />
+                <span className="text-lg">{salary}</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {minExperience && (
+                <Badge variant="secondary" className="text-sm">
+                  <Briefcase className="w-3 h-3 mr-1" />
+                  {minExperience}+ YOE
+                </Badge>
+              )}
+              {locationCategory && (
+                <Badge variant="secondary" className="text-sm">
+                  <Globe className="w-3 h-3 mr-1" />
+                  {locationCategory}
+                </Badge>
+              )}
+              {routine && (
+                <Badge variant="secondary" className="text-sm">
+                  <Clock className="w-3 h-3 mr-1" />
+                  {capitalizeFirstLetter(routine)}
+                </Badge>
+              )}
+              {industry && (
+                <Badge variant="secondary" className="text-sm">
+                  <Building className="w-3 h-3 mr-1" />
+                  {industry}
+                </Badge>
+              )}
+              {employmentType && (
+                <Badge variant="secondary" className="text-sm">
+                  <Calendar className="w-3 h-3 mr-1" />
+                  {employmentType}
+                </Badge>
+              )}
+              {qualification && (
+                <Badge variant="secondary" className="text-sm">
+                  <GraduationCap className="w-3 h-3 mr-1" />
+                  {qualification}
+                </Badge>
+              )}
+            </div>
+          </div>
+        </DialogHeader>
+
+        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+          {renderSection("Requirements Summary", reasoning, <Star className="w-5 h-5 text-primary" />)}
+          {renderSection("Other Experience", other_key_experience, <Briefcase className="w-5 h-5 text-primary" />)}
+          {renderSection("Responsibilities", responsibilities, <ListChecks className="w-5 h-5 text-primary" />)}
+          {renderSection("Perks", perks, <Gift className="w-5 h-5 text-primary" />)}
+          
+          {description && (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-lg font-semibold text-gray-900">
+                <FileText className="w-5 h-5 text-primary" />
+                <h3>Full Description</h3>
+              </div>
+              <p className="text-gray-600 whitespace-pre-line">{description}</p>
+            </div>
+          )}
+        </div>
+
+        <div className="flex-shrink-0 border-t bg-white p-6 space-y-4">
+          <div className="flex gap-4">
+            <Button 
+              asChild
+              className="flex-1"
+            >
+              <a href={applyUrl} target="_blank" rel="noopener noreferrer">
+                Apply Now
+              </a>
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleSave}
+              className="flex-1"
+            >
+              <BookmarkPlus className="w-4 h-4 mr-2" />
+              Save Job
+            </Button>
           </div>
         </div>
       </DialogContent>
