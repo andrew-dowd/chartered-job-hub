@@ -43,11 +43,23 @@ export const SignUpForm = ({ onToggle }: { onToggle: () => void }) => {
 
       if (signUpError) {
         console.error("Signup error:", signUpError);
-        toast({
-          variant: "destructive",
-          title: "Signup Error",
-          description: signUpError.message,
-        });
+        
+        // Check if the error is due to existing user
+        if (signUpError.message?.includes("User already registered")) {
+          toast({
+            variant: "destructive",
+            title: "Account Exists",
+            description: "An account with this email already exists. Please sign in instead.",
+          });
+          // Automatically switch to sign in form
+          onToggle();
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Signup Error",
+            description: signUpError.message,
+          });
+        }
       } else if (signUpData.user) {
         console.log("Signup successful:", signUpData);
         // Sign in the user immediately after signup
