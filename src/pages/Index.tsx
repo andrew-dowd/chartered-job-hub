@@ -11,6 +11,7 @@ const Index = () => {
     experience: "",
     location: "",
     city: "",
+    routine: "",
   });
 
   const { jobs, loading, hasMore, totalJobs, setPage } = useJobs(0, filters);
@@ -52,6 +53,10 @@ const Index = () => {
     setFilters(prev => ({ ...prev, city }));
   };
 
+  const handleRoutineChange = (routine: string) => {
+    setFilters(prev => ({ ...prev, routine }));
+  };
+
   const handleClearFilters = () => {
     setFilters({
       searchQuery: "",
@@ -60,6 +65,7 @@ const Index = () => {
       experience: "",
       location: "",
       city: "",
+      routine: "",
     });
   };
 
@@ -71,6 +77,7 @@ const Index = () => {
         onExperienceChange={handleExperienceChange}
         onLocationChange={handleLocationChange}
         onCityChange={handleCityChange}
+        onRoutineChange={handleRoutineChange}
         onClearFilters={handleClearFilters}
       />
       

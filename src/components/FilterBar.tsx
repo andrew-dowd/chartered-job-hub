@@ -4,6 +4,7 @@ import { SalaryFilter } from "./filters/SalaryFilter";
 import { ExperienceFilter } from "./filters/ExperienceFilter";
 import { LocationFilter } from "./filters/LocationFilter";
 import { CityFilter } from "./filters/CityFilter";
+import { RoutineFilter } from "./filters/RoutineFilter";
 import { ClearFiltersButton } from "./filters/ClearFiltersButton";
 
 interface FilterBarProps {
@@ -12,6 +13,7 @@ interface FilterBarProps {
   onExperienceChange: (experience: string) => void;
   onLocationChange: (location: string) => void;
   onCityChange: (city: string) => void;
+  onRoutineChange: (routine: string) => void;
   onClearFilters: () => void;
 }
 
@@ -21,6 +23,7 @@ export const FilterBar = ({
   onExperienceChange,
   onLocationChange,
   onCityChange,
+  onRoutineChange,
   onClearFilters,
 }: FilterBarProps) => {
   const [minSalary, setMinSalary] = useState(30);
@@ -29,6 +32,7 @@ export const FilterBar = ({
   const [experienceValue, setExperienceValue] = useState("");
   const [locationValue, setLocationValue] = useState("");
   const [cityValue, setCityValue] = useState("");
+  const [routineValue, setRoutineValue] = useState("");
 
   const trackFilterEvent = (filterName: string, value: string | number) => {
     if (window.plausible) {
@@ -77,12 +81,19 @@ export const FilterBar = ({
     trackFilterEvent('city', value);
   };
 
+  const handleRoutineChange = (value: string) => {
+    setRoutineValue(value);
+    onRoutineChange(value.toLowerCase());
+    trackFilterEvent('routine', value);
+  };
+
   const handleClearFilters = () => {
     setSearchValue("");
     setMinSalary(30);
     setExperienceValue("");
     setLocationValue("");
     setCityValue("");
+    setRoutineValue("");
     setIncludeMissingSalary(false);
     onClearFilters();
     trackFilterEvent('clear_filters', 'all');
@@ -93,6 +104,7 @@ export const FilterBar = ({
     experienceValue || 
     locationValue || 
     cityValue || 
+    routineValue ||
     minSalary !== 30 || 
     includeMissingSalary
   );
@@ -122,6 +134,10 @@ export const FilterBar = ({
             <CityFilter
               value={cityValue}
               onChange={handleCityChange}
+            />
+            <RoutineFilter
+              value={routineValue}
+              onChange={handleRoutineChange}
             />
           </div>
           

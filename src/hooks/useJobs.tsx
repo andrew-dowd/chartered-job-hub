@@ -9,6 +9,7 @@ export interface JobFilters {
   experience: string;
   location: string;
   city: string;
+  routine: string;
 }
 
 export const useJobs = (initialPage: number, filters: JobFilters) => {
@@ -46,6 +47,9 @@ export const useJobs = (initialPage: number, filters: JobFilters) => {
     }
     if (filters.city) {
       query = query.ilike("city", filters.city);
+    }
+    if (filters.routine) {
+      query = query.ilike("routine", filters.routine);
     }
 
     return query;
