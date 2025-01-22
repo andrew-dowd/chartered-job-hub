@@ -18,6 +18,7 @@ export const ProfileDropdown = () => {
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      console.log("Initial session check:", currentSession?.user?.email || "No session");
       setSession(currentSession);
     });
 
@@ -30,11 +31,16 @@ export const ProfileDropdown = () => {
       
       // If user signs out, redirect to auth page
       if (_event === 'SIGNED_OUT') {
+        console.log("User signed out, redirecting to auth page");
+        setSession(null); // Explicitly clear session
         navigate('/auth');
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log("Cleaning up auth subscription");
+      subscription.unsubscribe();
+    };
   }, [navigate]);
 
   return (

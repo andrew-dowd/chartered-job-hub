@@ -9,28 +9,33 @@ export const AuthenticatedMenuItems = () => {
   const { toast } = useToast();
 
   const handleSignOut = async () => {
+    console.log("Starting sign out process...");
+    
     try {
-      console.log("Attempting to sign out...");
+      // First check if we have a session
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log("Current session before sign out:", session?.user?.email || "No session");
+
+      // Attempt to sign out
       const { error } = await supabase.auth.signOut();
       
       if (error) {
-        console.error("Error signing out:", error);
+        console.error("Error during sign out:", error);
         toast({
           title: "Error signing out",
           description: error.message,
           variant: "destructive",
         });
-        return;
+      } else {
+        console.log("Sign out successful");
+        toast({
+          title: "Signed out successfully",
+          description: "You have been signed out of your account",
+        });
       }
       
-      // Even if there's no session, we want to clean up the UI state
-      console.log("Sign out successful");
-      toast({
-        title: "Signed out successfully",
-        description: "You have been signed out of your account",
-      });
-      
-      // Force navigation to auth page
+      // Always navigate to auth page, even if there was an error
+      console.log("Navigating to auth page");
       navigate("/auth");
       
     } catch (error) {
