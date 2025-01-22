@@ -46,7 +46,7 @@ interface JobDetailsDialogProps {
     employmentType?: string;
     qualification?: string;
     reasoning?: string;
-    otherKeyExperience?: string;
+    other_key_experience?: string;
     applyUrl: string;
     postedDate?: string;
     id?: string;
@@ -75,7 +75,7 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
     employmentType,
     qualification,
     reasoning,
-    otherKeyExperience,
+    other_key_experience,
     applyUrl,
     postedDate,
   } = job;
@@ -225,7 +225,7 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
         {/* Main Content */}
         <div className="space-y-8 py-6">
           {renderSection("Requirements Summary", reasoning, <Star className="w-5 h-5 text-primary" />)}
-          {renderSection("Other Experience", otherKeyExperience, <Briefcase className="w-5 h-5 text-primary" />)}
+          {renderSection("Other Experience", other_key_experience, <Briefcase className="w-5 h-5 text-primary" />)}
           {renderSection("Responsibilities", responsibilities, <ListChecks className="w-5 h-5 text-primary" />)}
           {renderSection("Perks", perks, <Gift className="w-5 h-5 text-primary" />)}
         </div>
