@@ -11,63 +11,93 @@ export type Database = {
     Tables: {
       jobs: {
         Row: {
+          city: string | null
           closing_date: string | null
           company: string
           created_at: string
           description: string
+          employment_type: string | null
           experience_level: string | null
           id: string
+          industry: string | null
+          intensity: string | null
           job_url: string
           location: string
           location_category: string | null
           min_experience: number | null
           min_salary: number | null
+          other_key_experience: string | null
+          perks: string | null
           posted_date: string | null
           pqe: string | null
+          qualification: string | null
           reasoning: string | null
+          responsibilities: string | null
+          routine: string | null
           salary_max: number | null
           salary_min: number | null
           salary_range: string | null
+          stress_reasoning: string | null
           title: string
         }
         Insert: {
+          city?: string | null
           closing_date?: string | null
           company: string
           created_at?: string
           description: string
+          employment_type?: string | null
           experience_level?: string | null
           id?: string
+          industry?: string | null
+          intensity?: string | null
           job_url: string
           location: string
           location_category?: string | null
           min_experience?: number | null
           min_salary?: number | null
+          other_key_experience?: string | null
+          perks?: string | null
           posted_date?: string | null
           pqe?: string | null
+          qualification?: string | null
           reasoning?: string | null
+          responsibilities?: string | null
+          routine?: string | null
           salary_max?: number | null
           salary_min?: number | null
           salary_range?: string | null
+          stress_reasoning?: string | null
           title: string
         }
         Update: {
+          city?: string | null
           closing_date?: string | null
           company?: string
           created_at?: string
           description?: string
+          employment_type?: string | null
           experience_level?: string | null
           id?: string
+          industry?: string | null
+          intensity?: string | null
           job_url?: string
           location?: string
           location_category?: string | null
           min_experience?: number | null
           min_salary?: number | null
+          other_key_experience?: string | null
+          perks?: string | null
           posted_date?: string | null
           pqe?: string | null
+          qualification?: string | null
           reasoning?: string | null
+          responsibilities?: string | null
+          routine?: string | null
           salary_max?: number | null
           salary_min?: number | null
           salary_range?: string | null
+          stress_reasoning?: string | null
           title?: string
         }
         Relationships: []
