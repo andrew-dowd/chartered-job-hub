@@ -11,16 +11,24 @@ import { EuroIcon } from "lucide-react";
 
 interface SalaryFilterProps {
   minSalary: number;
+  maxSalary: number;
   includeMissingSalary: boolean;
-  onMinSalaryChange: (minSalary: number, includeMissingSalary: boolean) => void;
+  onMinSalaryChange: (minSalary: number, maxSalary: number, includeMissingSalary: boolean) => void;
 }
 
 export const SalaryFilter = ({
   minSalary,
+  maxSalary,
   includeMissingSalary,
   onMinSalaryChange,
 }: SalaryFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleRangeChange = (values: number[]) => {
+    if (values[0] <= values[1]) {
+      onMinSalaryChange(values[0], values[1], includeMissingSalary);
+    }
+  };
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -31,9 +39,9 @@ export const SalaryFilter = ({
         >
           <EuroIcon className="mr-2 h-4 w-4 text-gray-500 shrink-0" />
           <span className="text-gray-600 truncate">
-            {minSalary === 30 && !includeMissingSalary 
+            {minSalary === 30 && maxSalary === 200 && !includeMissingSalary 
               ? "Salary" 
-              : `€${minSalary}k+${includeMissingSalary ? " (incl. unspecified)" : ""}`
+              : `€${minSalary}k - €${maxSalary}k${includeMissingSalary ? " (incl. unspecified)" : ""}`
             }
           </span>
         </Button>
@@ -44,19 +52,19 @@ export const SalaryFilter = ({
       >
         <div className="space-y-4">
           <div>
-            <h4 className="font-medium mb-2">Minimum Salary</h4>
+            <h4 className="font-medium mb-2">Salary Range</h4>
             <div className="flex items-center gap-3">
               <span className="text-sm font-medium text-gray-600 min-w-[48px]">€{minSalary}k</span>
               <Slider
-                defaultValue={[30]}
+                defaultValue={[30, 200]}
                 max={200}
                 min={30}
                 step={5}
-                value={[minSalary]}
-                onValueChange={(value) => onMinSalaryChange(value[0], includeMissingSalary)}
+                value={[minSalary, maxSalary]}
+                onValueChange={handleRangeChange}
                 className="flex-1"
               />
-              <span className="text-sm font-medium text-gray-600 min-w-[48px] text-right">€200k</span>
+              <span className="text-sm font-medium text-gray-600 min-w-[48px] text-right">€{maxSalary}k</span>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -64,7 +72,7 @@ export const SalaryFilter = ({
               id="includeMissingSalary"
               checked={includeMissingSalary}
               onCheckedChange={(checked) => 
-                onMinSalaryChange(minSalary, checked as boolean)
+                onMinSalaryChange(minSalary, maxSalary, checked as boolean)
               }
             />
             <label
