@@ -15,8 +15,6 @@ import {
   Globe,
   ListChecks,
   Gift,
-  FileText,
-  GraduationCap,
   Building,
   Clock,
   BookmarkPlus,
@@ -54,7 +52,7 @@ interface JobDetailsDialogProps {
 }
 
 export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogProps) => {
-  console.log("Job data in dialog:", job); // Debug log
+  console.log("Job data in dialog:", job);
   const [session, setSession] = useState(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -81,7 +79,7 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
     postedDate,
   } = job;
 
-  console.log("Extracted job fields:", { // Debug log
+  console.log("Extracted job fields:", {
     responsibilities,
     perks,
     other_key_experience,
@@ -144,23 +142,8 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
     return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : '';
   };
 
-  const formatDescription = (text: string) => {
-    // Split by double newlines to separate paragraphs
-    return text.split(/\n\n+/).map((paragraph, index) => (
-      <p key={index} className="mb-3 last:mb-0">
-        {/* Split by single newlines within paragraphs */}
-        {paragraph.split(/\n/).map((line, lineIndex) => (
-          <>
-            {lineIndex > 0 && <br />}
-            {line}
-          </>
-        ))}
-      </p>
-    ));
-  };
-
   const renderSection = (title: string, content: string | undefined, icon: React.ReactNode) => {
-    console.log(`Rendering section ${title}:`, content); // Debug log
+    console.log(`Rendering section ${title}:`, content);
     if (!content) return null;
     return (
       <div className="mb-4">
@@ -178,11 +161,11 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
-        <DialogHeader className="space-y-6 flex-shrink-0">
+        <DialogHeader className="space-y-4 flex-shrink-0">
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <Clock className="w-4 h-4" />
-              <span>{timeAgo}</span>
+              <span>Posted {timeAgo}</span>
             </div>
             
             <div className="space-y-2">
