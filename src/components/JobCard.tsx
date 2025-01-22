@@ -28,6 +28,8 @@ interface JobCardProps {
   perks?: string;
   industry?: string;
   employmentType?: string;
+  qualification?: string;
+  otherKeyExperience?: string;
 }
 
 export const JobCard = ({
@@ -49,6 +51,8 @@ export const JobCard = ({
   perks,
   industry,
   employmentType,
+  qualification,
+  otherKeyExperience,
 }: JobCardProps) => {
   const [saved, setSaved] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -213,6 +217,9 @@ export const JobCard = ({
           routine,
           industry,
           employmentType,
+          qualification,
+          reasoning,
+          otherKeyExperience,
           applyUrl,
         }}
       />

@@ -6,7 +6,21 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Building2, MapPin, Banknote, Briefcase, Calendar, Globe } from "lucide-react";
+import { 
+  Building2, 
+  MapPin, 
+  Banknote, 
+  Briefcase, 
+  Calendar, 
+  Globe,
+  ListChecks,
+  Gift,
+  Star,
+  FileText,
+  GraduationCap,
+  Building,
+  Clock
+} from "lucide-react";
 
 interface JobDetailsDialogProps {
   open: boolean;
@@ -24,6 +38,9 @@ interface JobDetailsDialogProps {
     routine?: string | null;
     industry?: string;
     employmentType?: string;
+    qualification?: string;
+    reasoning?: string;
+    otherKeyExperience?: string;
     applyUrl: string;
   };
 }
@@ -42,12 +59,28 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
     routine,
     industry,
     employmentType,
+    qualification,
+    reasoning,
+    otherKeyExperience,
     applyUrl,
   } = job;
 
+  const renderSection = (title: string, content: string | undefined, icon: React.ReactNode) => {
+    if (!content) return null;
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center gap-2 text-lg font-semibold text-gray-900">
+          {icon}
+          <h3>{title}</h3>
+        </div>
+        <p className="text-gray-600 whitespace-pre-line pl-6">{content}</p>
+      </div>
+    );
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">{title}</DialogTitle>
           <div className="flex items-center gap-2 text-gray-600 mt-2">
@@ -72,56 +105,51 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
           {/* Badges */}
           <div className="flex flex-wrap gap-2">
             {minExperience && (
-              <Badge variant="secondary">
+              <Badge variant="secondary" className="text-sm">
                 <Briefcase className="w-3 h-3 mr-1" />
                 {minExperience}+ YOE
               </Badge>
             )}
             {locationCategory && (
-              <Badge variant="secondary">
+              <Badge variant="secondary" className="text-sm">
                 <Globe className="w-3 h-3 mr-1" />
                 {locationCategory}
               </Badge>
             )}
             {routine && (
-              <Badge variant="secondary">
-                <Calendar className="w-3 h-3 mr-1" />
+              <Badge variant="secondary" className="text-sm">
+                <Clock className="w-3 h-3 mr-1" />
                 {routine}
               </Badge>
             )}
             {industry && (
-              <Badge variant="secondary">
+              <Badge variant="secondary" className="text-sm">
+                <Building className="w-3 h-3 mr-1" />
                 {industry}
               </Badge>
             )}
             {employmentType && (
-              <Badge variant="secondary">
+              <Badge variant="secondary" className="text-sm">
+                <Calendar className="w-3 h-3 mr-1" />
                 {employmentType}
+              </Badge>
+            )}
+            {qualification && (
+              <Badge variant="secondary" className="text-sm">
+                <GraduationCap className="w-3 h-3 mr-1" />
+                {qualification}
               </Badge>
             )}
           </div>
 
-          {/* Description */}
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Description</h3>
-            <p className="text-gray-600 whitespace-pre-line">{description}</p>
+          {/* Main Content */}
+          <div className="space-y-6 border-t pt-6">
+            {renderSection("Why This Role Matters", reasoning, <Star className="w-5 h-5 text-primary" />)}
+            {renderSection("Key Experience", otherKeyExperience, <Briefcase className="w-5 h-5 text-primary" />)}
+            {renderSection("Responsibilities", responsibilities, <ListChecks className="w-5 h-5 text-primary" />)}
+            {renderSection("Perks & Benefits", perks, <Gift className="w-5 h-5 text-primary" />)}
+            {renderSection("Full Description", description, <FileText className="w-5 h-5 text-primary" />)}
           </div>
-
-          {/* Responsibilities */}
-          {responsibilities && (
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Responsibilities</h3>
-              <p className="text-gray-600 whitespace-pre-line">{responsibilities}</p>
-            </div>
-          )}
-
-          {/* Perks */}
-          {perks && (
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Perks & Benefits</h3>
-              <p className="text-gray-600 whitespace-pre-line">{perks}</p>
-            </div>
-          )}
 
           {/* Apply Button */}
           <div className="pt-4">
