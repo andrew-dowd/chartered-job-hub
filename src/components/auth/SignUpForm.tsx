@@ -4,12 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 export const SignUpForm = ({ onToggle }: { onToggle: () => void }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +29,7 @@ export const SignUpForm = ({ onToggle }: { onToggle: () => void }) => {
         return;
       }
 
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
@@ -39,10 +41,20 @@ export const SignUpForm = ({ onToggle }: { onToggle: () => void }) => {
           title: "Authentication Error",
           description: error.message,
         });
-      } else {
+      } else if (data.user) {
+        // If we have a user object, signup was successful
         toast({
-          title: "Account created",
-          description: "Please check your email to confirm your account",
+          title: "Success",
+          description: "Account created successfully",
+        });
+        // Redirect to home page after successful signup
+        navigate('/');
+      } else {
+        // This case should not happen with email confirmation disabled
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Something went wrong. Please try again.",
         });
       }
     } catch (error) {
