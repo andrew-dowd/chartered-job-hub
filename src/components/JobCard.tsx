@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { JobCardHeader } from "./job-card/JobCardHeader";
 import { JobCardDetails } from "./job-card/JobCardDetails";
 import { JobCardBadges } from "./job-card/JobCardBadges";
+import { JobDetailsDialog } from "./job-card/JobDetailsDialog";
 
 interface JobCardProps {
   id: string;
@@ -23,6 +24,10 @@ interface JobCardProps {
   minExperience?: number | null;
   locationCategory?: string;
   routine?: string | null;
+  responsibilities?: string;
+  perks?: string;
+  industry?: string;
+  employmentType?: string;
 }
 
 export const JobCard = ({
@@ -40,8 +45,13 @@ export const JobCard = ({
   minExperience,
   locationCategory,
   routine,
+  responsibilities,
+  perks,
+  industry,
+  employmentType,
 }: JobCardProps) => {
   const [saved, setSaved] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const [session, setSession] = useState(null);
@@ -137,44 +147,75 @@ export const JobCard = ({
   };
 
   return (
-    <Card className="h-full hover:shadow-lg transition-shadow duration-200 bg-white">
-      <div className="p-5 flex flex-col h-full">
-        <JobCardHeader
-          title={title}
-          createdAt={createdAt}
-          postedDate={postedDate}
-          saved={saved}
-          onSave={handleSave}
-        />
+    <>
+      <Card 
+        className="h-full hover:shadow-lg transition-shadow duration-200 bg-white cursor-pointer"
+        onClick={() => setDialogOpen(true)}
+      >
+        <div className="p-5 flex flex-col h-full">
+          <JobCardHeader
+            title={title}
+            createdAt={createdAt}
+            postedDate={postedDate}
+            saved={saved}
+            onSave={(e) => {
+              e.stopPropagation();
+              handleSave();
+            }}
+          />
 
-        <JobCardDetails
-          company={company}
-          location={location}
-          salary={salary}
-        />
+          <JobCardDetails
+            company={company}
+            location={location}
+            salary={salary}
+          />
 
-        <JobCardBadges
-          minExperience={minExperience}
-          locationCategory={locationCategory}
-          routine={routine}
-        />
+          <JobCardBadges
+            minExperience={minExperience}
+            locationCategory={locationCategory}
+            routine={routine}
+          />
 
-        <p className="text-sm text-gray-600 mb-4 flex-grow">
-          {reasoning || description}
-        </p>
+          <p className="text-sm text-gray-600 mb-4 flex-grow line-clamp-3">
+            {reasoning || description}
+          </p>
 
-        <div className="mt-auto">
-          <Button 
-            asChild
-            variant="outline"
-            className="w-full border-gray-200 hover:bg-gray-100 hover:border-gray-300 hover:text-gray-900 text-gray-700 font-medium transition-all duration-200"
-          >
-            <a href={applyUrl} target="_blank" rel="noopener noreferrer">
-              Apply Now
-            </a>
-          </Button>
+          <div className="mt-auto">
+            <Button 
+              asChild
+              variant="outline"
+              className="w-full border-gray-200 hover:bg-gray-100 hover:border-gray-300 hover:text-gray-900 text-gray-700 font-medium transition-all duration-200"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <a href={applyUrl} target="_blank" rel="noopener noreferrer">
+                Apply Now
+              </a>
+            </Button>
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+
+      <JobDetailsDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        job={{
+          title,
+          company,
+          location,
+          salary,
+          description,
+          responsibilities,
+          perks,
+          minExperience,
+          locationCategory,
+          routine,
+          industry,
+          employmentType,
+          applyUrl,
+        }}
+      />
+    </>
   );
 };
