@@ -169,7 +169,7 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
           <h3>{title}</h3>
         </div>
         <div className="text-gray-600 pl-7">
-          {title === "Full Description" ? formatDescription(content) : content}
+          {content}
         </div>
       </div>
     );
@@ -235,7 +235,7 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
                   {employmentType}
                 </Badge>
               )}
-              {qualification && (
+              {qualification && qualification !== 'n/a' && (
                 <Badge variant="secondary" className="text-sm">
                   <GraduationCap className="w-3 h-3 mr-1" />
                   {qualification}
@@ -250,16 +250,6 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
           {renderSection("Responsibilities", responsibilities, <ListChecks className="w-5 h-5 text-primary" />)}
           {renderSection("Other Experience", other_key_experience, <Briefcase className="w-5 h-5 text-primary" />)}
           {renderSection("Perks", perks, <Gift className="w-5 h-5 text-primary" />)}
-          
-          {description && (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-lg font-semibold text-gray-900">
-                <FileText className="w-5 h-5 text-primary" />
-                <h3>Full Description</h3>
-              </div>
-              <p className="text-gray-600 whitespace-pre-line">{description}</p>
-            </div>
-          )}
         </div>
 
         <div className="flex-shrink-0 border-t bg-white p-6 space-y-4">
