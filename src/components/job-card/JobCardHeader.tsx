@@ -8,7 +8,7 @@ interface JobCardHeaderProps {
   createdAt?: string;
   postedDate?: string;
   saved: boolean;
-  onSave: () => void;
+  onSave: (e: React.MouseEvent) => void;  // Updated type definition here
 }
 
 export const JobCardHeader = ({
