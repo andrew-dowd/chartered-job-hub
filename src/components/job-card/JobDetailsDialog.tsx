@@ -55,33 +55,32 @@ export const JobDetailsDialog = ({
   }, [initialSaved]);
 
   useEffect(() => {
-    // Check for pending job save in localStorage
-    const checkPendingSave = async (currentSession) => {
-      if (currentSession?.user) {
-        const pendingJobId = localStorage.getItem('pendingJobSave');
-        if (pendingJobId === job.id) {
-          console.log('Found pending job save in dialog:', pendingJobId);
-          await handleSave(true);
-          localStorage.removeItem('pendingJobSave');
-        }
+    const checkPendingSave = async () => {
+      const pendingJobId = localStorage.getItem('pendingJobSave');
+      if (pendingJobId === job.id) {
+        console.log('Found pending job save in dialog:', pendingJobId);
+        await handleSave(true);
+        localStorage.removeItem('pendingJobSave');
       }
     };
 
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      console.log('Session check in JobDetailsDialog:', currentSession?.user?.id);
       setSession(currentSession);
       if (currentSession?.user) {
         checkIfSaved(currentSession.user.id);
-        checkPendingSave(currentSession);
+        checkPendingSave();
       }
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      console.log('Auth state changed in JobDetailsDialog:', _event, newSession?.user?.id);
       setSession(newSession);
       if (newSession?.user) {
         checkIfSaved(newSession.user.id);
-        checkPendingSave(newSession);
+        checkPendingSave();
       } else {
         setSaved(false);
       }
@@ -105,11 +104,10 @@ export const JobDetailsDialog = ({
 
   const handleSave = async (skipAuthCheck = false) => {
     if (!session?.user && !skipAuthCheck) {
-      // Store the job ID before redirecting
       localStorage.setItem('pendingJobSave', job.id);
       console.log('Storing pending job save in dialog:', job.id);
       
-      onOpenChange(false); // Close the dialog
+      onOpenChange(false);
       toast({
         title: "Sign in required",
         description: "Please sign in or create an account to save jobs",
@@ -124,6 +122,8 @@ export const JobDetailsDialog = ({
     }
 
     try {
+      console.log('Attempting to save job:', job.id, 'for user:', session.user.id);
+      
       if (saved) {
         const { error } = await supabase
           .from("saved_jobs")
