@@ -7,27 +7,31 @@ interface JobCardDetailsProps {
 }
 
 export const JobCardDetails = ({ company, location, salary }: JobCardDetailsProps) => {
-  const displaySalary = salary && 
-    salary !== "null" && 
-    salary !== "undefined" && 
-    salary.trim() !== "" && 
-    salary !== "€0k - €0k"
-      ? salary 
-      : "Not disclosed";
+  const formatValue = (value: string): string => {
+    if (!value || 
+        value === "null" || 
+        value === "undefined" || 
+        value.trim() === "" || 
+        value === "€0k - €0k" ||
+        value.toLowerCase() === "n/a") {
+      return "Not disclosed";
+    }
+    return value;
+  };
 
   return (
     <div className="space-y-2 mb-4">
       <div className="flex items-center text-gray-600">
         <Building2 className="w-4 h-4 mr-2 flex-shrink-0" />
-        <span className="text-sm line-clamp-1">{company}</span>
+        <span className="text-sm line-clamp-1">{formatValue(company)}</span>
       </div>
       <div className="flex items-center text-gray-600">
         <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
-        <span className="text-sm line-clamp-1">{location}</span>
+        <span className="text-sm line-clamp-1">{formatValue(location)}</span>
       </div>
       <div className="flex items-center text-gray-600">
         <Banknote className="w-4 h-4 mr-2 flex-shrink-0" />
-        <span className="text-sm">{displaySalary}</span>
+        <span className="text-sm">{formatValue(salary)}</span>
       </div>
     </div>
   );
