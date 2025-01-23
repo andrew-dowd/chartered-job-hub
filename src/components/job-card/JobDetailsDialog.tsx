@@ -1,6 +1,6 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { BookmarkPlus, BookmarkCheck, Building2, MapPin, BriefcaseIcon, Clock, GraduationCap, Briefcase, MapPinned, CalendarClock } from "lucide-react";
+import { BookmarkPlus, BookmarkCheck, Building2, MapPin, BriefcaseIcon, Clock, GraduationCap, Briefcase, MapPinned, CalendarClock, Gauge } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -64,6 +64,7 @@ export const JobDetailsDialog = ({
     other_key_experience,
     applyUrl,
     postedDate,
+    intensity,
   } = job;
 
   useEffect(() => {
@@ -163,11 +164,20 @@ export const JobDetailsDialog = ({
     ? formatDistanceToNow(new Date(postedDate), { addSuffix: true })
     : "Recently posted";
 
+  const capitalizeFirstLetter = (str: string) => {
+    return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : '';
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <div className="space-y-6">
-          <div className="space-y-2">
+          <div className="space-y-4">
+            <div className="flex items-center text-gray-600 text-sm">
+              <Clock className="w-4 h-4 mr-2" />
+              <span>{timeAgo}</span>
+            </div>
+
             <div className="flex items-start justify-between">
               <h2 className="text-2xl font-semibold">{title}</h2>
               <Button
@@ -200,10 +210,6 @@ export const JobDetailsDialog = ({
                 <BriefcaseIcon className="w-4 h-4" />
                 <span>{salary}</span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4" />
-                <span>{timeAgo}</span>
-              </div>
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -212,14 +218,9 @@ export const JobDetailsDialog = ({
                   {minExperience}+ years experience
                 </Badge>
               )}
-              {locationCategory && (
-                <Badge variant="secondary" className="bg-purple-100 text-purple-800 hover:bg-purple-200">
-                  {locationCategory}
-                </Badge>
-              )}
               {routine && (
                 <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200">
-                  {routine}
+                  {capitalizeFirstLetter(routine)}
                 </Badge>
               )}
             </div>
@@ -233,15 +234,17 @@ export const JobDetailsDialog = ({
               </div>
             )}
 
-            <div>
-              <h3 className="font-semibold mb-2">Job Description:</h3>
-              <p className="text-gray-600 whitespace-pre-line">{description}</p>
-            </div>
-
             {responsibilities && (
               <div>
                 <h3 className="font-semibold mb-2">Responsibilities:</h3>
                 <p className="text-gray-600 whitespace-pre-line">{responsibilities}</p>
+              </div>
+            )}
+
+            {other_key_experience && (
+              <div>
+                <h3 className="font-semibold mb-2">Key Experience:</h3>
+                <p className="text-gray-600 whitespace-pre-line">{other_key_experience}</p>
               </div>
             )}
 
@@ -274,22 +277,22 @@ export const JobDetailsDialog = ({
               </div>
             )}
 
-            {locationCategory && (
-              <div className="flex items-start gap-2">
-                <MapPinned className="w-5 h-5 text-gray-500 mt-0.5" />
-                <div>
-                  <h4 className="font-medium">Location Type</h4>
-                  <p className="text-sm text-gray-600">{locationCategory}</p>
-                </div>
-              </div>
-            )}
-
             {routine && (
               <div className="flex items-start gap-2">
                 <CalendarClock className="w-5 h-5 text-gray-500 mt-0.5" />
                 <div>
                   <h4 className="font-medium">Work Schedule</h4>
-                  <p className="text-sm text-gray-600">{routine}</p>
+                  <p className="text-sm text-gray-600">{capitalizeFirstLetter(routine)}</p>
+                </div>
+              </div>
+            )}
+
+            {intensity && (
+              <div className="flex items-start gap-2">
+                <Gauge className="w-5 h-5 text-gray-500 mt-0.5" />
+                <div>
+                  <h4 className="font-medium">Intensity</h4>
+                  <p className="text-sm text-gray-600">{intensity}</p>
                 </div>
               </div>
             )}
