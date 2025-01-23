@@ -141,11 +141,11 @@ const SavedJobs = () => {
               location={job.location}
               salary={job.salary_range || ""}
               description={job.description}
-              job_url={job.job_url}
-              created_at={job.created_at}
+              applyUrl={job.job_url}
+              createdAt={job.created_at}
               onUnsave={onJobUnsaved}
-              min_experience={job.min_experience}
-              location_category={job.location_category}
+              minExperience={job.min_experience}
+              locationCategory={job.location_category}
               reasoning={job.reasoning}
             />
           ))}

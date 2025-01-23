@@ -14,20 +14,20 @@ interface JobCardProps {
   title: string;
   company: string;
   location: string;
-  salary?: string;
+  salary: string;
   description: string;
   reasoning?: string;
-  job_url: string;
-  created_at?: string;
-  posted_date?: string;
+  applyUrl: string;
+  createdAt?: string;
+  postedDate?: string;
   onUnsave?: (jobId: string) => void;
-  min_experience?: number | null;
-  location_category?: string;
+  minExperience?: number | null;
+  locationCategory?: string;
   routine?: string | null;
   responsibilities?: string;
   perks?: string;
   industry?: string;
-  employment_type?: string;
+  employmentType?: string;
   qualification?: string;
   other_key_experience?: string;
 }
@@ -40,17 +40,17 @@ export const JobCard = ({
   salary,
   description,
   reasoning,
-  job_url,
-  created_at,
-  posted_date,
+  applyUrl,
+  createdAt,
+  postedDate,
   onUnsave,
-  min_experience,
-  location_category,
+  minExperience,
+  locationCategory,
   routine,
   responsibilities,
   perks,
   industry,
-  employment_type,
+  employmentType,
   qualification,
   other_key_experience,
 }: JobCardProps) => {
@@ -165,8 +165,8 @@ export const JobCard = ({
         <div className="p-5 flex flex-col h-full">
           <JobCardHeader
             title={title}
-            createdAt={created_at}
-            postedDate={posted_date}
+            createdAt={createdAt}
+            postedDate={postedDate}
             saved={saved}
             onSave={(e) => {
               e.stopPropagation();
@@ -181,8 +181,8 @@ export const JobCard = ({
           />
 
           <JobCardBadges
-            minExperience={min_experience}
-            locationCategory={location_category}
+            minExperience={minExperience}
+            locationCategory={locationCategory}
             routine={routine}
           />
 
@@ -199,7 +199,7 @@ export const JobCard = ({
                 e.stopPropagation();
               }}
             >
-              <a href={job_url} target="_blank" rel="noopener noreferrer">
+              <a href={applyUrl} target="_blank" rel="noopener noreferrer">
                 Apply Now
               </a>
             </Button>
@@ -211,7 +211,6 @@ export const JobCard = ({
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         job={{
-          id,
           title,
           company,
           location,
@@ -219,16 +218,17 @@ export const JobCard = ({
           description,
           responsibilities,
           perks,
-          min_experience,
-          location_category,
+          minExperience,
+          locationCategory,
           routine,
           industry,
-          employment_type,
+          employmentType,
           qualification,
           reasoning,
           other_key_experience,
-          job_url,
-          posted_date,
+          applyUrl,
+          postedDate,
+          id,
         }}
       />
     </>

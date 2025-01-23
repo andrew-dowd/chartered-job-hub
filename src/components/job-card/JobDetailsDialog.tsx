@@ -7,66 +7,51 @@ import { Job } from "@/types/job";
 
 interface JobDetailsDialogProps {
   job: Job;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
   trigger?: React.ReactNode;
 }
 
-export const JobDetailsDialog = ({ job, open, onOpenChange, trigger }: JobDetailsDialogProps) => {
+export const JobDetailsDialog = ({ job, trigger }: JobDetailsDialogProps) => {
   const {
     title,
     company,
     location,
     salary,
-    salary_range,
     description,
     responsibilities,
     perks,
-    min_experience,
     minExperience,
-    location_category,
     locationCategory,
     routine,
     industry,
-    employment_type,
     employmentType,
     qualification,
     reasoning,
     other_key_experience,
-    job_url,
     applyUrl,
-    posted_date,
     postedDate,
   } = job;
 
-  const displaySalary = salary || salary_range;
-  const effectiveSalary = displaySalary && 
-    displaySalary !== "null" && 
-    displaySalary !== "undefined" && 
-    displaySalary.trim() !== "" && 
-    displaySalary !== "€0k - €0k" &&
-    displaySalary !== "€0 - €0"
-      ? displaySalary 
+  const displaySalary = salary && 
+    salary !== "null" && 
+    salary !== "undefined" && 
+    salary.trim() !== "" && 
+    salary !== "€0k - €0k" &&
+    salary !== "€0 - €0"
+      ? salary 
       : "Not disclosed";
 
-  const effectiveLocationCategory = locationCategory || location_category;
-  const effectiveMinExperience = minExperience || min_experience;
-  const effectiveEmploymentType = employmentType || employment_type;
-  const effectivePostedDate = postedDate || posted_date;
-  const effectiveApplyUrl = applyUrl || job_url;
-
-  const timeAgo = effectivePostedDate ? formatDistanceToNow(new Date(effectivePostedDate), { addSuffix: true }) : "Recently";
+  const timeAgo = postedDate ? formatDistanceToNow(new Date(postedDate), { addSuffix: true }) : "Recently";
 
   const handleApply = () => {
-    if (effectiveApplyUrl) {
+    if (applyUrl) {
       // Ensure the URL is properly formatted
-      const url = effectiveApplyUrl.startsWith('http') ? effectiveApplyUrl : `https://${effectiveApplyUrl}`;
+      const url = applyUrl.startsWith('http') ? applyUrl : `https://${applyUrl}`;
       window.open(url, '_blank', 'noopener,noreferrer');
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog>
       <DialogTrigger asChild>
         {trigger || (
           <Button variant="outline" className="w-full">
@@ -105,22 +90,22 @@ export const JobDetailsDialog = ({ job, open, onOpenChange, trigger }: JobDetail
             <div className="grid gap-4 md:grid-cols-2">
               <div className="flex items-center text-gray-600">
                 <Banknote className="w-5 h-5 mr-2" />
-                <span className="text-lg">{effectiveSalary}</span>
+                <span className="text-lg">{displaySalary}</span>
               </div>
             </div>
 
             {/* Tags Section */}
             <div className="flex flex-wrap gap-2">
-              {effectiveLocationCategory && (
+              {locationCategory && (
                 <Badge variant="secondary">
                   <MapPin className="w-3 h-3 mr-1" />
-                  {effectiveLocationCategory}
+                  {locationCategory}
                 </Badge>
               )}
-              {effectiveMinExperience && (
+              {minExperience && (
                 <Badge variant="secondary">
                   <Briefcase className="w-3 h-3 mr-1" />
-                  {effectiveMinExperience}+ years
+                  {minExperience}+ years
                 </Badge>
               )}
               {qualification && qualification !== "n/a" && (
@@ -135,10 +120,10 @@ export const JobDetailsDialog = ({ job, open, onOpenChange, trigger }: JobDetail
                   {routine}
                 </Badge>
               )}
-              {effectiveEmploymentType && (
+              {employmentType && (
                 <Badge variant="secondary">
                   <Briefcase className="w-3 h-3 mr-1" />
-                  {effectiveEmploymentType}
+                  {employmentType}
                 </Badge>
               )}
             </div>
