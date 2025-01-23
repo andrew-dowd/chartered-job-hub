@@ -20,6 +20,7 @@ export const JobDialogCompanyInfo = ({
       value === 'null' || 
       value === 'undefined' ||
       value === '€0k - €0k' ||
+      value.toString().toLowerCase() === 'n/a' ||
       value.toString().trim() === ''
     ) {
       return "Not disclosed";
