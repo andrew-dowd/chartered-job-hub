@@ -162,7 +162,7 @@ export const JobDetailsDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <div className="space-y-6">
-          <div className="flex items-start justify-between">
+          <div className="flex items-start justify-between gap-4 pr-12">
             <div className="space-y-4 flex-grow">
               <JobDialogHeader
                 title={job.title}
@@ -192,7 +192,8 @@ export const JobDetailsDialog = ({
                 saved 
                   ? "bg-primary/10 text-primary border-primary hover:bg-primary/20" 
                   : "border-gray-200 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-              } ml-2 flex-shrink-0`}
+              } flex-shrink-0`}
+              title={saved ? "Remove from saved jobs" : "Save job"}
             >
               {saved ? <BookmarkCheck className="w-4 h-4" /> : <BookmarkPlus className="w-4 h-4" />}
             </Button>
