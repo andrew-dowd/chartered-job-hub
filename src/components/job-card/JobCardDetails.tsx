@@ -13,7 +13,8 @@ export const JobCardDetails = ({ company, location, salary }: JobCardDetailsProp
         value === "undefined" || 
         value.trim() === "" || 
         value === "€0k - €0k" ||
-        value.toLowerCase() === "n/a") {
+        value.toLowerCase() === "n/a" ||
+        /^€\d{2,3},\d{3}-€\d{2,3},\d{3}$/.test(value)) {
       return "Not disclosed";
     }
     return value;
