@@ -22,7 +22,7 @@ export const JobDialogContent = ({
 
       {responsibilities && (
         <div>
-          <h3 className="font-semibold mb-2">Responsibilities:</h3>
+          <h3 className="font-semibold mb-2">Responsibilities</h3>
           <p className="text-gray-600 whitespace-pre-line">{responsibilities}</p>
         </div>
       )}
