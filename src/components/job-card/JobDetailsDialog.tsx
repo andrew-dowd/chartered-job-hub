@@ -122,7 +122,22 @@ export const JobDetailsDialog = ({
             job_id: job.id,
           }]);
 
-        if (error) throw error;
+        if (error) {
+          // Check if it's a duplicate error
+          if (error.code === '23505') {
+            console.log("Job already saved:", error);
+            // Update the UI state to reflect that the job is saved
+            setSaved(true);
+            if (onSaveStateChange) onSaveStateChange(true);
+            toast({
+              title: "Job already saved",
+              description: "This job is already in your saved jobs",
+            });
+            onOpenChange(false);
+            return;
+          }
+          throw error;
+        }
 
         setSaved(true);
         if (onSaveStateChange) onSaveStateChange(true);
