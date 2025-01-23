@@ -15,7 +15,7 @@ export const JobDialogContent = ({
     <div className="space-y-4">
       {reasoning && (
         <div>
-          <h3 className="font-semibold mb-2">Why this job is relevant:</h3>
+          <h3 className="font-semibold mb-2">About</h3>
           <p className="text-gray-600 whitespace-pre-line">{reasoning}</p>
         </div>
       )}
