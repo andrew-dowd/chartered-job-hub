@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface CityFilterProps {
   value: string;
@@ -15,6 +22,7 @@ interface CityFilterProps {
 }
 
 export const CityFilter = ({ value, onChange }: CityFilterProps) => {
+  const [open, setOpen] = useState(false);
   const [cities, setCities] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -46,24 +54,47 @@ export const CityFilter = ({ value, onChange }: CityFilterProps) => {
   }, []);
 
   return (
-    <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="w-full h-12 bg-white border-gray-200">
-        <div className="flex items-center">
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-full h-12 justify-start bg-white border-gray-200"
+        >
           <MapPin className="mr-2 h-4 w-4 text-gray-500 shrink-0" />
-          <SelectValue placeholder={loading ? "Loading cities..." : "City"} />
-        </div>
-      </SelectTrigger>
-      <SelectContent className="bg-white border shadow-lg">
-        {cities.map((city) => (
-          <SelectItem 
-            key={city} 
-            value={city}
-            className="hover:bg-gray-50"
-          >
-            {city}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+          <span className="truncate">
+            {value ? value : loading ? "Loading cities..." : "City"}
+          </span>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-full p-0" align="start">
+        <Command>
+          <CommandInput placeholder="Search cities..." />
+          <CommandEmpty>No city found.</CommandEmpty>
+          <CommandGroup className="max-h-64 overflow-auto">
+            {cities.map((city) => (
+              <CommandItem
+                key={city}
+                value={city}
+                onSelect={(currentValue) => {
+                  onChange(currentValue === value ? "" : currentValue);
+                  setOpen(false);
+                }}
+              >
+                <span
+                  className={cn(
+                    "flex items-center",
+                    value === city ? "font-medium" : ""
+                  )}
+                >
+                  {city}
+                </span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 };
