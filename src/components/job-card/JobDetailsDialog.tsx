@@ -182,9 +182,9 @@ export const JobDetailsDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-        <div className="space-y-6">
-          <div className="space-y-4">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-3 sm:space-y-4">
             <JobDialogHeader
               title={job.title}
               postedDate={job.postedDate}
