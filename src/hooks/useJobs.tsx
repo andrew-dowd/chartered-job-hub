@@ -28,7 +28,17 @@ export const useJobs = (initialPage: number, filters: JobFilters) => {
       .select(countOnly ? 'count' : '*', { count: 'exact' });
 
     if (filters.searchQuery) {
-      query = query.or(`title.ilike.%${filters.searchQuery}%,company.ilike.%${filters.searchQuery}%,description.ilike.%${filters.searchQuery}%,location.ilike.%${filters.searchQuery}%`);
+      // Split the search terms and create individual conditions
+      const searchTerms = filters.searchQuery.split(' ');
+      const searchConditions = searchTerms.map(term => {
+        const encodedTerm = `%${term}%`;
+        return `or(title.ilike.${encodedTerm},company.ilike.${encodedTerm},description.ilike.${encodedTerm},location.ilike.${encodedTerm})`;
+      });
+      
+      // Apply each search condition
+      searchConditions.forEach(condition => {
+        query = query.or(condition);
+      });
     }
     
     if (filters.minSalary > 30) {
