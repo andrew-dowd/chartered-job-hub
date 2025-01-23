@@ -15,7 +15,7 @@ export const JobDialogContent = ({
     <div className="space-y-4">
       {reasoning && (
         <div>
-          <h3 className="font-semibold mb-2">About</h3>
+          <h3 className="font-semibold mb-2">High level experience</h3>
           <p className="text-gray-600 whitespace-pre-line">{reasoning}</p>
         </div>
       )}
@@ -29,14 +29,14 @@ export const JobDialogContent = ({
 
       {other_key_experience && (
         <div>
-          <h3 className="font-semibold mb-2">High level experience</h3>
+          <h3 className="font-semibold mb-2">Other experience required</h3>
           <p className="text-gray-600 whitespace-pre-line">{other_key_experience}</p>
         </div>
       )}
 
       {perks && (
         <div>
-          <h3 className="font-semibold mb-2">Perks & Benefits:</h3>
+          <h3 className="font-semibold mb-2">Perks & benefits</h3>
           <p className="text-gray-600 whitespace-pre-line">{perks}</p>
         </div>
       )}
