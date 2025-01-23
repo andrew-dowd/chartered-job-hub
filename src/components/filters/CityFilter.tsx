@@ -39,11 +39,12 @@ export const CityFilter = ({ value, onChange }: CityFilterProps) => {
         if (error) {
           console.error("Error fetching cities:", error);
           setError(error.message);
+          setCities([]);
           return;
         }
 
-        if (!data) {
-          console.log("No data returned from cities query");
+        if (!data || data.length === 0) {
+          console.log("No cities data available");
           setCities([]);
           return;
         }
@@ -53,11 +54,12 @@ export const CityFilter = ({ value, onChange }: CityFilterProps) => {
           .filter((city): city is string => Boolean(city))
           .sort();
 
-        console.log("Found cities:", uniqueCities);
+        console.log(`Found ${uniqueCities.length} unique cities`);
         setCities(uniqueCities);
       } catch (err) {
         console.error("Unexpected error:", err);
         setError(err instanceof Error ? err.message : "An unexpected error occurred");
+        setCities([]);
       } finally {
         setLoading(false);
       }
@@ -87,7 +89,9 @@ export const CityFilter = ({ value, onChange }: CityFilterProps) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" align="start">
-        {!loading && cities.length > 0 ? (
+        {loading ? (
+          <div className="p-4 text-sm text-gray-500">Loading cities...</div>
+        ) : cities.length > 0 ? (
           <Command>
             <CommandInput placeholder="Search cities..." />
             <CommandEmpty>No city found.</CommandEmpty>
@@ -115,7 +119,7 @@ export const CityFilter = ({ value, onChange }: CityFilterProps) => {
           </Command>
         ) : (
           <div className="p-4 text-sm text-gray-500">
-            {loading ? "Loading cities..." : "No cities available"}
+            {error ? "Error loading cities" : "No cities available"}
           </div>
         )}
       </PopoverContent>
