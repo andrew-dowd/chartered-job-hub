@@ -8,11 +8,21 @@ interface JobCardBadgesProps {
 }
 
 export const JobCardBadges = ({ minExperience, locationCategory, routine }: JobCardBadgesProps) => {
-  if (!minExperience && !locationCategory && !routine) return null;
-
   const capitalizeFirstLetter = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
+
+  const shouldShowValue = (value: string | null | undefined): boolean => {
+    if (!value) return false;
+    return !['n/a', 'N/a', 'N/A', 'n/A'].includes(value);
+  };
+
+  const hasAnyValidBadge = 
+    (minExperience !== null && minExperience !== undefined) ||
+    shouldShowValue(locationCategory) ||
+    shouldShowValue(routine);
+
+  if (!hasAnyValidBadge) return null;
 
   return (
     <div className="flex gap-2 mb-4">
@@ -22,13 +32,13 @@ export const JobCardBadges = ({ minExperience, locationCategory, routine }: JobC
           {minExperience}+ YOE
         </Badge>
       )}
-      {locationCategory && (
+      {shouldShowValue(locationCategory) && (
         <Badge variant="secondary" className="text-xs">
           <Globe className="w-3 h-3 mr-1" />
           {locationCategory}
         </Badge>
       )}
-      {routine && (
+      {shouldShowValue(routine) && (
         <Badge variant="secondary" className="text-xs">
           <Calendar className="w-3 h-3 mr-1" />
           {capitalizeFirstLetter(routine)}
