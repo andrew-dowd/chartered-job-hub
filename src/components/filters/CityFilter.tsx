@@ -25,33 +25,44 @@ export const CityFilter = ({ value, onChange }: CityFilterProps) => {
   const [open, setOpen] = useState(false);
   const [cities, setCities] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCities = async () => {
-      console.log("Fetching unique cities from jobs table...");
-      const { data, error } = await supabase
-        .from('jobs')
-        .select('city')
-        .not('city', 'is', null)
-        .order('city');
+      try {
+        console.log("Fetching unique cities from jobs table...");
+        const { data, error } = await supabase
+          .from('jobs')
+          .select('city')
+          .not('city', 'is', null);
 
-      if (error) {
-        console.error("Error fetching cities:", error);
-        return;
+        if (error) {
+          console.error("Error fetching cities:", error);
+          setError(error.message);
+          return;
+        }
+
+        // Extract unique cities, remove nulls and empty strings, and sort
+        const uniqueCities = Array.from(new Set(data.map(row => row.city)))
+          .filter((city): city is string => Boolean(city))
+          .sort();
+
+        console.log("Found cities:", uniqueCities);
+        setCities(uniqueCities);
+      } catch (err) {
+        console.error("Unexpected error:", err);
+        setError(err instanceof Error ? err.message : "An unexpected error occurred");
+      } finally {
+        setLoading(false);
       }
-
-      // Extract unique cities and remove nulls
-      const uniqueCities = Array.from(new Set(data.map(row => row.city)))
-        .filter(Boolean)
-        .sort();
-
-      console.log("Found cities:", uniqueCities);
-      setCities(uniqueCities);
-      setLoading(false);
     };
 
     fetchCities();
   }, []);
+
+  if (error) {
+    console.error("CityFilter error:", error);
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -61,10 +72,11 @@ export const CityFilter = ({ value, onChange }: CityFilterProps) => {
           role="combobox"
           aria-expanded={open}
           className="w-full h-12 justify-start bg-white border-gray-200"
+          disabled={loading}
         >
           <MapPin className="mr-2 h-4 w-4 text-gray-500 shrink-0" />
           <span className="truncate">
-            {value ? value : loading ? "Loading cities..." : "City"}
+            {loading ? "Loading cities..." : value || "City"}
           </span>
         </Button>
       </PopoverTrigger>
