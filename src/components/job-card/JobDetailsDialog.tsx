@@ -104,7 +104,7 @@ export const JobDetailsDialog = ({
   };
 
   const handleSave = async (skipAuthCheck = false) => {
-    if (!session && !skipAuthCheck) {
+    if (!session?.user && !skipAuthCheck) {
       // Store the job ID before redirecting
       localStorage.setItem('pendingJobSave', job.id);
       console.log('Storing pending job save in dialog:', job.id);
@@ -115,6 +115,11 @@ export const JobDetailsDialog = ({
         description: "Please sign in or create an account to save jobs",
       });
       navigate("/auth");
+      return;
+    }
+
+    if (!session?.user) {
+      console.log('No user session available');
       return;
     }
 
