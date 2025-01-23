@@ -12,7 +12,16 @@ export const JobDialogCompanyInfo = ({
   salary,
 }: JobDialogCompanyInfoProps) => {
   const formatValue = (value: string | number | null | undefined) => {
-    if (value === null || value === undefined || value === 0 || value === '') {
+    if (
+      value === null || 
+      value === undefined || 
+      value === 0 || 
+      value === '' || 
+      value === 'null' || 
+      value === 'undefined' ||
+      value === '€0k - €0k' ||
+      value.toString().trim() === ''
+    ) {
       return "Not disclosed";
     }
     return value;
@@ -22,11 +31,11 @@ export const JobDialogCompanyInfo = ({
     <div className="flex flex-wrap gap-4 text-gray-600">
       <div className="flex items-center gap-1.5">
         <Building2 className="w-4 h-4" />
-        <span>{company}</span>
+        <span>{formatValue(company)}</span>
       </div>
       <div className="flex items-center gap-1.5">
         <MapPin className="w-4 h-4" />
-        <span>{location}</span>
+        <span>{formatValue(location)}</span>
       </div>
       <div className="flex items-center gap-1.5">
         <BriefcaseIcon className="w-4 h-4" />
