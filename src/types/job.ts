@@ -19,4 +19,5 @@ export interface Job {
   employment_type?: string;
   qualification?: string;
   other_key_experience?: string;
+  intensity?: string | null;
 }
