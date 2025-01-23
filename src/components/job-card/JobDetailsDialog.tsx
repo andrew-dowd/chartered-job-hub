@@ -22,7 +22,7 @@ import {
   GraduationCap,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -80,6 +80,43 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
     postedDate,
   } = job;
 
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      setSession(currentSession);
+      if (currentSession?.user) {
+        checkIfSaved(currentSession.user.id);
+      }
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+      if (newSession?.user) {
+        checkIfSaved(newSession.user.id);
+      } else {
+        setSaved(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [id]);
+
+  const checkIfSaved = async (userId: string) => {
+    const { data, error } = await supabase
+      .from("saved_jobs")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("job_id", id)
+      .maybeSingle();
+
+    if (data && !error) {
+      setSaved(true);
+    }
+  };
+
   const displaySalary = salary && 
     salary !== "null" && 
     salary !== "undefined" && 
@@ -97,6 +134,7 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
         title: "Sign in required",
         description: "Please sign in or create an account to save jobs",
       });
+      onOpenChange(false); // Close the dialog
       navigate("/auth");
       return;
     }
@@ -131,6 +169,7 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
           title: "Job saved successfully",
           description: "Check your saved jobs to apply later",
         });
+        onOpenChange(false); // Close the dialog after successful save
       }
     } catch (error) {
       console.error("Error saving job:", error);
@@ -255,7 +294,7 @@ export const JobDetailsDialog = ({ open, onOpenChange, job }: JobDetailsDialogPr
               className="flex-1"
             >
               <BookmarkPlus className="w-4 h-4 mr-2" />
-              Save Job
+              {saved ? 'Unsave Job' : 'Save Job'}
             </Button>
           </div>
         </div>
