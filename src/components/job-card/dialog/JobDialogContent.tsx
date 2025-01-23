@@ -29,7 +29,7 @@ export const JobDialogContent = ({
 
       {other_key_experience && (
         <div>
-          <h3 className="font-semibold mb-2">Other Experience Needed:</h3>
+          <h3 className="font-semibold mb-2">Key Experience:</h3>
           <p className="text-gray-600 whitespace-pre-line">{other_key_experience}</p>
         </div>
       )}
