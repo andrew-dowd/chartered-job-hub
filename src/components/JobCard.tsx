@@ -30,6 +30,7 @@ interface JobCardProps {
   employmentType?: string;
   qualification?: string;
   other_key_experience?: string;
+  onSaveStateChange?: (saved: boolean) => void;
 }
 
 export const JobCard = ({
@@ -53,13 +54,8 @@ export const JobCard = ({
   employmentType,
   qualification,
   other_key_experience,
+  onSaveStateChange,
 }: JobCardProps) => {
-  console.log("Job card props:", { // Debug log
-    responsibilities,
-    perks,
-    other_key_experience,
-  });
-
   const [saved, setSaved] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const { toast } = useToast();
@@ -122,6 +118,8 @@ export const JobCard = ({
         if (error) throw error;
 
         setSaved(false);
+        if (onSaveStateChange) onSaveStateChange(false);
+        
         toast({
           title: "Job removed from saved jobs",
           description: "You can always save it again later",
@@ -141,6 +139,8 @@ export const JobCard = ({
         if (error) throw error;
 
         setSaved(true);
+        if (onSaveStateChange) onSaveStateChange(true);
+        
         toast({
           title: "Job saved successfully",
           description: "Check your saved jobs to apply later",
@@ -210,6 +210,10 @@ export const JobCard = ({
       <JobDetailsDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
+        onSaveStateChange={(newSavedState) => {
+          setSaved(newSavedState);
+          if (onSaveStateChange) onSaveStateChange(newSavedState);
+        }}
         job={{
           title,
           company,
