@@ -137,10 +137,8 @@ export const JobCard = ({
           }]);
 
         if (error) {
-          // Check if it's a duplicate error
           if (error.code === '23505') {
             console.log("Job already saved:", error);
-            // Update the UI state to reflect that the job is saved
             setSaved(true);
             if (onSaveStateChange) onSaveStateChange(true);
             toast({
@@ -224,6 +222,7 @@ export const JobCard = ({
       <JobDetailsDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
+        initialSaved={saved}
         onSaveStateChange={(newSavedState) => {
           setSaved(newSavedState);
           if (onSaveStateChange) onSaveStateChange(newSavedState);

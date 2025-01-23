@@ -14,6 +14,7 @@ interface JobDetailsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSaveStateChange?: (saved: boolean) => void;
+  initialSaved?: boolean;
   job: {
     id: string;
     title: string;
@@ -41,12 +42,17 @@ export const JobDetailsDialog = ({
   open,
   onOpenChange,
   onSaveStateChange,
+  initialSaved = false,
   job,
 }: JobDetailsDialogProps) => {
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState(initialSaved);
   const [session, setSession] = useState(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  useEffect(() => {
+    setSaved(initialSaved);
+  }, [initialSaved]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
