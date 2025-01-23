@@ -16,12 +16,12 @@ export const JobDialogBadges = ({
   return (
     <div className="flex flex-wrap gap-2">
       {minExperience !== null && minExperience !== undefined && minExperience > 0 && (
-        <Badge variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200">
+        <Badge variant="secondary" className="bg-[#888888] text-white hover:bg-[#888888]/90">
           {minExperience}+ years experience
         </Badge>
       )}
       {routine && (
-        <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200">
+        <Badge variant="secondary" className="bg-[#888888] text-white hover:bg-[#888888]/90">
           {capitalizeFirstLetter(routine)}
         </Badge>
       )}
