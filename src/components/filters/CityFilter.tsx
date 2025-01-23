@@ -42,6 +42,12 @@ export const CityFilter = ({ value, onChange }: CityFilterProps) => {
           return;
         }
 
+        if (!data) {
+          console.log("No data returned from cities query");
+          setCities([]);
+          return;
+        }
+
         // Extract unique cities, remove nulls and empty strings, and sort
         const uniqueCities = Array.from(new Set(data.map(row => row.city)))
           .filter((city): city is string => Boolean(city))
@@ -81,31 +87,37 @@ export const CityFilter = ({ value, onChange }: CityFilterProps) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" align="start">
-        <Command>
-          <CommandInput placeholder="Search cities..." />
-          <CommandEmpty>No city found.</CommandEmpty>
-          <CommandGroup className="max-h-64 overflow-auto">
-            {cities.map((city) => (
-              <CommandItem
-                key={city}
-                value={city}
-                onSelect={(currentValue) => {
-                  onChange(currentValue === value ? "" : currentValue);
-                  setOpen(false);
-                }}
-              >
-                <span
-                  className={cn(
-                    "flex items-center",
-                    value === city ? "font-medium" : ""
-                  )}
+        {!loading && cities.length > 0 ? (
+          <Command>
+            <CommandInput placeholder="Search cities..." />
+            <CommandEmpty>No city found.</CommandEmpty>
+            <CommandGroup className="max-h-64 overflow-auto">
+              {cities.map((city) => (
+                <CommandItem
+                  key={city}
+                  value={city}
+                  onSelect={(currentValue) => {
+                    onChange(currentValue === value ? "" : currentValue);
+                    setOpen(false);
+                  }}
                 >
-                  {city}
-                </span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
+                  <span
+                    className={cn(
+                      "flex items-center",
+                      value === city ? "font-medium" : ""
+                    )}
+                  >
+                    {city}
+                  </span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </Command>
+        ) : (
+          <div className="p-4 text-sm text-gray-500">
+            {loading ? "Loading cities..." : "No cities available"}
+          </div>
+        )}
       </PopoverContent>
     </Popover>
   );
