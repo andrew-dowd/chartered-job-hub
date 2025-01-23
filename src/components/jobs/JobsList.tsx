@@ -32,15 +32,15 @@ export const JobsList = ({ jobs, lastJobRef }: JobsListProps) => {
               salary={job.salary_range || `€${job.salary_min / 1000}k - €${job.salary_max / 1000}k`}
               description={job.description}
               reasoning={job.reasoning}
-              applyUrl={job.job_url}
-              postedDate={job.posted_date}
-              minExperience={job.min_experience}
-              locationCategory={job.location_category}
+              job_url={job.job_url}
+              posted_date={job.posted_date}
+              min_experience={job.min_experience}
+              location_category={job.location_category}
               routine={job.routine}
               responsibilities={job.responsibilities}
               perks={job.perks}
               industry={job.industry}
-              employmentType={job.employment_type}
+              employment_type={job.employment_type}
               qualification={job.qualification}
               other_key_experience={job.other_key_experience}
             />
