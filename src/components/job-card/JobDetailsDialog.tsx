@@ -55,10 +55,23 @@ export const JobDetailsDialog = ({
   }, [initialSaved]);
 
   useEffect(() => {
+    // Check for pending job save in localStorage
+    const checkPendingSave = async (currentSession) => {
+      if (currentSession?.user) {
+        const pendingJobId = localStorage.getItem('pendingJobSave');
+        if (pendingJobId === job.id) {
+          console.log('Found pending job save in dialog:', pendingJobId);
+          await handleSave(true);
+          localStorage.removeItem('pendingJobSave');
+        }
+      }
+    };
+
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
       setSession(currentSession);
       if (currentSession?.user) {
         checkIfSaved(currentSession.user.id);
+        checkPendingSave(currentSession);
       }
     });
 
@@ -68,6 +81,7 @@ export const JobDetailsDialog = ({
       setSession(newSession);
       if (newSession?.user) {
         checkIfSaved(newSession.user.id);
+        checkPendingSave(newSession);
       } else {
         setSaved(false);
       }
@@ -89,13 +103,17 @@ export const JobDetailsDialog = ({
     }
   };
 
-  const handleSave = async () => {
-    if (!session) {
+  const handleSave = async (skipAuthCheck = false) => {
+    if (!session && !skipAuthCheck) {
+      // Store the job ID before redirecting
+      localStorage.setItem('pendingJobSave', job.id);
+      console.log('Storing pending job save in dialog:', job.id);
+      
+      onOpenChange(false); // Close the dialog
       toast({
         title: "Sign in required",
         description: "Please sign in or create an account to save jobs",
       });
-      onOpenChange(false);
       navigate("/auth");
       return;
     }

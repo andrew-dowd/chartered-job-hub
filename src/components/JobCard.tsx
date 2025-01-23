@@ -63,10 +63,23 @@ export const JobCard = ({
   const [session, setSession] = useState(null);
 
   useEffect(() => {
+    // Check for pending job save in localStorage
+    const checkPendingSave = async (currentSession) => {
+      if (currentSession?.user) {
+        const pendingJobId = localStorage.getItem('pendingJobSave');
+        if (pendingJobId === id) {
+          console.log('Found pending job save:', pendingJobId);
+          await handleSave(true);
+          localStorage.removeItem('pendingJobSave');
+        }
+      }
+    };
+
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
       setSession(currentSession);
       if (currentSession?.user) {
         checkIfSaved(currentSession.user.id);
+        checkPendingSave(currentSession);
       }
     });
 
@@ -76,13 +89,14 @@ export const JobCard = ({
       setSession(newSession);
       if (newSession?.user) {
         checkIfSaved(newSession.user.id);
+        checkPendingSave(newSession);
       } else {
         setSaved(false);
       }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [id]);
 
   const checkIfSaved = async (userId: string) => {
     const { data, error } = await supabase
@@ -97,8 +111,12 @@ export const JobCard = ({
     }
   };
 
-  const handleSave = async () => {
-    if (!session) {
+  const handleSave = async (skipAuthCheck = false) => {
+    if (!session && !skipAuthCheck) {
+      // Store the job ID before redirecting
+      localStorage.setItem('pendingJobSave', id);
+      console.log('Storing pending job save:', id);
+      
       toast({
         title: "Sign in required",
         description: "Please sign in or create an account to save jobs",
